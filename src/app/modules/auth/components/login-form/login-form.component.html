@@ -1,0 +1,31 @@
+<form class="login-form" [formGroup]="form" (submit)="onSubmit($event)">
+  <form-input
+    [id]="'email'"
+    [form]="form"
+    type="email"
+    controlName="email"
+    placeholder="Email"
+    [validationMessages]="formConfig.validationMessages.email"
+  >
+    <label for="email" icon
+      ><span class="material-symbols-outlined"> mail </span></label
+    >
+  </form-input>
+  <form-input
+    [id]="'password'"
+    [form]="form"
+    type="password"
+    controlName="password"
+    placeholder="Password"
+  >
+    <label for="password" icon
+      ><span class="material-symbols-outlined"> lock </span></label
+    >
+  </form-input>
+
+  <button type="submit" class="login-button">LOG IN</button>
+
+  <div class="signup-prompt">
+    Don't have an account? <a href="/signup" class="signup-link">Sign up</a>
+  </div>
+</form>

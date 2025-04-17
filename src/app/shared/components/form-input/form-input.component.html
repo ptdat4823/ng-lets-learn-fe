@@ -1,0 +1,35 @@
+<div class="form-group" [formGroup]="form">
+  <div class="input-container">
+    <ng-content select="[icon]"></ng-content>
+    <input
+      [id]="id"
+      [type]="getInputType()"
+      [formControlName]="controlName"
+      [placeholder]="placeholder"
+      [min]="min"
+      [max]="max"
+      [step]="step"
+      [required]="required"
+      [disabled]="disabled"
+      [readonly]="readonly"
+      class="form-input"
+    />
+
+    @if (type === "password") {
+    <button
+      type="button"
+      class="toggle-password"
+      (click)="togglePasswordVisibility()"
+    >
+      <span class="material-symbols-outlined">
+        {{ showPassword ? "visibility_off" : "visibility" }}
+      </span></button
+    >}
+  </div>
+
+  <form-warning
+    [form]="form"
+    [controlName]="controlName"
+    [messages]="validationMessages"
+  />
+</div>
