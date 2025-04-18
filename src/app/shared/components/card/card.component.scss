@@ -1,0 +1,13 @@
+@use "styles/theme/theme.variables" as *;
+
+:host {
+  --max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  max-width: var(--max-width, 400px);
+  width: 100%;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: $box-shadow;
+  background-color: $background-color;
+}

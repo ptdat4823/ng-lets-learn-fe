@@ -19,11 +19,6 @@ export class LoginFormComponent implements OnInit {
     this.form = this.fb.group(this.formConfig.schema);
   }
 
-  // Convenience getter for easy access to form fields
-  get f() {
-    return this.form.controls;
-  }
-
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
   }

@@ -2,8 +2,20 @@ import { Validators } from '@angular/forms';
 
 export const loginFormConfig = {
   schema: {
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]],
+    email: [
+      '',
+      {
+        validators: [Validators.required, Validators.email],
+        updateOn: 'submit',
+      },
+    ],
+    password: [
+      '',
+      {
+        validators: [Validators.required],
+        updateOn: 'submit',
+      },
+    ],
   },
   validationMessages: {
     email: {

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 @Component({
@@ -20,7 +20,6 @@ export class FormWarningComponent {
 
     const errors = control?.errors;
     if (!errors) return '';
-
     for (const errorKey in errors) {
       const message = this.messages[errorKey];
       if (message) return message;
@@ -29,12 +28,8 @@ export class FormWarningComponent {
     return defaultMessage;
   }
 
-  isTouched(): boolean {
+  get shouldShowError() {
     const control = this.form.get(this.controlName);
-    return control?.touched || false;
-  }
-  isValid(): boolean {
-    const control = this.form.get(this.controlName);
-    return control?.valid || false;
+    return control?.touched && control?.invalid;
   }
 }

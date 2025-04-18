@@ -1,0 +1,51 @@
+@use "styles/theme/theme.variables" as *;
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: $tint-color;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 8px;
+
+  &:hover {
+    background-color: rgba($color: $tint-color, $alpha: 0.8);
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:disabled {
+    background-color: rgba($color: $tint-color, $alpha: 0.8);
+    cursor: not-allowed;
+  }
+}
+
+.link-container {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 14px;
+  color: $text-secondary-color;
+
+  & a {
+    color: $tint-color;
+    text-decoration: none;
+    font-weight: 500;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
