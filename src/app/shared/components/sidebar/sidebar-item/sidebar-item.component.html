@@ -1,0 +1,7 @@
+<div
+  class="container"
+  [class]="{ item: type === 'list-item', collapsed: isCollapsed }"
+>
+  <ng-content select="[icon]"></ng-content>
+  <label>{{ label }}</label>
+</div>

@@ -1,0 +1,21 @@
+@use "styles/theme/theme.variables" as *;
+
+:host {
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  & span {
+    color: $icon-color;
+    font-size: 32px;
+  }
+}
+
+img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}

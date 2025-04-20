@@ -1,1 +1,22 @@
-<p>sidebar works!</p>
+<div class="container" [class.collapsed]="isCollapsed">
+  <sidebar-group>
+    <sidebar-item [label]="'Home'">
+      <span class="material-symbols-outlined" icon> home </span>
+    </sidebar-item>
+    <sidebar-item [label]="'Calendar'">
+      <span class="material-symbols-outlined" icon> calendar_today </span>
+    </sidebar-item>
+  </sidebar-group>
+  <sidebar-item-collapse [label]="'Teacher'">
+    <span class="material-symbols-outlined" icon> group </span>
+
+    <ul items>
+      <sidebar-item [label]="'Home'" type="list-item">
+        <span class="material-symbols-outlined" icon> home </span>
+      </sidebar-item>
+      <sidebar-item [label]="'Calendar'" type="list-item">
+        <span class="material-symbols-outlined" icon> calendar_today </span>
+      </sidebar-item>
+    </ul>
+  </sidebar-item-collapse>
+</div>

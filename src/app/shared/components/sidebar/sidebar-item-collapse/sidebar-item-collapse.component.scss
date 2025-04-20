@@ -1,0 +1,44 @@
+@use "styles/theme/theme.variables" as *;
+
+:host {
+  padding: 16px 0;
+  border-top: 1px solid $border-color;
+}
+
+mat-panel-title {
+  display: flex;
+  align-items: end;
+  gap: 16px;
+  transition: background-color 0.4s ease-in-out;
+  color: $text-secondary-color;
+}
+
+ng-content.icon {
+  --icon-color: $icon-color;
+}
+
+label {
+  pointer-events: none;
+  user-select: none;
+}
+
+::ng-deep mat-expansion-panel div.mat-expansion-panel-body {
+  padding: 0;
+}
+
+mat-expansion-panel-header {
+  transition: padding 0.4s ease-in-out !important;
+  &.mat-expanded {
+    border-radius: 12px 12px 0 0;
+  }
+  &.mat-content {
+    overflow: auto;
+  }
+  &:hover {
+    background-color: #e8e7eb !important;
+  }
+  &.collapsed {
+    padding-left: 12px;
+    padding-right: 0;
+  }
+}

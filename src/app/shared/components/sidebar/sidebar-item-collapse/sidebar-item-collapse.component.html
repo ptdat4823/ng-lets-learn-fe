@@ -1,0 +1,11 @@
+<mat-accordion>
+  <mat-expansion-panel [hideToggle]="isCollapsed">
+    <mat-expansion-panel-header [class.collapsed]="isCollapsed">
+      <mat-panel-title>
+        <ng-content select="[icon]"></ng-content>
+        <label>{{ label }}</label></mat-panel-title
+      >
+    </mat-expansion-panel-header>
+    <ng-content select="[items]"></ng-content>
+  </mat-expansion-panel>
+</mat-accordion>

@@ -35,6 +35,8 @@
             "styles": [
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/app/styles/theme/theme.variables.scss",
+              "src/app/styles/material-ui/material-ui.style.scss",
+              "src/app/styles/fonts/fonts.style.scss",
               "src/styles.scss"
             ],
             "scripts": []

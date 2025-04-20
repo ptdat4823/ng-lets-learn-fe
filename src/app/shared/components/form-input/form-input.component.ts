@@ -8,9 +8,10 @@ import { FormWarningComponent } from '../form-warning/form-warning.component';
 
 @Component({
   selector: 'form-input',
-  imports: [ReactiveFormsModule, FormWarningComponent],
+  standalone: true,
   templateUrl: './form-input.component.html',
   styleUrls: ['./form-input.component.scss'],
+  imports: [FormWarningComponent, ReactiveFormsModule],
 })
 export class FormInputComponent {
   // Form control inputs

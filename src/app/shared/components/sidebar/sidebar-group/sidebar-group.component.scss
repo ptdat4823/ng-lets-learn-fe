@@ -1,0 +1,12 @@
+@use "styles/theme/theme.variables" as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 16px;
+
+  &.has-border {
+    border-bottom: 1px solid $border-color;
+  }
+}
