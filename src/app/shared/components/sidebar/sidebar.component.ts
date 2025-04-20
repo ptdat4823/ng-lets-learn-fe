@@ -4,6 +4,7 @@ import { SidebarItemCollapseComponent } from './sidebar-item-collapse/sidebar-it
 import { SidebarItemComponent } from './sidebar-item/sidebar-item.component';
 import { SidebarGroupComponent } from './sidebar-group/sidebar-group.component';
 import { LayoutService } from '../layout/layout.service';
+import { UserAvatarComponent } from '../user-avatar/user-avatar.component';
 @Component({
   selector: 'app-sidebar',
   standalone: true,
@@ -14,6 +15,7 @@ import { LayoutService } from '../layout/layout.service';
     MatExpansionModule,
     SidebarItemComponent,
     SidebarGroupComponent,
+    UserAvatarComponent,
   ],
 })
 export class SidebarComponent {

@@ -11,6 +11,7 @@ import { LayoutService } from '@shared/components/layout/layout.service';
 })
 export class SidebarItemComponent {
   @Input({ required: true }) label!: string;
+  @Input() description: string | null = null;
   @Input() type: 'default' | 'list-item' = 'default';
 
   layoutService = inject(LayoutService);

@@ -1,7 +1,14 @@
 <div
   class="container"
-  [class]="{ item: type === 'list-item', collapsed: isCollapsed }"
+  [class.list-item]="type === 'list-item'"
+  [class.has-description]="!!description"
+  [class.collapsed]="isCollapsed"
 >
   <ng-content select="[icon]"></ng-content>
-  <label>{{ label }}</label>
+  <div class="content">
+    <label>{{ label }}</label>
+    @if(description) {
+    <span class="description">{{ description }}</span>
+    }
+  </div>
 </div>
