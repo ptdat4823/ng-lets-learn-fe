@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UserAvatarComponent } from './user-avatar.component';
+import { CircleImageComponent } from './circle-image.component';
 
-describe('UserAvatarComponent', () => {
-  let component: UserAvatarComponent;
-  let fixture: ComponentFixture<UserAvatarComponent>;
+describe('CircleImageComponent', () => {
+  let component: CircleImageComponent;
+  let fixture: ComponentFixture<CircleImageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UserAvatarComponent]
+      imports: [CircleImageComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(UserAvatarComponent);
+    fixture = TestBed.createComponent(CircleImageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

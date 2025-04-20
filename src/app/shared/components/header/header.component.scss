@@ -13,6 +13,10 @@ span.material-symbols-outlined {
   color: $icon-color;
 }
 
+::ng-deep circle-image span.material-symbols-outlined {
+  --icon-size: 44px;
+}
+
 .right-header {
   display: flex;
   align-items: center;

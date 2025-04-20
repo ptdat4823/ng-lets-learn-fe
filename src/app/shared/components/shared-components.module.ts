@@ -6,8 +6,8 @@ import { FormInputComponent } from './form-input/form-input.component';
 import { FormWarningComponent } from './form-warning/form-warning.component';
 import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import { UserAvatarComponent } from './user-avatar/user-avatar.component';
 import { LayoutComponent } from './layout/layout.component';
+import { CircleImageComponent } from './circle-image/circle-image.component';
 @NgModule({
   imports: [
     FormWarningComponent,
@@ -16,9 +16,9 @@ import { LayoutComponent } from './layout/layout.component';
     MatCheckboxModule,
     HeaderComponent,
     SidebarComponent,
-    UserAvatarComponent,
     MatExpansionModule,
     LayoutComponent,
+    CircleImageComponent,
   ],
   exports: [
     FormWarningComponent,
@@ -27,9 +27,9 @@ import { LayoutComponent } from './layout/layout.component';
     MatCheckboxModule,
     HeaderComponent,
     SidebarComponent,
-    UserAvatarComponent,
     MatExpansionModule,
     LayoutComponent,
+    CircleImageComponent,
   ],
 })
 export class SharedComponentsModule {}

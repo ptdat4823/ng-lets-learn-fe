@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { UserAvatarComponent } from '../user-avatar/user-avatar.component';
+import { CircleImageComponent } from '../circle-image/circle-image.component';
 import { LayoutService } from '../layout/layout.service';
 
 @Component({
@@ -7,7 +7,7 @@ import { LayoutService } from '../layout/layout.service';
   standalone: true,
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
-  imports: [UserAvatarComponent],
+  imports: [CircleImageComponent],
 })
 export class HeaderComponent {
   layoutService = inject(LayoutService);

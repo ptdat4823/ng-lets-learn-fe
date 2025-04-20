@@ -1,10 +1,10 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { CircleImageComponent } from '../circle-image/circle-image.component';
+import { LayoutService } from '../layout/layout.service';
+import { SidebarGroupComponent } from './sidebar-group/sidebar-group.component';
 import { SidebarItemCollapseComponent } from './sidebar-item-collapse/sidebar-item-collapse.component';
 import { SidebarItemComponent } from './sidebar-item/sidebar-item.component';
-import { SidebarGroupComponent } from './sidebar-group/sidebar-group.component';
-import { LayoutService } from '../layout/layout.service';
-import { UserAvatarComponent } from '../user-avatar/user-avatar.component';
 @Component({
   selector: 'app-sidebar',
   standalone: true,
@@ -15,7 +15,7 @@ import { UserAvatarComponent } from '../user-avatar/user-avatar.component';
     MatExpansionModule,
     SidebarItemComponent,
     SidebarGroupComponent,
-    UserAvatarComponent,
+    CircleImageComponent,
   ],
 })
 export class SidebarComponent {
