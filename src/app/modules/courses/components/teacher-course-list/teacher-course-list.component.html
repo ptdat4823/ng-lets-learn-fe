@@ -1,0 +1,11 @@
+<div
+  class="course-list"
+  [class.medium]="screenSize === 'medium'"
+  [class.small]="screenSize === 'small'"
+  [class.xsmall]="screenSize === 'xsmall'"
+  [class.sidebarCollapsed]="isSidebarCollapsed"
+>
+  @for(course of courses; track course.id) {
+  <teacher-course-card [course]="course" />
+  }
+</div>

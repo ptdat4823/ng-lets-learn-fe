@@ -11,4 +11,10 @@ export class LayoutService {
   toggleSidebar() {
     this.isCollapsed.next(!this.isCollapsed.value);
   }
+  collapseSidebar() {
+    this.isCollapsed.next(true);
+  }
+  expandSidebar() {
+    this.isCollapsed.next(false);
+  }
 }

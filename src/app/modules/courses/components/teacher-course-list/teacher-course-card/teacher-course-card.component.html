@@ -1,0 +1,7 @@
+<div class="course-card" (click)="handleClick()">
+  <img [src]="course.imageUrl" alt="Course title" />
+  <div class="course-content">
+    <h4>{{ course.title }}</h4>
+    <p>{{ course.category.name }}</p>
+  </div>
+</div>

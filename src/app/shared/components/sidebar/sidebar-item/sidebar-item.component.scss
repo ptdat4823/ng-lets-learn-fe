@@ -10,11 +10,16 @@
   padding: 12px 24px;
   background-color: #faf9fd;
   transition: padding 0.4s ease-in-out;
+  user-select: none;
+
   &.has-description {
     align-items: center;
     padding: 12px 18px;
     &.collapsed {
       padding: 12px 5.5px;
+    }
+    label {
+      font-weight: 600;
     }
   }
 
@@ -34,14 +39,22 @@
       img {
         outline: 3px solid $tint-color;
       }
+      label {
+        font-weight: 600;
+      }
     }
   }
 
   &:active {
     background-color: #e8e7eb;
-    ::ng-deep .material-symbols-outlined {
-      --icon-active-setting: "FILL" 1, "wght" 100, "GRAD" 0, "opsz" 48;
-      font-variation-settings: var(--icon-active-setting);
+    ::ng-deep {
+      .material-symbols-outlined {
+        --icon-active-setting: "FILL" 1, "wght" 100, "GRAD" 0, "opsz" 48;
+        font-variation-settings: var(--icon-active-setting);
+      }
+      img {
+        transform: scale(0.95);
+      }
     }
   }
 
@@ -65,6 +78,7 @@
   color: $text-secondary-color;
   font-size: 14px;
   font-weight: 400;
+  font-family: Nunito;
 }
 
 ng-content {
@@ -77,4 +91,5 @@ label {
   text-overflow: ellipsis;
   overflow: hidden;
   width: 100%;
+  font-family: Nunito;
 }
