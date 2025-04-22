@@ -8,6 +8,8 @@ import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { LayoutComponent } from './layout/layout.component';
 import { CircleImageComponent } from './circle-image/circle-image.component';
+import { ButtonComponent } from './button/button.component';
+import { ComboboxComponent } from './combobox/combobox.component';
 @NgModule({
   imports: [
     FormWarningComponent,
@@ -19,6 +21,8 @@ import { CircleImageComponent } from './circle-image/circle-image.component';
     MatExpansionModule,
     LayoutComponent,
     CircleImageComponent,
+    ButtonComponent,
+    ComboboxComponent,
   ],
   exports: [
     FormWarningComponent,
@@ -30,6 +34,8 @@ import { CircleImageComponent } from './circle-image/circle-image.component';
     MatExpansionModule,
     LayoutComponent,
     CircleImageComponent,
+    ButtonComponent,
+    ComboboxComponent,
   ],
 })
 export class SharedComponentsModule {}

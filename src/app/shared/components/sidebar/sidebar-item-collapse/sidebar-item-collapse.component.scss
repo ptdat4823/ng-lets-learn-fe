@@ -53,4 +53,13 @@ mat-expansion-panel-header {
       }
     }
   }
+
+  &:active {
+    ::ng-deep {
+      .material-symbols-outlined {
+        --icon-active-setting: "FILL" 1, "wght" 100, "GRAD" 0, "opsz" 48;
+        font-variation-settings: var(--icon-active-setting);
+      }
+    }
+  }
 }

@@ -1,0 +1,29 @@
+<h2>Create your course</h2>
+<form [formGroup]="form" (submit)="onSubmit($event)">
+  @for(control of formControls; track control.id) {
+  <label [for]="control.id" class="input-label">{{ control.label }}</label>
+  @if(control.componentType === 'input') {
+  <form-input
+    [id]="control.id"
+    [form]="form"
+    [type]="control.type"
+    [controlName]="control.id"
+    [placeholder]="control.placeholder"
+    [validationMessages]="control.validationMessages"
+  />
+  <span class="description">{{ control.description }}</span>
+  } @else if (control.componentType === 'select') {
+  <app-combobox
+    [form]="form"
+    [controlName]="control.id"
+    [validationMessages]="control.validationMessages"
+    [options]="control.options ?? []"
+  />
+  @if(control.descriptionOnOption) {
+  <span class="description">{{
+    control.descriptionOnOption[visibilityValue]
+  }}</span
+  >} } }
+
+  <app-button label="Create" type="submit" />
+</form>

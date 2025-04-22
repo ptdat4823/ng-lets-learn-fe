@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { mockCourses } from '@shared/mocks/course';
 
 @Component({
-  selector: 'courses-page',
+  selector: 'course-list',
   standalone: false,
-  templateUrl: './courses-page.component.html',
-  styleUrl: './courses-page.component.scss',
+  templateUrl: './course-list.component.html',
+  styleUrl: './course-list.component.scss',
 })
-export class CoursesPageComponent {
+export class CourseListComponent {
   courses = mockCourses;
 }

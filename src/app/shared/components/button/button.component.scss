@@ -1,0 +1,28 @@
+@use "styles/theme/theme.variables" as *;
+
+button {
+  --width: 100%;
+  width: var(--width);
+  padding: 12px;
+  background-color: $tint-color;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: rgba($color: $tint-color, $alpha: 0.8);
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:disabled {
+    background-color: rgba($color: $tint-color, $alpha: 0.8);
+    cursor: not-allowed;
+  }
+}

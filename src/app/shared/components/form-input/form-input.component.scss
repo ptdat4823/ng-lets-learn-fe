@@ -1,21 +1,5 @@
-// Variables
-$primary-color: #3366ff;
-$light-gray: #e8e8e8;
-$medium-gray: #a0a0a0;
-$error-color: #f44336;
-$border-radius: 8px;
-
-// Mixins
-@mixin flex-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-@mixin flex-column {
-  display: flex;
-  flex-direction: column;
-}
+@use "styles/theme/theme.variables" as *;
+@use "styles/material-ui/material-ui.style" as *;
 
 .form-group {
   margin-bottom: 16px;
@@ -25,14 +9,25 @@ $border-radius: 8px;
   position: relative;
   display: flex;
   align-items: center;
-  border: 1px solid $light-gray;
-  border-radius: $border-radius;
+  border: 1px solid $border-color;
+  border-radius: 8px;
   overflow: hidden;
   transition: border-color 0.3s ease;
-  padding-left: 12px;
+
+  &:has(.material-symbols-outlined) {
+    padding-left: 12px;
+  }
+
+  &:hover:not(:focus-within) {
+    border-color: $icon-color;
+  }
 
   &:focus-within {
-    border-color: $primary-color;
+    border-color: $tint-color;
+    outline: none;
+    ::ng-deep span.material-symbols-outlined {
+      font-variation-settings: $google-icon-active-setting;
+    }
   }
 }
 
@@ -42,9 +37,10 @@ $border-radius: 8px;
   border: none;
   outline: none;
   font-size: 14px;
+  font-family: Nunito;
 
   &::placeholder {
-    color: $medium-gray;
+    color: $text-secondary-color;
   }
 
   &.invalid {

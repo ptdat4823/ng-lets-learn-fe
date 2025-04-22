@@ -1,0 +1,51 @@
+@use "styles/theme/theme.variables" as *;
+
+:host {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 400px;
+  font-family: Nunito;
+}
+
+h2 {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+label {
+  height: 24px;
+  &.input-label {
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+}
+
+.description {
+  font-size: 14px;
+  color: $text-secondary-color;
+  margin-bottom: 8px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  ::ng-deep {
+    & span.material-symbols-outlined {
+      color: $icon-color;
+    }
+
+    &:focus-within {
+      span.material-symbols-outlined {
+        color: $tint-color;
+      }
+    }
+  }
+}
+
+app-button {
+  margin-top: 16px;
+}

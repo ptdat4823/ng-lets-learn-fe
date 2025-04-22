@@ -1,0 +1,32 @@
+<div
+  [formGroup]="form"
+  class="combobox-field"
+  [class.disabled]="disabled"
+  (click)="toggleDropdown()"
+>
+  <span class="combobox-value">{{ selectedOption?.label || placeholder }}</span>
+
+  <span class="material-symbols-outlined" [class.open]="isOpen">
+    keyboard_arrow_down
+  </span>
+</div>
+<form-warning
+  [form]="form"
+  [controlName]="controlName"
+  [messages]="validationMessages"
+/>
+@if(isOpen) {
+<div class="combobox-dropdown">
+  @if(options.length === 0) {
+  <div class="combobox-option">No options available</div>
+  } @for(option of options; track option.value) {
+  <div
+    class="combobox-option"
+    [class.selected]="option.value === selectedOption?.value"
+    (click)="selectOption(option)"
+  >
+    {{ option.label }}
+  </div>
+  }
+</div>
+}

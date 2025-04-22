@@ -1,27 +1,27 @@
 @use "styles/theme/theme.variables" as *;
 
+$google-icon-default-setting: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 48;
+$google-icon-hover-setting: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 48;
+$google-icon-active-setting: "FILL" 1, "wght" 100, "GRAD" 0, "opsz" 48;
+
 .material-symbols-outlined {
   --icon-color: $icon-color;
-  --icon-default-setting: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 48;
-  --icon-hover-setting: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 48;
-  --icon-active-setting: "FILL" 1, "wght" 100, "GRAD" 0, "opsz" 48;
 
   color: var(--icon-color, $icon-color);
   cursor: pointer;
   user-select: none;
-  font-variation-settings: var(--icon-default-setting);
+  font-variation-settings: $google-icon-default-setting;
   transition: font-variation-settings 0.3s;
   &:hover {
-    font-variation-settings: var(--icon-hover-setting);
+    font-variation-settings: $google-icon-hover-setting;
   }
   &:active {
-    font-variation-settings: var(--icon-active-setting);
+    font-variation-settings: $google-icon-active-setting;
   }
 }
 
 mat-checkbox {
   width: fit-content;
-  margin-left: auto;
 
   & .mdc-checkbox__background {
     border-radius: 4px;

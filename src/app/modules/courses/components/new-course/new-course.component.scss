@@ -1,0 +1,32 @@
+@use "styles/theme/theme.variables" as *;
+
+:host {
+  width: 100%;
+  padding: 16px;
+}
+
+.back-container {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: $icon-bouding-color;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  ::ng-deep {
+    & .material-symbols-outlined {
+      font-size: 20px;
+    }
+  }
+
+  &:hover {
+    background-color: $icon-bounding-color-hover;
+    transform: scale(1.05);
+  }
+  &:active {
+    transform: scale(0.95);
+  }
+}
