@@ -5,6 +5,7 @@ import { LayoutService } from '../layout/layout.service';
 import { SidebarGroupComponent } from './sidebar-group/sidebar-group.component';
 import { SidebarItemCollapseComponent } from './sidebar-item-collapse/sidebar-item-collapse.component';
 import { SidebarItemComponent } from './sidebar-item/sidebar-item.component';
+import { mockCourses } from '@shared/mocks/course';
 @Component({
   selector: 'app-sidebar',
   standalone: true,
@@ -21,6 +22,7 @@ import { SidebarItemComponent } from './sidebar-item/sidebar-item.component';
 export class SidebarComponent {
   layoutService = inject(LayoutService);
   isCollapsed = false;
+  courses = mockCourses;
 
   ngOnInit() {
     this.layoutService.isCollapsed$.subscribe((value) => {

@@ -79,6 +79,11 @@
   font-size: 14px;
   font-weight: 400;
   font-family: Nunito;
+
+  width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 ng-content {

@@ -6,6 +6,9 @@
     <sidebar-item [label]="'Calendar'">
       <span class="material-symbols-outlined" icon> calendar_today </span>
     </sidebar-item>
+    <sidebar-item [label]="'Settings'">
+      <span class="material-symbols-outlined" icon> settings </span>
+    </sidebar-item>
   </sidebar-group>
   <sidebar-item-collapse [label]="'Teaching'">
     <span class="material-symbols-outlined" icon> group </span>
@@ -14,13 +17,15 @@
       <sidebar-item [label]="'To review'" type="list-item">
         <span class="material-symbols-outlined" icon> checkbook </span>
       </sidebar-item>
+      @for(course of courses; track course.id) {
       <sidebar-item
-        [label]="'Introduction to Astronomywasdasd'"
+        [label]="course.title"
         type="list-item"
-        description="Astronomy"
+        [description]="course.category.name"
       >
-        <circle-image src="images/mock-astronomy.jpg" icon></circle-image>
+        <circle-image src="{{ course.imageUrl }}" icon></circle-image>
       </sidebar-item>
+      }
     </ul>
   </sidebar-item-collapse>
 </div>

@@ -15,26 +15,26 @@ input[type="password"]::-ms-clear {
   display: none;
 }
 
-// /* Width of the scrollbar */
-// ::-webkit-scrollbar {
-//   width: 8px;
-// }
+/* Width of the scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
 
-// /* Track (the background of the scrollbar) */
-// ::-webkit-scrollbar-track {
-//   background: transparent;
-// }
+/* Track (the background of the scrollbar) */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
 
-// /* Handle (the draggable part) */
-// ::-webkit-scrollbar-thumb {
-//   background: white;
-//   border-radius: 10px;
-// }
+/* Handle (the draggable part) */
+::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 10px;
+}
 
-// /* Handle on hover */
-// ::-webkit-scrollbar-thumb:hover {
-//   background: #eee;
-// }
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #ddd;
+}
 
 html,
 body {

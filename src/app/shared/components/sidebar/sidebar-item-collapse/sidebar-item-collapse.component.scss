@@ -1,7 +1,7 @@
 @use "styles/theme/theme.variables" as *;
 
 :host {
-  padding: 16px 0;
+  padding: 16px 0 0;
   border-top: 1px solid $border-color;
 }
 
