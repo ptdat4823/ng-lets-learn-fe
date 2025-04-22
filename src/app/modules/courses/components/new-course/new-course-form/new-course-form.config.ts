@@ -58,6 +58,7 @@ export const newCourseFormControls: FormControlField[] = [
       { value: '0', label: 'Private' },
     ],
     descriptionOnOption: {
+      default: 'Choose who can access your course',
       '1': 'Anyone can access the course',
       '0': 'Only participants can access the course',
     },

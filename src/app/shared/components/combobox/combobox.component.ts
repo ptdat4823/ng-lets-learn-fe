@@ -18,23 +18,28 @@ export class ComboboxComponent implements OnInit {
 
   @Input() options: ComboboxOption[] = [];
   @Input() placeholder = 'Select an option';
+  @Input() disabled = false;
   comboboxService = inject(ComboboxService);
 
   isOpen = false;
   selectedOption: ComboboxOption | null = null;
-  disabled = false;
+
+  findOptionByValue(value: string): ComboboxOption | null {
+    if (!value) return null;
+    return this.options.find((option) => option.value === value) || null;
+  }
 
   ngOnInit(): void {
+    const initValue = this.form.get(this.controlName)?.value;
+    const initOption = this.findOptionByValue(initValue);
+    this.comboboxService.selectOption(initOption);
+
     this.comboboxService.selectedOption$.subscribe((option) => {
       this.selectedOption = option;
     });
 
     this.comboboxService.isOpen$.subscribe((isOpen) => {
       this.isOpen = isOpen;
-    });
-
-    this.comboboxService.disabled$.subscribe((disabled) => {
-      this.disabled = disabled;
     });
   }
 

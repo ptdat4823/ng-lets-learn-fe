@@ -11,6 +11,7 @@ import { ComboboxService } from '@shared/components/combobox/combobox.service';
   standalone: false,
   templateUrl: './new-course-form.component.html',
   styleUrl: './new-course-form.component.scss',
+  providers: [ComboboxService],
 })
 export class NewCourseFormComponent {
   private fb: FormBuilder = inject(FormBuilder);
@@ -25,7 +26,7 @@ export class NewCourseFormComponent {
   ngOnInit(): void {
     this.form = this.fb.group(newCourseFormSchema);
     this.comboboxService.selectedOption$.subscribe((option) => {
-      this.visibilityValue = option?.value || '0';
+      this.visibilityValue = option?.value || 'default';
     });
   }
 

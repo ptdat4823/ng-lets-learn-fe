@@ -12,10 +12,17 @@
   transition: width 0.4s ease-in-out, padding 0.4s ease-in-out;
   overflow: hidden;
 
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
   &.collapsed {
     width: 56px;
     padding: 16px 4px;
     transition: width 0.4s ease-in-out, padding 0.4s ease-in-out;
+    ::-webkit-scrollbar {
+      width: 1px;
+    }
   }
 }
 
@@ -28,11 +35,6 @@ ul {
   flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
-}
-
-/* Width of the scrollbar */
-::-webkit-scrollbar {
-  width: 1px;
 }
 
 /* Track (the background of the scrollbar) */
