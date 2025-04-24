@@ -1,7 +1,17 @@
-<app-tab-list [tabs]="tabs" />
+<app-tab-list />
 @if(course) {
 <main>
+  @if(selectedTab === tabs.COURSE) {
   <tab-course [course]="course" />
+  } @else if(selectedTab === tabs.ACTIVITIES) {
+  <p>ACTIVITIES</p>
+  } @else if(selectedTab === tabs.PEOPLE) {
+  <p>PEOPLE</p>
+  } @else if(selectedTab === tabs.DASHBOARD) {
+  <p>DASHBOARD</p>
+  } @else if(selectedTab === tabs.SETTINGS) {
+  <p>SETTINGS</p>
+  }
 </main>
 } @else {
 <div class="course-not-found">

@@ -1,0 +1,72 @@
+@use "styles/theme/theme.variables" as *;
+
+.custom-toast {
+  font-family: Nunito;
+  border-radius: 8px !important;
+  transition: all 0.2s ease-in-out;
+
+  &.toast-success {
+    background-color: $success-color;
+    box-shadow: $box-shadow !important;
+
+    &:hover {
+      transform: scale(1.01);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+
+    & .toast-close-button {
+      transition: all 0.2s ease-in-out;
+    }
+  }
+  &.toast-error {
+    background-color: $error-color;
+    box-shadow: $box-shadow !important;
+
+    &:hover {
+      transform: scale(1.01);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+
+    & .toast-close-button {
+      transition: all 0.2s ease-in-out;
+    }
+  }
+  &.toast-warning {
+    background-color: $warning-color;
+    box-shadow: $box-shadow !important;
+
+    &:hover {
+      transform: scale(1.01);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+
+    & .toast-close-button {
+      transition: all 0.2s ease-in-out;
+    }
+  }
+  &.toast-info {
+    background-color: $info-color;
+    box-shadow: $box-shadow !important;
+
+    &:hover {
+      transform: scale(1.01);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+
+    & .toast-close-button {
+      transition: all 0.2s ease-in-out;
+    }
+  }
+}

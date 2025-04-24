@@ -23,6 +23,9 @@ export class TabListComponent implements OnInit {
     this.tabService.selectedTab$.subscribe((tab) => {
       this.selectedTab = tab;
     });
+    this.tabService.tabs$.subscribe((tabs) => {
+      this.tabs = tabs;
+    });
   }
 
   onTabClick(tab: string): void {

@@ -6,6 +6,9 @@ import { AuthModule } from './modules/auth/auth.module';
 import { AppRoutingModule } from './routes/app-route.module';
 import { SharedModule } from './shared/shared.module';
 import { CoursesModule } from '@modules/courses/courses.module';
+import { ToastrModule } from 'ngx-toastr';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideToastr } from 'ngx-toastr';
 
 @NgModule({
   imports: [
@@ -15,8 +18,19 @@ import { CoursesModule } from '@modules/courses/courses.module';
     AppRoutingModule,
     AuthModule,
     CoursesModule,
+    ToastrModule.forRoot(),
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
+  providers: [
+    provideToastr({
+      timeOut: 10000,
+      positionClass: 'toast-bottom-left',
+      preventDuplicates: true,
+      toastClass: 'custom-toast ngx-toastr',
+      closeButton: true,
+    }),
+    provideAnimations(),
+  ],
 })
 export class AppModule {}

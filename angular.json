@@ -37,7 +37,9 @@
               "src/app/styles/theme/theme.variables.scss",
               "src/app/styles/material-ui/material-ui.style.scss",
               "src/app/styles/fonts/fonts.style.scss",
-              "src/styles.scss"
+              "src/app/styles/toast/toast.style.scss",
+              "src/styles.scss",
+              "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": []
           },

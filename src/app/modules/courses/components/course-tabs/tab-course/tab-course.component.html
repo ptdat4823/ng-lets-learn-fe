@@ -4,7 +4,7 @@
       <h1 class="course-title">{{ course.title }}</h1>
       <p>{{ course.category.name }}</p>
     </div>
-    <div class="course-code">
+    <div class="course-code" (click)="onCopyCourseId()">
       <p>cPquskdja</p>
       <span class="material-symbols-outlined"> content_copy </span>
     </div>
