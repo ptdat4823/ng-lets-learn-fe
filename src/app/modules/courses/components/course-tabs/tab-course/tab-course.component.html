@@ -1,0 +1,38 @@
+<div class="course-banner">
+  <div class="course-info">
+    <div>
+      <h1 class="course-title">{{ course.title }}</h1>
+      <p>{{ course.category.name }}</p>
+    </div>
+    <div class="course-code">
+      <p>cPquskdja</p>
+      <span class="material-symbols-outlined"> content_copy </span>
+    </div>
+  </div>
+  <button class="customize-btn">
+    <span class="material-symbols-outlined"> stylus </span> Customize
+  </button>
+  <img [src]="course.imageUrl" />
+</div>
+
+<div class="course-content">
+  <div class="content-actions">
+    <span class="collapse-all" (click)="collapseAllSections()"
+      >Collapse all</span
+    >
+  </div>
+
+  <app-collapsible-list [sections]="course.sections" [canEdit]="canEdit" />
+
+  @if(canEdit) {
+  <div class="action-buttons">
+    <app-button label="Cancel changes" variant="secondary" />
+    <app-button label="Add new section">
+      <span class="material-symbols-outlined" icon> add_circle </span>
+    </app-button>
+    <app-button label="Save">
+      <span class="material-symbols-outlined" icon> save </span>
+    </app-button>
+  </div>
+  }
+</div>

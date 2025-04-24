@@ -1,0 +1,56 @@
+<div
+  class="section"
+  #collapsibleRef
+  [style.max-height]="maxCollapsibleHeight"
+  [class.collapsed]="!isExpanded"
+>
+  <div class="section-header" (click)="toggleExpand()">
+    <div class="section-title">
+      <div class="toggle-icon" [class.rotate-right]="!isExpanded">
+        <span class="material-symbols-outlined"> keyboard_arrow_down </span>
+      </div>
+      <h2>{{ section.title }}</h2>
+      @if(isEditing) {
+      <span class="material-symbols-outlined"> stylus </span>
+      }
+    </div>
+    @if(canEdit) { @if(isEditing) {
+    <span class="material-symbols-outlined check" (click)="toggleEdit($event)">
+      check_circle
+    </span>
+    } @else {
+    <span class="material-symbols-outlined" (click)="toggleEdit($event)">
+      stylus
+    </span>
+    } }
+  </div>
+
+  <div class="section-content">
+    @if(section.description) {
+    <div class="section-description">
+      {{ section.description }}
+      @if(isEditing) {
+      <span class="material-symbols-outlined"> stylus </span>
+      }
+    </div>
+    } @if(section.topics.length > 0) { @for(topic of section.topics; track
+    topic.id) {
+    <app-topic
+      [topic]="topic"
+      [isEditing]="isEditing"
+      [class.editting]="isEditing"
+    />
+    } } @else {
+    <div class="no-topics">
+      <img src="images/no-item-found.jpg" alt="No topic found" />
+    </div>
+    } @if(canEdit) {
+
+    <div class="action-buttons">
+      <app-button label="Add new topic" (onClick)="addOneMoreItem()">
+        <span class="material-symbols-outlined" icon> add_circle </span>
+      </app-button>
+    </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,10 @@
+<app-tab-list [tabs]="tabs" />
+@if(course) {
+<main>
+  <tab-course [course]="course" />
+</main>
+} @else {
+<div class="course-not-found">
+  <img src="images/course-not-found.jpg" alt="Course not found" />
+</div>
+}

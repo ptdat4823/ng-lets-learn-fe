@@ -1,0 +1,108 @@
+@use "styles/theme/theme.variables" as *;
+
+.section {
+  background-color: white;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  transition: max-height 0.2s ease-in-out;
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    cursor: pointer;
+
+    span.material-symbols-outlined {
+      color: $tint-color;
+
+      &.check {
+        color: $success-color;
+      }
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      gap: 0.5rem;
+
+      .toggle-icon {
+        width: 28px;
+        height: 28px;
+        background-color: rgba($color: $tint-color, $alpha: 0.1);
+        transition: all 0.2s ease-in-out;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin-right: 0.75rem;
+
+        &:hover {
+          background-color: rgba($color: $tint-color, $alpha: 0.2);
+        }
+
+        &:active {
+          transform: scale(0.95);
+        }
+
+        &.rotate-right {
+          transform: rotate(-90deg);
+        }
+      }
+
+      h2 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 0;
+      }
+    }
+  }
+
+  .section-content {
+    padding: 0 1rem 1rem;
+
+    span.material-symbols-outlined {
+      color: $tint-color;
+    }
+
+    .section-description {
+      color: #666;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      gap: 0.5rem;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+
+      app-button {
+        width: fit-content;
+
+        span.material-symbols-outlined {
+          color: white;
+        }
+      }
+    }
+
+    .no-topics {
+      width: 100%;
+      max-width: 250px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0 auto 1rem;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+      }
+    }
+  }
+}

@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { Course } from '@shared/models/course';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'teacher-course-card',
@@ -9,8 +10,9 @@ import { Course } from '@shared/models/course';
 })
 export class TeacherCourseCardComponent {
   @Input({ required: true }) course!: Course;
+  router = inject(Router);
 
   handleClick(): void {
-    // handle your click logic here
+    this.router.navigate(['/courses', this.course.id]);
   }
 }

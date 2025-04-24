@@ -1,4 +1,4 @@
-import { Component, inject, Input, signal } from '@angular/core';
+import { Component, inject, Input, OnInit, signal } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { LayoutService } from '@shared/components/layout/layout.service';
 
@@ -9,7 +9,7 @@ import { LayoutService } from '@shared/components/layout/layout.service';
   templateUrl: './sidebar-item-collapse.component.html',
   styleUrl: './sidebar-item-collapse.component.scss',
 })
-export class SidebarItemCollapseComponent {
+export class SidebarItemCollapseComponent implements OnInit {
   @Input({ required: true }) label!: string;
   clicked = signal(false);
   layoutService = inject(LayoutService);

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { CircleImageComponent } from '../circle-image/circle-image.component';
 import { LayoutService } from '../layout/layout.service';
@@ -19,7 +19,7 @@ import { mockCourses } from '@shared/mocks/course';
     CircleImageComponent,
   ],
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
   layoutService = inject(LayoutService);
   isCollapsed = false;
   courses = mockCourses;

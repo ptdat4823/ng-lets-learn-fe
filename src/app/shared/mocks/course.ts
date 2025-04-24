@@ -5,7 +5,7 @@ import { mockCategories } from './category';
 
 export const mockCourses: Course[] = [
   {
-    id: 'sdalsdjka',
+    id: '1',
     title: 'Introduction to Accounting',
     category: mockCategories[0],
     sections: mockSections.filter((section) => section.courseId === '1'),

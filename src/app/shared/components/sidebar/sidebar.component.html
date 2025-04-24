@@ -1,12 +1,12 @@
 <div class="container" [class.collapsed]="isCollapsed">
   <sidebar-group>
-    <sidebar-item [label]="'Home'">
+    <sidebar-item [label]="'Home'" href="/home">
       <span class="material-symbols-outlined" icon> home </span>
     </sidebar-item>
-    <sidebar-item [label]="'Calendar'">
+    <sidebar-item [label]="'Calendar'" href="/calendar">
       <span class="material-symbols-outlined" icon> calendar_today </span>
     </sidebar-item>
-    <sidebar-item [label]="'Settings'">
+    <sidebar-item [label]="'Settings'" href="/settings">
       <span class="material-symbols-outlined" icon> settings </span>
     </sidebar-item>
   </sidebar-group>
@@ -14,7 +14,7 @@
     <span class="material-symbols-outlined" icon> group </span>
 
     <ul items>
-      <sidebar-item [label]="'To review'" type="list-item">
+      <sidebar-item [label]="'To review'" type="list-item" href="/to-review">
         <span class="material-symbols-outlined" icon> checkbook </span>
       </sidebar-item>
       @for(course of courses; track course.id) {
@@ -22,6 +22,7 @@
         [label]="course.title"
         type="list-item"
         [description]="course.category.name"
+        [href]="'/courses/' + course.id"
       >
         <circle-image src="{{ course.imageUrl }}" icon></circle-image>
       </sidebar-item>

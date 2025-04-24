@@ -7,8 +7,10 @@ import { TeacherCourseCardComponent } from './components/teacher-course-list/tea
 import { TeacherCourseListComponent } from './components/teacher-course-list/teacher-course-list.component';
 import { NewCourseFormComponent } from './components/new-course/new-course-form/new-course-form.component';
 import { NewCourseComponent } from './components/new-course/new-course.component';
-import { CourseComponent } from './components/course/course.component';
 import { CourseRoutingModule } from '@routes/course-route.module';
+import { CourseLayoutComponent } from './components/course-layout/course-layout.component';
+import { TabComponent } from '../../shared/components/tab-list/tab/tab.component';
+import { TabCourseComponent } from './components/course-tabs/tab-course/tab-course.component';
 
 @NgModule({
   declarations: [
@@ -18,8 +20,9 @@ import { CourseRoutingModule } from '@routes/course-route.module';
     CoursesLayoutComponent,
     NewCourseFormComponent,
     NewCourseComponent,
-    CourseComponent,
+    CourseLayoutComponent,
+    TabCourseComponent,
   ],
-  imports: [SharedModule, RouterOutlet, CourseRoutingModule],
+  imports: [SharedModule, RouterOutlet, CourseRoutingModule, TabComponent],
 })
 export class CoursesModule {}

@@ -1,20 +1,39 @@
 @use "styles/theme/theme.variables" as *;
+@use "styles/material-ui/material-ui.style" as *;
 
 button {
   --width: 100%;
   width: var(--width);
-  padding: 12px;
-  background-color: $tint-color;
-  color: white;
+  padding: 8px 12px;
   border: none;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 600;
+  font-family: Nunito;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  &.primary {
+    background-color: $tint-color;
+    color: white;
+  }
+  &.secondary {
+    background-color: $background-secondary-color;
+    color: $text-secondary-color;
+    border: 1px solid $border-color;
+  }
 
   &:hover {
-    background-color: rgba($color: $tint-color, $alpha: 0.8);
+    transform: scale(1.02);
+    ::ng-deep {
+      & .material-symbols-outlined {
+        font-variation-settings: $google-icon-hover-setting;
+      }
+    }
   }
 
   &:focus {
@@ -22,7 +41,14 @@ button {
   }
 
   &:disabled {
-    background-color: rgba($color: $tint-color, $alpha: 0.8);
     cursor: not-allowed;
+
+    &.primary {
+      background-color: rgba($color: $tint-color, $alpha: 0.8);
+    }
+  }
+
+  &:active {
+    transform: scale(0.95);
   }
 }

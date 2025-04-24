@@ -3,6 +3,8 @@
   [class.list-item]="type === 'list-item'"
   [class.has-description]="!!description"
   [class.collapsed]="isCollapsed"
+  [class.selected]="currentUrl === href"
+  (click)="onClick()"
 >
   <ng-content select="[icon]"></ng-content>
   <div class="content">

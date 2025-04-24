@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import {
   newCourseFormControls,
@@ -13,7 +13,7 @@ import { ComboboxService } from '@shared/components/combobox/combobox.service';
   styleUrl: './new-course-form.component.scss',
   providers: [ComboboxService],
 })
-export class NewCourseFormComponent {
+export class NewCourseFormComponent implements OnInit {
   private fb: FormBuilder = inject(FormBuilder);
   private comboboxService = inject(ComboboxService);
 

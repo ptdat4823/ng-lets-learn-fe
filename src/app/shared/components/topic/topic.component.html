@@ -1,0 +1,24 @@
+<span [class]="'material-symbols-outlined ' + topic.type">
+  {{ topicIcon }}
+</span>
+<div class="topic-content">
+  <div class="topic-name">
+    <h3>{{ topic.title }}</h3>
+    @if(isEditing) {<span class="material-symbols-outlined"> stylus </span>}
+  </div>
+  @if(topic.data.description) {
+  <div class="topic-description">
+    <p>
+      {{ topic.data.description }}
+    </p>
+    @if(isEditing) {<span class="material-symbols-outlined"> stylus </span>}
+  </div>
+  }
+</div>
+
+@if(isEditing){
+<div class="action-buttons">
+  <span class="material-symbols-outlined trash"> delete </span>
+  <span class="material-symbols-outlined default"> unfold_more </span>
+</div>
+}

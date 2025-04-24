@@ -1,0 +1,74 @@
+@use "styles/theme/theme.variables" as *;
+
+:host {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid $border-color;
+
+  span.material-symbols-outlined {
+    color: $tint-color;
+    &.link {
+      color: $link-color;
+    }
+    &.assignment {
+      color: $assignment-color;
+    }
+    &.quiz {
+      color: $quiz-color;
+    }
+    &.file {
+      color: $file-color;
+    }
+    &.page {
+      color: $page-color;
+    }
+    &.meeting {
+      color: $meeting-color;
+    }
+  }
+
+  .topic-content {
+    flex-grow: 1;
+
+    .topic-name,
+    .topic-description {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: start;
+      gap: 0.5rem;
+
+      span.material-symbols-outlined {
+        font-size: 20px;
+      }
+    }
+
+    h3 {
+      color: #06b6d4;
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+
+    p {
+      font-size: 0.8rem;
+      color: $text-secondary-color;
+    }
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+
+    span.material-symbols-outlined {
+      &.trash {
+        color: $error-color;
+      }
+      &.default {
+        color: $icon-color;
+      }
+    }
+  }
+}

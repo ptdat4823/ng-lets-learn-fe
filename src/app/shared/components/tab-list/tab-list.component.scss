@@ -1,0 +1,8 @@
+@use "styles/theme/theme.variables" as *;
+
+.nav-tabs {
+  padding-left: 16px;
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid $border-color;
+}

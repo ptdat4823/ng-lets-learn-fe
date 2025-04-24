@@ -1,0 +1,19 @@
+@use "styles/theme/theme.variables" as *;
+
+div {
+  padding: 0.75rem 1rem;
+  color: $text-secondary-color;
+  font-family: Nunito;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+  &:hover {
+    background-color: $icon-bounding-color-hover;
+  }
+
+  &.active {
+    box-shadow: inset 0 -2px 0 0 $tint-color;
+    color: $tint-color;
+    font-weight: 600;
+  }
+}
