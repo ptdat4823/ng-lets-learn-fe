@@ -1,5 +1,5 @@
+import { Location } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'new-course',
@@ -8,8 +8,8 @@ import { Router } from '@angular/router';
   styleUrl: './new-course.component.scss',
 })
 export class NewCourseComponent {
-  router = inject(Router);
+  location = inject(Location);
   onNavigateBack() {
-    this.router.navigate(['/courses']);
+    this.location.back();
   }
 }

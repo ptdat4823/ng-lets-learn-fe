@@ -1,4 +1,11 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { ComboboxOption } from './combobox.type';
 import { ComboboxService } from './combobox.service';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -12,13 +19,15 @@ import { FormWarningComponent } from '../form-warning/form-warning.component';
   imports: [ReactiveFormsModule, FormWarningComponent],
 })
 export class ComboboxComponent implements OnInit {
-  @Input({ required: true }) form!: FormGroup;
-  @Input({ required: true }) controlName!: string;
+  @Input() form: FormGroup = new FormGroup({});
+  @Input() controlName: string = '';
   @Input() validationMessages: Record<string, string> | null = null;
 
   @Input() options: ComboboxOption[] = [];
   @Input() placeholder = 'Select an option';
   @Input() disabled = false;
+  @Output() onSelect = new EventEmitter<ComboboxOption>();
+
   comboboxService = inject(ComboboxService);
 
   isOpen = false;
@@ -30,7 +39,7 @@ export class ComboboxComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const initValue = this.form.get(this.controlName)?.value;
+    const initValue = this.form?.get(this.controlName)?.value;
     const initOption = this.findOptionByValue(initValue);
     this.comboboxService.selectOption(initOption);
 
@@ -49,6 +58,7 @@ export class ComboboxComponent implements OnInit {
 
   selectOption(option: ComboboxOption): void {
     this.comboboxService.selectOption(option);
-    this.form.get(this.controlName)?.setValue(option.value);
+    this.onSelect.emit(option);
+    this.form?.get(this.controlName)?.setValue(option.value);
   }
 }

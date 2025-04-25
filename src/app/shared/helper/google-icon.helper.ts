@@ -28,6 +28,8 @@ const iconKeys = [
   'check_circle',
   'delete',
   'unfold_more',
+  'chevron_left',
+  'chevron_right',
 ];
 const baseGoogleIconLink =
   'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200';

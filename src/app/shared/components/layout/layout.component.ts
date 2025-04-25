@@ -3,11 +3,12 @@ import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { LayoutService } from './layout.service';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [HeaderComponent, SidebarComponent],
+  imports: [HeaderComponent, SidebarComponent, RouterOutlet],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss',
 })

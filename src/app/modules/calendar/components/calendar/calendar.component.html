@@ -1,0 +1,30 @@
+<div class="calendar-grid">
+  @for(calendarItem of calendar; track calendarItem.date) {
+  <div class="calendar-day">
+    <div class="day-header">
+      <div
+        class="day-name"
+        [class]="{ today: isCurrentDate(calendarItem.date) }"
+      >
+        {{ getDateOfWeek(calendarItem.date) }}
+      </div>
+      <div
+        class="day-number"
+        [class]="{ today: isCurrentDate(calendarItem.date) }"
+      >
+        {{ getDateNumber(calendarItem.date) }}
+      </div>
+    </div>
+    <div class="day-events">
+      @for(topicItem of calendarItem.topicItems; track topicItem.topic.id) {
+      <div class="event" [class]="topicItem.topic.type">
+        <div class="event-title">{{ topicItem.topic.title }}</div>
+        <div class="event-time">
+          {{ getTopicTime(topicItem, calendarItem.date) }}
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+  }
+</div>

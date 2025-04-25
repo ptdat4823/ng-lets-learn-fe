@@ -8,8 +8,8 @@ export const mockQuiz: QuizTopic = {
   sectionId: '1',
   type: TopicType.QUIZ,
   data: {
-    open: new Date(2024, 11, 10, 10, 30, 0, 0).toISOString(),
-    close: new Date(2024, 11, 20, 14, 30, 0, 0).toISOString(),
+    open: new Date(2025, 3, 25, 10, 30, 0, 0).toISOString(),
+    close: new Date(2025, 3, 26, 14, 30, 0, 0).toISOString(),
     description:
       'This quiz contains a variety of questions to test your basic knowledge of Astronomy. At the end of the quiz you will be given your score with suggestions for improvement.',
     timeLimit: 1,

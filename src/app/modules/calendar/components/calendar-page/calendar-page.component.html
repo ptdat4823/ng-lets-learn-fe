@@ -1,0 +1,24 @@
+<header>
+  <form>
+    <app-combobox
+      [options]="courseOptions || []"
+      (onSelect)="onSelectOption($event)"
+      placeholder="Select a course"
+    />
+  </form>
+  <div class="calendar-navigation">
+    <button
+      class="nav-button"
+      (click)="navigatePrevious()"
+      aria-label="Previous week"
+    >
+      <span class="material-symbols-outlined"> chevron_left </span>
+    </button>
+    <span class="date-range">{{ calendarRangeText() }}</span>
+    <button class="nav-button" (click)="navigateNext()" aria-label="Next week">
+      <span class="material-symbols-outlined"> chevron_right </span>
+    </button>
+  </div>
+  <div class="temp"></div>
+</header>
+<calendar [range]="calendarRange()" [topics]="topics" />

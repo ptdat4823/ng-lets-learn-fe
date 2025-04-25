@@ -12,7 +12,7 @@ export const mockTopics: Topic[] = [
     title: 'Topic Meeting',
     data: {
       description: 'Meeting description',
-      open: new Date(2024, 11, 20).toISOString(),
+      open: new Date().toISOString(),
     },
   },
   {

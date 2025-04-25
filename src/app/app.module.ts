@@ -9,6 +9,7 @@ import { CoursesModule } from '@modules/courses/courses.module';
 import { ToastrModule } from 'ngx-toastr';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
+import { CalendarModule } from '@modules/calendar/calendar.module';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { provideToastr } from 'ngx-toastr';
     AppRoutingModule,
     AuthModule,
     CoursesModule,
+    CalendarModule,
     ToastrModule.forRoot(),
   ],
   declarations: [AppComponent],

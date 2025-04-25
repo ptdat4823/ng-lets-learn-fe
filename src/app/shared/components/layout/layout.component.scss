@@ -3,10 +3,20 @@
   flex-direction: column;
   width: 100%;
   height: 100%;
-}
+  overflow: hidden;
 
-main {
-  display: flex;
-  flex-direction: row;
-  flex-grow: 1;
+  & main {
+    height: 91vh;
+    display: flex;
+    flex-direction: row;
+  }
+
+  & div.main-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: auto;
+    box-sizing: border-box;
+  }
 }
