@@ -2,7 +2,7 @@
   {{ topicIcon }}
 </span>
 <div class="topic-content">
-  <div class="topic-name">
+  <div class="topic-name" (click)="onTopicClick()">
     <h3>{{ topic.title }}</h3>
     @if(isEditing) {<span class="material-symbols-outlined"> stylus </span>}
   </div>

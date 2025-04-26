@@ -1,7 +1,8 @@
 @use "styles/theme/theme.variables" as *;
 
-.nav-tabs {
-  padding-left: 16px;
+:host {
+  --padding-left: 16px;
+  padding-left: var(--padding-left);
   display: flex;
   flex-direction: row;
   border-bottom: 1px solid $border-color;

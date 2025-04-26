@@ -1,0 +1,11 @@
+<div class="topic-header">
+  <div class="topic-title">
+    <span class="material-symbols-outlined"> {{ topicIcon }}</span>
+    <h2>{{ topic.title }}</h2>
+  </div>
+
+  <app-tab-list [tabs]="tabs" variant="white"></app-tab-list>
+</div>
+<div class="topic-content">
+  <ng-content />
+</div>

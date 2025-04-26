@@ -28,7 +28,7 @@ button {
   }
 
   &:hover {
-    transform: scale(1.02);
+    transform: scale(1.01);
     ::ng-deep {
       & .material-symbols-outlined {
         font-variation-settings: $google-icon-hover-setting;
@@ -49,6 +49,6 @@ button {
   }
 
   &:active {
-    transform: scale(0.95);
+    transform: scale(0.98);
   }
 }

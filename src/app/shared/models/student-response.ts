@@ -1,6 +1,6 @@
-import { CloudinaryFile } from "./cloudinary-file";
-import { Question } from "./question";
-import { User } from "./user";
+import { CloudinaryFile } from './cloudinary-file';
+import { Question } from './question';
+import { User } from './user';
 
 export type StudentResponse = {
   id: string;
@@ -26,9 +26,9 @@ export type QuizAnswer = {
 };
 
 export enum QuizStatus {
-  FINISHED = "Finished",
-  NOT_FINISHED = "Not finished",
-  NOT_STARTED = "Not started",
+  FINISHED = 'Finished',
+  NOT_FINISHED = 'Not finished',
+  NOT_STARTED = 'Not started',
 }
 
 export type AssignmentResponseData = {
@@ -36,39 +36,4 @@ export type AssignmentResponseData = {
   files: CloudinaryFile[];
   mark: number | null;
   note: string;
-};
-
-export const getQuizResponseMark = (quizResponse: QuizResponseData) => {
-  let mark = 0;
-  quizResponse.answers.forEach((answer) => {
-    mark += answer.mark;
-  });
-  return mark;
-};
-
-export const getQuizResponseTotalMark = (quizResponse: QuizResponseData) => {
-  let totalMark = 0;
-  quizResponse.answers.forEach((answer) => {
-    totalMark += answer.question.defaultMark;
-  });
-  return totalMark;
-};
-
-export const sortQuizResponsesByCompletedDate = (
-  quizResponses: StudentResponse[],
-  ascending = true
-) => {
-  return quizResponses.sort((a, b) => {
-    const aData = a.data as QuizResponseData;
-    const bData = b.data as QuizResponseData;
-    if (ascending)
-      return (
-        new Date(aData.completedAt).getTime() -
-        new Date(bData.completedAt).getTime()
-      );
-    return (
-      new Date(bData.completedAt).getTime() -
-      new Date(aData.completedAt).getTime()
-    );
-  });
 };

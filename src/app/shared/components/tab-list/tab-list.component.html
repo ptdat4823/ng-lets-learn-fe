@@ -1,9 +1,8 @@
-<div class="nav-tabs">
-  @for(tab of tabs; track tab) {
-  <app-tab
-    [label]="tab"
-    [isActive]="tab === selectedTab"
-    (click)="onTabClick(tab)"
-  />
-  }
-</div>
+@for(tab of tabs; track tab) {
+<app-tab
+  [label]="tab"
+  [isActive]="tab === selectedTab"
+  (click)="onTabClick(tab)"
+  [variant]="variant"
+/>
+}

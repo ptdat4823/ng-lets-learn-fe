@@ -8,13 +8,10 @@ export class CollapsibleSectionService {
   private section = new BehaviorSubject<Section | null>(null);
   public section$ = this.section.asObservable();
 
-  constructor() {}
-
   setSection(section: Section): void {
     this.section.next(section);
   }
 
-  // Reactive topics
   setTopics(topics: Topic[]): void {
     if (!this.section.value) return;
     const current: Section = this.section.value;

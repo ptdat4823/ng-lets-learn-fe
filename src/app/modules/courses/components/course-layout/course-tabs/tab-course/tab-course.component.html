@@ -17,12 +17,12 @@
 
 <div class="course-content">
   <div class="content-actions">
-    <span class="collapse-all" (click)="collapseAllSections()"
-      >Collapse all</span
-    >
+    <span class="collapse-all" (click)="toggleAllSectionState()">{{
+      toggleString
+    }}</span>
   </div>
 
-  <app-collapsible-list [sections]="course.sections" [canEdit]="canEdit" />
+  <app-collapsible-list />
 
   @if(canEdit) {
   <div class="action-buttons">

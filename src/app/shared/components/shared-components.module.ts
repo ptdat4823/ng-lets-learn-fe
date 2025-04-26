@@ -14,6 +14,7 @@ import { TabListComponent } from './tab-list/tab-list.component';
 import { CollapsibleSectionComponent } from './collapsible-section/collapsible-section.component';
 import { TopicComponent } from './topic/topic.component';
 import { CollapsibleListComponent } from './collapsible-list/collapsible-list.component';
+import { TopicPageLayoutComponent } from './topic-page-layout/topic-page-layout.component';
 @NgModule({
   imports: [
     FormWarningComponent,
@@ -31,6 +32,7 @@ import { CollapsibleListComponent } from './collapsible-list/collapsible-list.co
     CollapsibleSectionComponent,
     CollapsibleListComponent,
     TopicComponent,
+    TopicPageLayoutComponent,
   ],
   exports: [
     FormWarningComponent,
@@ -48,6 +50,7 @@ import { CollapsibleListComponent } from './collapsible-list/collapsible-list.co
     CollapsibleSectionComponent,
     TopicComponent,
     CollapsibleListComponent,
+    TopicPageLayoutComponent,
   ],
 })
 export class SharedComponentsModule {}

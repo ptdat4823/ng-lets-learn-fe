@@ -11,18 +11,13 @@ import { CollapsibleListService } from './collapsible-list.service';
   imports: [CollapsibleSectionComponent],
 })
 export class CollapsibleListComponent implements OnInit {
-  @Input() sections: Section[] = [];
-  @Input() canEdit = true;
-  @Input() expandedSectionIds: string[] = [];
-  @Input() editingSectionIds: string[] = [];
+  sections: Section[] = [];
+  canEdit = true;
+  expandedSectionIds: string[] = [];
+  editingSectionIds: string[] = [];
   collapsibleListService = inject(CollapsibleListService);
 
   ngOnInit(): void {
-    this.collapsibleListService.setCanEdit(this.canEdit);
-    this.collapsibleListService.setSections(this.sections);
-    this.collapsibleListService.setExpandedSectionIds(this.expandedSectionIds);
-    this.collapsibleListService.setEditingSectionIds(this.editingSectionIds);
-
     this.collapsibleListService.sections$.subscribe((sections) => {
       this.sections = sections;
     });

@@ -8,6 +8,7 @@ import { LayoutComponent } from '@shared/components/layout/layout.component';
 const routes: Routes = [
   { path: 'auth/login', component: LoginPageComponent },
   { path: 'auth/signup', component: RegisterPageComponent },
+  { path: 'home', redirectTo: 'courses' },
   {
     path: '',
     component: LayoutComponent,
@@ -22,7 +23,6 @@ const routes: Routes = [
       },
     ],
   },
-
   { path: '**', redirectTo: 'auth/login' },
 ];
 

@@ -1,9 +1,5 @@
 @use "styles/theme/theme.variables" as *;
 
-$assignment-bg: #faf5ff;
-$quiz-bg: #fdf2f8;
-$meeting-bg: #eff6ff;
-
 :host {
   width: 100%;
   display: flex;
@@ -79,7 +75,7 @@ $meeting-bg: #eff6ff;
     transition: all 0.2s ease-in-out;
 
     &.assignment {
-      background-color: $assignment-bg;
+      background-color: $assignment-background;
       color: $assignment-color;
 
       &:hover {
@@ -89,7 +85,7 @@ $meeting-bg: #eff6ff;
     }
 
     &.meeting {
-      background-color: $meeting-bg;
+      background-color: $meeting-background;
       color: $meeting-color;
 
       &:hover {
@@ -99,7 +95,7 @@ $meeting-bg: #eff6ff;
     }
 
     &.quiz {
-      background-color: $quiz-bg;
+      background-color: $quiz-background;
       color: $quiz-color;
 
       &:hover {

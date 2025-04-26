@@ -1,8 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { COURSE_TABS } from '@modules/courses/constants/courses.constant';
+import {
+  COURSE_TABS,
+  CourseTab,
+} from '@modules/courses/constants/courses.constant';
 import { TabService } from '@shared/components/tab-list/tab-list.service';
-import { CourseTab } from '@shared/constants/course';
 import { mockCourses } from '@shared/mocks/course';
 import { Course } from '@shared/models/course';
 

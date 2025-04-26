@@ -4,7 +4,6 @@ import {
   ElementRef,
   inject,
   Input,
-  OnChanges,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -23,13 +22,11 @@ import { CollapsibleSectionService } from './collapsible-section.service';
   imports: [ButtonComponent, TopicComponent],
   providers: [CollapsibleSectionService],
 })
-export class CollapsibleSectionComponent
-  implements OnInit, AfterViewInit, OnChanges
-{
+export class CollapsibleSectionComponent implements OnInit, AfterViewInit {
   @Input({ required: true }) section!: Section;
-  @Input() canEdit = true;
-  @Input() isEditing = false;
-  @Input() isExpanded = true;
+  canEdit = true;
+  isEditing = false;
+  isExpanded = false;
   @ViewChild('collapsibleRef') collapsibleRef!: ElementRef;
 
   maxCollapsibleHeight = '60px';
@@ -41,13 +38,20 @@ export class CollapsibleSectionComponent
     this.collapsibleService.section$.subscribe((section) => {
       if (section) this.section = section;
     });
+
+    this.collapsibleListService.expandedSectionIds$.subscribe((ids) => {
+      this.isExpanded = ids.includes(this.section.id);
+      this.updateContentHeight();
+    });
+    this.collapsibleListService.canEdit$.subscribe((canEdit) => {
+      this.canEdit = canEdit;
+    });
+    this.collapsibleListService.editingSectionIds$.subscribe((ids) => {
+      this.isEditing = ids.includes(this.section.id);
+    });
   }
 
   ngAfterViewInit(): void {
-    this.updateContentHeight();
-  }
-
-  ngOnChanges(): void {
     this.updateContentHeight();
   }
 
@@ -73,7 +77,7 @@ export class CollapsibleSectionComponent
     requestAnimationFrame(() => {
       const scrollHeight = this.collapsibleRef.nativeElement.scrollHeight;
       this.maxCollapsibleHeight = this.isExpanded
-        ? `${scrollHeight + 50}px`
+        ? `${scrollHeight + 100}px`
         : '60px';
     });
   }

@@ -1,9 +1,3 @@
 @for(section of sections; track section.id) {
-<collapsible-section
-  [section]="section"
-  [canEdit]="canEdit"
-  [isEditing]="editingSectionIds.includes(section.id)"
-  [isExpanded]="expandedSectionIds.includes(section.id)"
->
-</collapsible-section>
+<collapsible-section [section]="section"> </collapsible-section>
 }

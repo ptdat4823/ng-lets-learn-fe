@@ -1,0 +1,18 @@
+<div class="comment">
+  <div class="comment-avatar">
+    <img src="images/mock-user-image.jpg" alt="{{ comment.user.username }}" />
+  </div>
+  <div class="comment-content">
+    <div class="comment-header">
+      <span class="comment-author">{{ comment.user.username }}</span>
+      <span class="comment-time">{{
+        formatMessageTime(comment.createdAt)
+      }}</span>
+    </div>
+    <div class="comment-message">{{ comment.text }}</div>
+  </div>
+  <div class="comment-actions">
+    <span class="material-symbols-outlined"> reply </span>
+    <span class="material-symbols-outlined"> more_vert</span>
+  </div>
+</div>

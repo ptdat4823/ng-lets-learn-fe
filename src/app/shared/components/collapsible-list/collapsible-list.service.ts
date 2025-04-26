@@ -31,6 +31,22 @@ export class CollapsibleListService {
     this.expandedSectionIds.next([]);
   }
 
+  expandAll(): void {
+    const current = this.sections.value.map((section) => section.id);
+    this.expandedSectionIds.next(current);
+  }
+
+  isAllCollapsed() {
+    const current = this.expandedSectionIds.value;
+    return current.length === 0;
+  }
+
+  toggleAllSectionStates(): void {
+    const current = this.expandedSectionIds.value;
+    if (current.length === 0) this.expandAll();
+    else this.collapseAll();
+  }
+
   toggleEdit(sectionId: string): void {
     const current = this.editingSectionIds.value;
     if (current.includes(sectionId)) {
@@ -71,5 +87,15 @@ export class CollapsibleListService {
       section.id === updatedSection.id ? updatedSection : section
     );
     this.sections.next(updated);
+  }
+
+  getSectionExpandState(sectionId: string) {
+    const current = this.expandedSectionIds.value;
+    return current.includes(sectionId);
+  }
+
+  getSectionEditingState(sectionId: string) {
+    const current = this.editingSectionIds.value;
+    return current.includes(sectionId);
   }
 }

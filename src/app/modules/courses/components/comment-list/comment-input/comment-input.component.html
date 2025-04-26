@@ -1,0 +1,16 @@
+<div class="comment-input">
+  <div class="comment-avatar">
+    <img src="images/mock-user-image.jpg" alt="You" />
+  </div>
+  <div class="input-container">
+    <input
+      type="text"
+      placeholder="Add class comment"
+      (keyup.enter)="submitComment()"
+      [(ngModel)]="newComment"
+    />
+    <span class="material-symbols-outlined" (click)="submitComment()">
+      send
+    </span>
+  </div>
+</div>

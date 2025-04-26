@@ -13,6 +13,13 @@ const routes: Routes = [
       { path: '', component: CourseListComponent },
       { path: 'new-course', component: NewCourseComponent },
       { path: ':courseId', component: CourseLayoutComponent },
+      {
+        path: ':courseId',
+        loadChildren: () =>
+          import('@routes/topic-route.module').then(
+            (m) => m.TopicRoutingModule
+          ),
+      },
     ],
   },
 ];

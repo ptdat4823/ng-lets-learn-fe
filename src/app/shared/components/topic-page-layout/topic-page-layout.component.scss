@@ -1,0 +1,77 @@
+@use "styles/theme/theme.variables" as *;
+
+:host {
+  z-index: 0;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  font-family: Nunito;
+  color: $text-color;
+  background-color: $quiz-background;
+  overflow-y: hidden;
+  display: flex;
+  flex-direction: column;
+
+  ::ng-deep {
+    app-tab-list {
+      padding-left: 24px;
+    }
+
+    card {
+      --max-width: auto;
+      --width: auto;
+    }
+
+    app-button {
+      width: fit-content;
+      button {
+        padding-left: 24px;
+        padding-right: 24px;
+        background-color: $tint-secondary-color !important;
+        border-radius: 6px;
+      }
+    }
+  }
+}
+
+.topic-header {
+  z-index: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  padding: 2.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  box-shadow: inset 4px 4px 20px 0px #751540;
+
+  background: linear-gradient(
+    to bottom right,
+    $quiz-color,
+    #751540 75%,
+    #751540
+  );
+
+  .topic-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 24px;
+    margin-bottom: 16px;
+
+    span.material-symbols-outlined {
+      font-size: 28px;
+    }
+  }
+}
+
+.topic-content {
+  z-index: 1;
+  position: relative;
+  padding: 0 20px 20px;
+  overflow-y: auto;
+  margin-top: 150px;
+}

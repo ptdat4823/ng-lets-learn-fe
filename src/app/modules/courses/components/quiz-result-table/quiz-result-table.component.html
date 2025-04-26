@@ -1,0 +1,27 @@
+<div class="attempts-table">
+  <div class="attempt-row header">
+    <div class="attempt-cell">Attempt</div>
+    <div class="attempt-cell">Status</div>
+    <div class="attempt-cell">Started</div>
+    <div class="attempt-cell">Completed</div>
+    <div class="attempt-cell">Duration</div>
+    <div class="attempt-cell actions">Result</div>
+  </div>
+
+  @for(res of studentReponses; track res.id; let index = $index) {
+  <div class="attempt-row">
+    <div class="attempt-cell">{{ index + 1 }}</div>
+    <div class="attempt-cell">{{ getQuizResponseData(res).status }}</div>
+    <div class="attempt-cell">
+      {{ formatDate(getQuizResponseData(res).startedAt) }}
+    </div>
+    <div class="attempt-cell">
+      {{ formatDate(getQuizResponseData(res).completedAt) }}
+    </div>
+    <div class="attempt-cell">{{ showDuration(getQuizResponseData(res)) }}</div>
+    <div class="attempt-cell actions">
+      <a href="#" class="review-link">Review</a>
+    </div>
+  </div>
+  }
+</div>

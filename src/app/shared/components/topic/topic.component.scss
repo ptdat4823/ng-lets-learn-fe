@@ -1,4 +1,5 @@
 @use "styles/theme/theme.variables" as *;
+@use "styles/material-ui/material-ui.style" as *;
 
 :host {
   display: flex;
@@ -29,8 +30,30 @@
     }
   }
 
+  &:hover {
+    span.material-symbols-outlined {
+      font-variation-settings: $google-icon-hover-setting;
+    }
+    &:active {
+      span.material-symbols-outlined {
+        font-variation-settings: $google-icon-active-setting;
+      }
+    }
+  }
+
   .topic-content {
     flex-grow: 1;
+
+    .topic-name {
+      width: fit-content;
+      cursor: pointer;
+      &:hover {
+        text-decoration: underline;
+        text-decoration-color: $tint-secondary-color;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 2px;
+      }
+    }
 
     .topic-name,
     .topic-description {

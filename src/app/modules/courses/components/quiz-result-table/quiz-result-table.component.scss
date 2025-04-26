@@ -1,0 +1,45 @@
+@use "styles/theme/theme.variables" as *;
+
+.attempts-table {
+  width: 100%;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.attempt-row {
+  display: grid;
+  grid-template-columns: 0.3fr 0.8fr 1fr 1fr 0.6fr 0.6fr;
+
+  &.header {
+    background-color: $background-secondary-color;
+    font-weight: 600;
+    color: $text-color;
+  }
+
+  &:not(.header):nth-child(odd) {
+    background-color: $background-secondary-color;
+  }
+}
+
+.attempt-cell {
+  padding: 10px;
+  border-bottom: 1px solid $border-color;
+  font-size: 14px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
+  &.actions {
+    text-align: right;
+  }
+}
+
+.review-link {
+  color: $tint-secondary-color;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
