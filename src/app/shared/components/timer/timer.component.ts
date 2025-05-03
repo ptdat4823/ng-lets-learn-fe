@@ -12,8 +12,7 @@ export type TimerType = 'count-up' | 'count-down';
   styleUrl: './timer.component.scss',
 })
 export class TimerComponent implements OnInit {
-  @Input() timerType: TimerType = 'count-up';
-  @Input() interval: number = 60; // in seconds
+  timerType: TimerType = 'count-up';
 
   countUp: number = 0;
   countDown: number = 0;
@@ -21,13 +20,14 @@ export class TimerComponent implements OnInit {
   constructor(private timerService: TimerService) {}
 
   ngOnInit() {
-    this.timerService.setTimerType(this.timerType);
-    this.timerService.setCountDown(this.interval);
     this.timerService.countUp$.subscribe((val) => {
       this.countUp = val;
     });
     this.timerService.countDown$.subscribe((val) => {
       this.countDown = val;
+    });
+    this.timerService.timerType$.subscribe((val) => {
+      this.timerType = val;
     });
   }
 

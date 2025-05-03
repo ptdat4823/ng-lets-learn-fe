@@ -12,7 +12,7 @@ export const mockQuiz: QuizTopic = {
     close: new Date(2025, 3, 26, 18, 30, 0, 0).toISOString(),
     description:
       'This quiz contains a variety of questions to test your basic knowledge of Astronomy. At the end of the quiz you will be given your score with suggestions for improvement.',
-    timeLimit: 1,
+    timeLimit: null,
     timeLimitUnit: TimeLimitType.HOURS,
     gradeToPass: 5,
     gradingMethod: GradingMethod.HIGHEST_GRADE,

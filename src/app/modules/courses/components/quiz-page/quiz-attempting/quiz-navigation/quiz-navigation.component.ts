@@ -1,8 +1,8 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { QuestionResult } from '@modules/courses/constants/quiz.constant';
 import { Question } from '@shared/models/question';
 import { QuizNavigationService } from './quiz-navigation.service';
-import { TimerService } from '@shared/components/timer/timer.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'quiz-navigation',
@@ -22,7 +22,7 @@ export class QuizNavigationComponent implements OnInit {
 
   constructor(
     private quizNavigationService: QuizNavigationService,
-    private timerService: TimerService
+    private location: Location
   ) {}
 
   ngOnInit(): void {
@@ -67,6 +67,10 @@ export class QuizNavigationComponent implements OnInit {
     if (this.showAnswer) return;
     this.quizNavigationService.finishQuiz();
     this.calculateQuestionResult();
+  }
+
+  finishReview() {
+    this.location.back();
   }
 
   getQuestionResult(questionId: string) {

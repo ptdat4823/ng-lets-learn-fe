@@ -1,9 +1,12 @@
-<div>
+<div class="timer" [class.fade-out]="showAnswer">
   <h3>Timer</h3>
-  <app-timer timerType="count-down" [interval]="3600" />
+  <app-timer />
 </div>
 
-<app-button label="Finish attempt" (onClick)="finishQuiz()" />
+<app-button
+  [label]="showAnswer ? 'Finish review' : 'Finish attempt'"
+  (onClick)="showAnswer ? finishReview() : finishQuiz()"
+/>
 
 <div>
   <h3 class="title">Quiz navigation</h3>

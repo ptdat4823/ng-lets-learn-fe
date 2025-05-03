@@ -128,6 +128,11 @@ const getTimeBySeconds = (seconds: number) => {
   return new Date(baseTime.setSeconds(seconds));
 };
 
+const removeMilliseconds = (date: Date) => {
+  date.setMilliseconds(0);
+  return date;
+};
+
 export {
   getDurationText,
   getTimeStringByDuration,
@@ -138,4 +143,5 @@ export {
   formatDateString,
   getBaseTime,
   getTimeBySeconds,
+  removeMilliseconds,
 };

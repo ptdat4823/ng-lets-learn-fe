@@ -53,8 +53,14 @@ $white: #fff;
     padding: 15px;
 
     &.highlighted {
+      opacity: 0;
       outline: 2px solid $tint-third-color;
       box-shadow: 0 2px 6px 0 $tint-third-color;
+
+      &.fade-in {
+        opacity: 1;
+        transition: opacity 1.5s ease;
+      }
     }
   }
 }

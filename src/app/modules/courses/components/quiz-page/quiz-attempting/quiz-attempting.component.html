@@ -73,10 +73,8 @@
     <div class="sidebar-item">
       <quiz-navigation />
     </div>
-    @if(showAnswer) {
-    <div class="sidebar-item highlighted">
+    <div class="sidebar-item highlighted" [class.fade-in]="showAnswer">
       <quiz-result />
     </div>
-    }
   </div>
 </div>

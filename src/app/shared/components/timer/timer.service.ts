@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { interval, BehaviorSubject, Subscription } from 'rxjs';
 import { takeWhile, map } from 'rxjs/operators';
 import { TimerType } from './timer.component';
+import { removeMilliseconds } from '@shared/helper/date.helper';
 
 @Injectable({ providedIn: 'root' })
 export class TimerService {
@@ -13,8 +14,12 @@ export class TimerService {
 
   private timerSub?: Subscription;
   private countDownSub?: Subscription;
-  private type: TimerType = 'count-up';
+
+  private timerType = new BehaviorSubject<TimerType>('count-up');
+  timerType$ = this.timerType.asObservable();
+
   private startTime: Date = new Date();
+  private completedTime: Date = new Date();
 
   private unscribe() {
     if (this.timerSub) {
@@ -26,8 +31,8 @@ export class TimerService {
     }
   }
 
-  setTimerType(type: TimerType) {
-    this.type = type;
+  setTimerType(timerType: TimerType) {
+    this.timerType.next(timerType);
   }
 
   setCountUp(countUp: number) {
@@ -39,14 +44,14 @@ export class TimerService {
   }
 
   start() {
-    if (this.type === 'count-up') this.startCountUp();
+    if (this.timerType.getValue() === 'count-up') this.startCountUp();
     else this.startCountDown();
   }
 
   startCountUp() {
     if (this.timerSub) return;
     this.timerSub = interval(1000).subscribe((seconds) => {
-      if (seconds === 0) this.startTime = new Date();
+      if (seconds === 0) this.startTime = removeMilliseconds(new Date());
       this.countUpSubject.next(seconds);
     });
   }
@@ -56,7 +61,7 @@ export class TimerService {
     const from = this.countDownSubject.getValue();
     this.countDownSub = interval(1000).subscribe((value) => {
       if (value === 0) {
-        this.startTime = new Date();
+        this.startTime = removeMilliseconds(new Date());
         console.log('start time', this.startTime);
       }
       this.countDownSubject.next(from - value);
@@ -65,7 +70,8 @@ export class TimerService {
 
   stop() {
     this.unscribe();
-    return new Date();
+    this.completedTime = removeMilliseconds(new Date());
+    return this.completedTime;
   }
 
   reset() {

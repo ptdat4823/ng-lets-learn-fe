@@ -16,6 +16,17 @@ $white: #fff;
   gap: 1rem;
 }
 
+.timer {
+  max-height: 200px;
+
+  &.fade-out {
+    pointer-events: none;
+    opacity: 0;
+    max-height: 0;
+    transition: opacity 0.4s ease-in-out, max-height 1s ease-in-out;
+  }
+}
+
 .navigation-grid {
   max-height: 245px;
   overflow-y: auto;
