@@ -1,0 +1,82 @@
+<div class="quiz-container">
+  <!-- Left Sidebar - Annotation Table -->
+  <div class="sidebar">
+    <div class="sidebar-item">
+      <quiz-description />
+    </div>
+  </div>
+
+  <div class="quiz-content">
+    <ng-container>
+      @for(question of questions; track question.id){ @if(currentQuestionId
+      ===question.id) {
+      <div class="question-container">
+        <div class="question-header">
+          <div class="question-header-main">
+            <app-button
+              variant="gradient-blue"
+              [label]="'Question ' + question.id + ' / ' + questions.length"
+            />
+            <span
+              class="material-symbols-outlined"
+              [class.flagged]="flaggedQuestions.includes(question.id)"
+              (click)="flagQuestion(question)"
+              >flag_2</span
+            >
+          </div>
+        </div>
+
+        <div class="question-text" [innerHTML]="question.questionText"></div>
+
+        <div class="answer-instructions">
+          @if(question.type === questionTypes.SHORT_ANSWER) {
+          <span> Write your answer here: </span>
+          } @else if(question.type === questionTypes.TRUE_FALSE) {
+          <span> Select the correct answer: </span>
+          }@else if(isMultipleChoice(question)){
+          <span> Select the correct answers: </span>
+          } @else{
+          <span> Select the correct answer: </span>
+          }
+        </div>
+
+        <div
+          class="answers-container"
+          [class]="{ 'review-mode': isReviewMode }"
+        >
+          @if(question.type === questionTypes.CHOICE){
+          <ng-container>
+            @for(option of getChoices(question); track option; let optIndex =
+            $index) {
+            <quiz-choice-answer
+              [question]="question"
+              [choice]="option"
+              [answer]="getCharacter(optIndex)"
+            />
+            }
+          </ng-container>
+          } @else if(question.type === questionTypes.TRUE_FALSE) {
+          <ng-container>
+            <quiz-true-false-answer [question]="question" [value]="false" />
+            <quiz-true-false-answer [question]="question" [value]="true" />
+          </ng-container>
+          } @else if(question.type === questionTypes.SHORT_ANSWER) {
+          <quiz-short-answer [question]="question" />
+          }
+        </div>
+      </div>
+      } }
+    </ng-container>
+  </div>
+
+  <div class="sidebar">
+    <div class="sidebar-item">
+      <quiz-navigation />
+    </div>
+    @if(showAnswer) {
+    <div class="sidebar-item highlighted">
+      <quiz-result />
+    </div>
+    }
+  </div>
+</div>

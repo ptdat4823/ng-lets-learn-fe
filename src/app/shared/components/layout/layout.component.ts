@@ -4,6 +4,8 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { LayoutService } from './layout.service';
 import { RouterOutlet } from '@angular/router';
+import { UserService } from '@shared/services/user.service';
+import { mockUsers } from '@shared/mocks/user';
 
 @Component({
   selector: 'app-layout',
@@ -15,6 +17,7 @@ import { RouterOutlet } from '@angular/router';
 export class LayoutComponent implements OnInit {
   private responsive = inject(BreakpointObserver);
   private layoutService = inject(LayoutService);
+  private userService = inject(UserService);
 
   // XSmall (max-width: 599.98px)
   // Small (min-width: 600px) and (max-width: 959.98px)
@@ -23,6 +26,7 @@ export class LayoutComponent implements OnInit {
   // XLarge (min-width: 1920px)
 
   ngOnInit() {
+    this.userService.setUser(mockUsers[0]);
     this.responsive
       .observe([Breakpoints.XSmall, Breakpoints.Small])
       .subscribe((state) => {

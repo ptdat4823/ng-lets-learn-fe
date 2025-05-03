@@ -23,6 +23,13 @@ const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'quiz',
+    loadChildren: () =>
+      import('@routes/quiz-attempting-route.module').then(
+        (m) => m.QuizAttemptingRoutingModule
+      ),
+  },
   { path: '**', redirectTo: 'auth/login' },
 ];
 

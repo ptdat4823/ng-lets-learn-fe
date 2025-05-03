@@ -1,0 +1,21 @@
+<button
+  type="button"
+  [class]="{
+    default: getVariant() === 'default',
+    selected: getVariant() === 'selected',
+    correct: getVariant() === 'correct',
+    incorrect: getVariant() === 'incorrect',
+    missing: getVariant() === 'missing',
+    'not-selected': getVariant() === 'not-selected',
+  }"
+  (click)="handleClick()"
+>
+  @if(isMultipleChoice()){ @if(isSelectedChoice()){
+  <span class="material-symbols-outlined">check_circle</span>
+  } @else {
+  <span class="material-symbols-outlined">circle</span>
+  } } @else {
+  <div class="answer-char" [innerHTML]="answer"></div>
+  }
+  {{ getAnswerText() }}
+</button>

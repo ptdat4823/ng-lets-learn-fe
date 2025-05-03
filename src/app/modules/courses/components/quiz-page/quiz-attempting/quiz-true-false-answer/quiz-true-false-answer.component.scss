@@ -1,0 +1,104 @@
+@use "styles/theme/theme.variables" as *;
+@use "styles/material-ui/material-ui.style" as *;
+
+button {
+  --width: 100%;
+  width: var(--width);
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: Nunito;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+
+  &.default {
+    background-color: $background-secondary-color;
+    color: $text-secondary-color;
+
+    .answer-char {
+      color: $text-secondary-color;
+    }
+  }
+  &.selected {
+    background-color: $question-selected-color;
+    color: white;
+
+    .answer-char {
+      color: $question-selected-color;
+    }
+  }
+  &.correct {
+    background-color: transparent;
+    color: $text-secondary-color;
+    border: 1px solid $success-color;
+
+    span.material-symbols-outlined {
+      color: $success-color;
+    }
+  }
+  &.incorrect {
+    background-color: transparent;
+    color: $text-secondary-color;
+    border: 1px solid $error-color;
+
+    span.material-symbols-outlined {
+      color: $error-color;
+    }
+  }
+  &.missing {
+    background-color: transparent;
+    color: $text-secondary-color;
+    border: 1px solid $warning-color;
+
+    span.material-symbols-outlined {
+      color: $warning-color;
+    }
+  }
+
+  &:hover {
+    transform: scale(1.01);
+    ::ng-deep {
+      & .material-symbols-outlined {
+        font-variation-settings: $google-icon-hover-setting;
+      }
+    }
+  }
+
+  span.material-symbols-outlined {
+    font-size: 18px;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+
+    &.primary {
+      background-color: rgba($color: $tint-color, $alpha: 0.8);
+    }
+  }
+
+  &:active {
+    transform: scale(0.99);
+  }
+
+  .answer-char {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    height: 18px;
+
+    padding: 3px 5px;
+    background-color: white;
+    border-radius: 4px;
+  }
+}

@@ -1,0 +1,36 @@
+@use "styles/theme/theme.variables" as *;
+
+.title {
+  color: $tint-third-color;
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.result-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  .result-item {
+    font-size: 14px;
+    font-weight: 500;
+
+    label {
+      font-weight: 600;
+      margin-right: 0.5rem;
+    }
+
+    .result-value {
+      font-weight: 600;
+      &.green {
+        color: $success-color;
+      }
+      &.yellow {
+        color: $warning-color;
+      }
+      &.red {
+        color: $error-color;
+      }
+    }
+  }
+}

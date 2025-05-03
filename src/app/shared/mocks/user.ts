@@ -8,6 +8,6 @@ export const mockUsers: User[] = [
     avatar: '',
     courses: [],
     password: '',
-    role: Role.TEACHER,
+    role: Role.STUDENT,
   },
 ];

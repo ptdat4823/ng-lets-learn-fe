@@ -1,0 +1,11 @@
+<textarea
+  [class]="{
+    default: variant === 'default',
+    correct: variant === 'correct',
+    incorrect: variant === 'incorrect',
+    missing: variant === 'missing',
+  }"
+  [value]="answer"
+  (change)="onAnswerChange($event)"
+  [readonly]="showAnswer"
+></textarea>

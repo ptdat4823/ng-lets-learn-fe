@@ -9,7 +9,13 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class ButtonComponent {
   @Input() label: string = 'Button';
   @Input() type: 'button' | 'submit' = 'button';
-  @Input() variant: 'primary' | 'secondary' = 'primary';
+  @Input() variant:
+    | 'primary'
+    | 'secondary'
+    | 'gradient-blue'
+    | 'gradient-green'
+    | 'gradient-red'
+    | 'gradient-yellow' = 'primary';
   @Output() onClick = new EventEmitter<void>();
 
   handleClick() {

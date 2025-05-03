@@ -1,0 +1,20 @@
+<h3 class="title">Quiz result</h3>
+
+<div class="result-container">
+  <div class="result-item">
+    <label>Total score:</label>
+    <span
+      class="result-value"
+      [class]="{
+        green: quizResult === quizResults.GOOD,
+        yellow: quizResult === quizResults.AVERAGE,
+        red: quizResult === quizResults.BAD
+      }"
+      >{{ `${score} / ${totalScore}` }}</span
+    >
+  </div>
+  <div class="result-item">
+    <label>Duration:</label>
+    <span>{{ strDuration }}</span>
+  </div>
+</div>

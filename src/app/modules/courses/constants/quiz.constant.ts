@@ -5,11 +5,18 @@ export enum QuizTab {
   RESULTS = 'Results',
   QUESTION_BANK = 'Question Bank',
 }
-export const QUIZ_TABS = Object.values(QuizTab);
+export const QUIZ_TEACHER_TABS = Object.values(QuizTab);
+export const QUIZ_STUDENT_TABS = [QuizTab.QUIZ];
 
 export enum QuestionResult {
-  NOT_SHOW = 'Not Show',
   FULL_MARK = 'Full mark',
   PARTIAL_MARK = 'Partial mark',
   ZERO_MARK = 'Zero mark',
+}
+
+export enum QuizResult {
+  GOOD = 'Good',
+  AVERAGE = 'Average',
+  BAD = 'Bad',
+  DEFAULT = 'Default',
 }

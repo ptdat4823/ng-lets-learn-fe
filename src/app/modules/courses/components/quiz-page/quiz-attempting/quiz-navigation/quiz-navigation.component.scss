@@ -1,0 +1,131 @@
+@use "styles/theme/theme.variables" as *;
+
+// Variables
+$primary-color: #6366f1;
+$primary-light: #818cf8;
+$primary-dark: #4f46e5;
+$text-color: #333;
+$text-light: #666;
+$border-color: #e5e7eb;
+$background-color: #f9fafb;
+$white: #fff;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.navigation-grid {
+  max-height: 245px;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  padding: 2px 2px 1px 1px;
+  overflow-x: hidden;
+}
+
+h3 {
+  color: $tint-third-color;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  &.title {
+    margin-bottom: 1rem;
+  }
+}
+
+.nav-button {
+  all: unset;
+  width: 100%;
+  aspect-ratio: 1;
+  background-color: $icon-bounding-color;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  color: $icon-color;
+  position: relative;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: $question-selected-color-hover;
+  }
+
+  &.selected {
+    background-color: $question-selected-color-hover;
+    color: $question-selected-color;
+  }
+  &.answered {
+    background-color: $question-selected-color;
+    color: white;
+  }
+
+  &.green {
+    background-color: transparent;
+    outline: 1px solid $success-color;
+    color: $success-color;
+
+    &:hover {
+      background-color: $success-hover-color;
+    }
+  }
+
+  &.yellow {
+    background-color: transparent;
+    color: $warning-color;
+    outline: 1px solid $warning-color;
+
+    &:hover {
+      background-color: $warning-hover-color;
+    }
+  }
+
+  &.red {
+    background-color: transparent;
+    color: $error-color;
+    outline: 1px solid $error-color;
+
+    &:hover {
+      background-color: $error-hover-color;
+    }
+  }
+
+  &.flagged {
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: $error-color;
+    }
+  }
+}
+
+// Responsive styles
+@media (max-width: 1024px) {
+  .quiz-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+  }
+
+  .sidebar {
+    width: 100%;
+  }
+
+  .option-row {
+    flex-direction: column;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}

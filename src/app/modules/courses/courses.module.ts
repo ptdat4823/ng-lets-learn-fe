@@ -19,6 +19,15 @@ import { NewCourseComponent } from './components/new-course/new-course.component
 import { QuizPageComponent } from './components/quiz-page/quiz-page.component';
 import { TabQuizComponent } from './components/quiz-page/quiz-tabs/tab-quiz/tab-quiz.component';
 import { QuizResultTableComponent } from './components/quiz-result-table/quiz-result-table.component';
+import { TabQuizStudentComponent } from './components/quiz-page/quiz-tabs/tab-quiz-student/tab-quiz-student.component';
+import { QuizAttemptingComponent } from './components/quiz-page/quiz-attempting/quiz-attempting.component';
+import { QuizDescriptionComponent } from './components/quiz-page/quiz-attempting/quiz-description/quiz-description.component';
+import { QuizNavigationComponent } from './components/quiz-page/quiz-attempting/quiz-navigation/quiz-navigation.component';
+import { QuizChoiceAnswerComponent } from './components/quiz-page/quiz-attempting/quiz-choice-answer/quiz-choice-answer.component';
+import { QuizTrueFalseAnswerComponent } from './components/quiz-page/quiz-attempting/quiz-true-false-answer/quiz-true-false-answer.component';
+import { QuizShortAnswerComponent } from './components/quiz-page/quiz-attempting/quiz-short-answer/quiz-short-answer.component';
+import { QuizResultComponent } from './components/quiz-page/quiz-attempting/quiz-result/quiz-result.component';
+import { TimerComponent } from '../../shared/components/timer/timer.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +45,14 @@ import { QuizResultTableComponent } from './components/quiz-result-table/quiz-re
     CommentInputComponent,
     QuizPageComponent,
     TabQuizComponent,
+    TabQuizStudentComponent,
+    QuizAttemptingComponent,
+    QuizDescriptionComponent,
+    QuizNavigationComponent,
+    QuizChoiceAnswerComponent,
+    QuizTrueFalseAnswerComponent,
+    QuizShortAnswerComponent,
+    QuizResultComponent,
   ],
   imports: [
     SharedModule,
@@ -44,6 +61,8 @@ import { QuizResultTableComponent } from './components/quiz-result-table/quiz-re
     TabComponent,
     FormsModule,
     SharedComponentsModule,
+    TimerComponent,
   ],
+  exports: [QuizAttemptingComponent],
 })
 export class CoursesModule {}

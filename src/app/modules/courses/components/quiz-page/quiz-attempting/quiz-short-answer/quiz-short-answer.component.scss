@@ -1,0 +1,83 @@
+@use "styles/theme/theme.variables" as *;
+@use "styles/material-ui/material-ui.style" as *;
+
+textarea {
+  --width: 100%;
+  width: var(--width);
+  box-sizing: border-box;
+  padding: 8px 12px;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: Nunito;
+  resize: vertical;
+  min-height: 200px;
+
+  &.default {
+    background-color: white;
+    color: $text-secondary-color;
+
+    .answer-char {
+      color: $text-secondary-color;
+    }
+  }
+  &.correct {
+    background-color: transparent;
+    color: $text-secondary-color;
+    border: 1px solid $success-color;
+
+    span.material-symbols-outlined {
+      color: $success-color;
+    }
+
+    .answer-char {
+      background-color: $success-color;
+      color: white;
+    }
+  }
+  &.incorrect {
+    background-color: transparent;
+    color: $text-secondary-color;
+    border: 1px solid $error-color;
+
+    span.material-symbols-outlined {
+      color: $error-color;
+    }
+
+    .answer-char {
+      background-color: $error-color;
+      color: white;
+    }
+  }
+  &.missing {
+    background-color: transparent;
+    color: $text-secondary-color;
+    border: 1px solid $warning-color;
+
+    span.material-symbols-outlined {
+      color: $warning-color;
+    }
+
+    .answer-char {
+      background-color: $warning-color;
+      color: white;
+    }
+  }
+
+  &:focus {
+    outline: 1px solid $border-color;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+
+    &.primary {
+      background-color: rgba($color: $tint-color, $alpha: 0.8);
+    }
+  }
+
+  span.material-symbols-outlined {
+    font-size: 18px;
+  }
+}

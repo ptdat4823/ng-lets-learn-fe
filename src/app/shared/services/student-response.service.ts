@@ -1,12 +1,21 @@
 import { Injectable } from '@angular/core';
 import {
   QuizResponseData,
+  QuizStatus,
   StudentResponse,
 } from '@shared/models/student-response';
+import { UserService } from './user.service';
+import { User } from '@shared/models/user';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class StudentResponseService {
-  constructor() {}
+  private user: User | null = null;
+  constructor(private userService: UserService) {
+    this.user = this.userService.getUser();
+    this.userService.user$.subscribe((user) => {
+      this.user = user;
+    });
+  }
 
   getQuizResponseMark = (quizResponse: QuizResponseData) => {
     let mark = 0;
@@ -47,5 +56,22 @@ export class StudentResponseService {
     if (grade >= maxGrade * 0.8) return 'green';
     if (grade >= maxGrade * 0.5) return 'orange';
     return 'red';
+  };
+
+  getInitQuizResponse = (topicId: string): StudentResponse | null => {
+    if (!this.user) return null;
+    const quizResponseData: QuizResponseData = {
+      status: QuizStatus.NOT_STARTED,
+      startedAt: new Date().toISOString(),
+      completedAt: new Date().toISOString(),
+      answers: [],
+    };
+    const response: StudentResponse = {
+      id: '',
+      topicId,
+      student: this.user,
+      data: quizResponseData,
+    };
+    return response;
   };
 }

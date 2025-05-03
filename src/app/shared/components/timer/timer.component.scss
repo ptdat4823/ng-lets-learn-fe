@@ -1,0 +1,16 @@
+@use "styles/theme/theme.variables" as *;
+
+:host {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+span {
+  font-weight: 600;
+
+  &.material-symbols-outlined {
+    font-size: 18px;
+    color: $tint-color;
+  }
+}

@@ -33,6 +33,11 @@ const iconKeys = [
   'reply',
   'more_vert',
   'send',
+  'task_alt',
+  'circle',
+  'flag_2',
+  'timer',
+  'hourglass',
 ];
 const baseGoogleIconLink =
   'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200';

@@ -26,6 +26,38 @@ button {
     color: $text-secondary-color;
     border: 1px solid $border-color;
   }
+  &.gradient {
+    color: white;
+    padding: 8px 16px;
+    &.blue {
+      background: linear-gradient(
+        to bottom right,
+        $gradient-blue-1,
+        $gradient-blue-2
+      );
+    }
+    &.green {
+      background: linear-gradient(
+        to bottom right,
+        $gradient-green-1,
+        $gradient-green-2
+      );
+    }
+    &.red {
+      background: linear-gradient(
+        to bottom right,
+        $gradient-red-1,
+        $gradient-red-2
+      );
+    }
+    &.yellow {
+      background: linear-gradient(
+        to bottom right,
+        $gradient-yellow-1,
+        $gradient-yellow-2
+      );
+    }
+  }
 
   &:hover {
     transform: scale(1.01);

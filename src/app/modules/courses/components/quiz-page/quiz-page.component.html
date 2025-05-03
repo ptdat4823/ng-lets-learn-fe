@@ -1,5 +1,7 @@
 <topic-page-layout [topic]="topic">
-  @if(selectedTab === tabs.QUIZ){
+  @if(selectedTab === tabs.QUIZ){ @if(!isStudent){
   <tab-quiz [topic]="topic" />
-  }
+  } @else {
+  <tab-quiz-student [topic]="topic" />
+  } }
 </topic-page-layout>

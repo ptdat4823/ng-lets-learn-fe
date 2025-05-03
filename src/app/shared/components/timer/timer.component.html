@@ -1,0 +1,7 @@
+@if(timerType === 'count-up') {
+<span class="material-symbols-outlined"> timer </span>
+<span> {{ formatTime(countUp) }}</span>
+} @else {
+<span class="material-symbols-outlined"> hourglass </span>
+<span> {{ formatTime(countDown) }}</span>
+}

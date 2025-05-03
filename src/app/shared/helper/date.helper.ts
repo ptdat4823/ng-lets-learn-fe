@@ -117,6 +117,17 @@ const getShortTimeStringByDuration = (duration: number, fixed: number = 6) => {
   return time;
 };
 
+const getBaseTime = () => {
+  const baseTime = new Date();
+  baseTime.setHours(0, 0, 0, 0); // Reset time to midnight
+  return baseTime;
+};
+
+const getTimeBySeconds = (seconds: number) => {
+  const baseTime = getBaseTime();
+  return new Date(baseTime.setSeconds(seconds));
+};
+
 export {
   getDurationText,
   getTimeStringByDuration,
@@ -125,4 +136,6 @@ export {
   getEndDateOfWeek,
   isInDate,
   formatDateString,
+  getBaseTime,
+  getTimeBySeconds,
 };
