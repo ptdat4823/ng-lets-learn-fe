@@ -1,0 +1,56 @@
+@use "styles/theme/theme.variables" as *;
+
+.container {
+  &.warning {
+    & .confirm-button {
+      background-color: $error-color;
+      color: white;
+    }
+  }
+
+  &.info {
+    & .confirm-button {
+      background-color: $tint-color;
+      color: white;
+    }
+  }
+
+  &.error {
+    & .confirm-button {
+      background-color: $error-color;
+      color: white;
+    }
+  }
+
+  &.success {
+    & .confirm-button {
+      background-color: $success-color;
+      color: white;
+    }
+  }
+}
+
+::ng-deep .mat-mdc-dialog-surface {
+  border-radius: 8px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  color: $tint-color;
+  font-family: Nunito;
+
+  &.info {
+    color: $tint-color;
+  }
+  &.warning {
+    color: $warning-color;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}

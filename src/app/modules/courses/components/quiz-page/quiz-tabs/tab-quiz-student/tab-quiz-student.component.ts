@@ -1,11 +1,15 @@
-import { Component, inject, Input } from '@angular/core';
-import { StudentResponseService } from '@shared/services/student-response.service';
-import { TabQuizService } from '../tab-quiz/tab-quiz.service';
+import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
+import {
+  ConfirmMessageData,
+  ConfirmMessageService,
+} from '@shared/components/confirm-message/confirm-message.service';
+import { formatDateString } from '@shared/helper/date.helper';
 import { mockStudentResponses } from '@shared/mocks/student-response';
 import { GradingMethod } from '@shared/models/quiz';
 import { QuizTopic } from '@shared/models/topic';
-import { formatDateString } from '@shared/helper/date.helper';
-import { ActivatedRoute, Router } from '@angular/router';
+import { StudentResponseService } from '@shared/services/student-response.service';
+import { TabQuizService } from '../tab-quiz/tab-quiz.service';
 
 @Component({
   selector: 'tab-quiz-student',
@@ -23,13 +27,41 @@ export class TabQuizStudentComponent {
   fullMarkOfQuiz = 100;
   gradeColor = 'green';
 
-  private tabQuizService = inject(TabQuizService);
-  private studentResponseService = inject(StudentResponseService);
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
+  constructor(
+    private tabQuizService: TabQuizService,
+    private studentResponseService: StudentResponseService,
+    private router: Router,
+    private confirmMessageService: ConfirmMessageService
+  ) {}
+
+  confirmMessageData: ConfirmMessageData = {
+    title: 'This quiz has time limit',
+    message:
+      "Are you sure you want to start this quiz? You can't pause the quiz and the time will keep counting down.",
+    variant: 'warning',
+  };
+
+  openConfirmMessage() {
+    this.confirmMessageService.openDialog();
+  }
+
+  onCancelConfirmMessage() {
+    this.confirmMessageService.closeDialog();
+  }
+
+  onAcceptConfirmMessage() {
+    this.confirmMessageService.closeDialog();
+    this.startQuiz();
+  }
 
   ngOnInit(): void {
-    this.tabQuizService.setTopic(this.topic);
+    this.confirmMessageService.setData(this.confirmMessageData);
+    this.confirmMessageService.setCancelAction(() =>
+      this.onCancelConfirmMessage()
+    );
+    this.confirmMessageService.setConfirmAction(() =>
+      this.onAcceptConfirmMessage()
+    );
     this.tabQuizService.topic$.subscribe((topic) => {
       if (!topic) return;
       this.topic = topic;
@@ -59,10 +91,11 @@ export class TabQuizStudentComponent {
         this.fullMarkOfQuiz
       );
     });
+    this.tabQuizService.setTopic(this.topic);
   }
 
-  formatDate(date: string | null) {
-    return formatDateString(date, 'MM/dd/yyyy HH:mm a');
+  formatDate(date: string | null, pattern: string = 'MM/dd/yyyy HH:mm a') {
+    return formatDateString(date, pattern);
   }
 
   startQuiz() {

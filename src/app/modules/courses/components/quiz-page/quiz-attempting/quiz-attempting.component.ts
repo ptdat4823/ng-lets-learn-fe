@@ -1,16 +1,16 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { getCharacter } from '@shared/helper/string.helper';
-import { mockQuestions } from '@shared/mocks/question';
+import { mockTopics } from '@shared/mocks/topic';
 import { mockUsers } from '@shared/mocks/user';
 import { Question, QuestionType } from '@shared/models/question';
-import { UserService } from '@shared/services/user.service';
-import { QuizAttemptingService } from './quiz-attempting.service';
-import { RouteService } from '@shared/services/route.service';
-import { ActivatedRoute } from '@angular/router';
-import { QuizTopic } from '@shared/models/topic';
-import { mockTopics } from '@shared/mocks/topic';
-import { Location } from '@angular/common';
 import { getSecondFromTimeLimitType } from '@shared/models/quiz';
+import { QuizTopic } from '@shared/models/topic';
+import { RouteService } from '@shared/services/route.service';
+import { UserService } from '@shared/services/user.service';
+import { debounceTime } from 'rxjs';
+import { QuizAttemptingService } from './quiz-attempting.service';
 
 @Component({
   selector: 'quiz-attempting',
@@ -45,9 +45,11 @@ export class QuizAttemptingComponent implements OnInit {
     this.quizAttemptingService.currentQuestionId$.subscribe((id) => {
       this.currentQuestionId = id;
     });
-    this.quizAttemptingService.answerRecord$.subscribe((answers) => {
-      this.answerRecord = answers;
-    });
+    this.quizAttemptingService.answerRecord$
+      .pipe(debounceTime(200))
+      .subscribe((answers) => {
+        this.answerRecord = answers;
+      });
     this.quizAttemptingService.showAnswer$.subscribe((show) => {
       this.showAnswer = show;
     });

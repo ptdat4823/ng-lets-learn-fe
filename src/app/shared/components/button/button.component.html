@@ -1,12 +1,15 @@
 <button
   [type]="type"
-  [class.primary]="variant === 'primary'"
-  [class.secondary]="variant === 'secondary'"
-  [class.gradient]="variant.includes('gradient')"
-  [class.blue]="variant.includes('blue')"
-  [class.green]="variant.includes('green')"
-  [class.yellow]="variant.includes('yellow')"
-  [class.red]="variant.includes('red')"
+  [class]="{
+  primary: variant === 'primary',
+  secondary: variant === 'secondary',
+  warning: variant === 'warning',
+  gradient: variant.includes('gradient'),
+  blue: variant.includes('blue'),
+  green: variant.includes('green'),
+  yellow: variant.includes('yellow'),
+  red: variant.includes('red'),
+}"
   (click)="handleClick()"
 >
   <ng-content select="[icon]"></ng-content>

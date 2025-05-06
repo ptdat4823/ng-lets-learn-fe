@@ -124,6 +124,13 @@ export class QuizAttemptingService {
     return !!records[questionId];
   }
 
+  hasAnsweredAll(): boolean {
+    const records = this.answerRecord.value;
+    const questionIds = this.questions.value.map((q) => q.id);
+
+    return questionIds.every((id) => !!records[id]);
+  }
+
   getAnswer(questionId: string) {
     const question = this.findQuestion(questionId);
     if (!question) return '';

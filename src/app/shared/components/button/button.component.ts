@@ -1,5 +1,14 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
+export type ButtonVariant =
+  | 'primary'
+  | 'secondary'
+  | 'gradient-blue'
+  | 'gradient-green'
+  | 'gradient-red'
+  | 'gradient-yellow'
+  | 'warning';
+
 @Component({
   selector: 'app-button',
   standalone: true,
@@ -9,13 +18,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class ButtonComponent {
   @Input() label: string = 'Button';
   @Input() type: 'button' | 'submit' = 'button';
-  @Input() variant:
-    | 'primary'
-    | 'secondary'
-    | 'gradient-blue'
-    | 'gradient-green'
-    | 'gradient-red'
-    | 'gradient-yellow' = 'primary';
+  @Input() variant: ButtonVariant = 'primary';
   @Output() onClick = new EventEmitter<void>();
 
   handleClick() {

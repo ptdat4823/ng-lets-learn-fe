@@ -28,6 +28,7 @@ import { QuizTrueFalseAnswerComponent } from './components/quiz-page/quiz-attemp
 import { QuizShortAnswerComponent } from './components/quiz-page/quiz-attempting/quiz-short-answer/quiz-short-answer.component';
 import { QuizResultComponent } from './components/quiz-page/quiz-attempting/quiz-result/quiz-result.component';
 import { TimerComponent } from '../../shared/components/timer/timer.component';
+import { ConfirmMessageComponent } from '../../shared/components/confirm-message/confirm-message.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { TimerComponent } from '../../shared/components/timer/timer.component';
     FormsModule,
     SharedComponentsModule,
     TimerComponent,
+    ConfirmMessageComponent,
   ],
   exports: [QuizAttemptingComponent],
 })

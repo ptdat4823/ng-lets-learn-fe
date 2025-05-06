@@ -60,4 +60,8 @@ export class QuizNavigationService {
   isFlagged(questionId: string): boolean {
     return this.quizAttemptingService.isFlagged(questionId);
   }
+
+  hasAnsweredAll(): boolean {
+    return this.quizAttemptingService.hasAnsweredAll();
+  }
 }

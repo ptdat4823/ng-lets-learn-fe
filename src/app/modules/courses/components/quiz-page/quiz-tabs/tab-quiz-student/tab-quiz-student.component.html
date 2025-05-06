@@ -2,11 +2,15 @@
   <div class="quiz-dates">
     <div class="date-item">
       <span class="date-label">Open:</span>
-      <span class="date-value">{{ formatDate(topic.data.open) }}</span>
+      <span class="date-value">{{
+        formatDate(topic.data.open, "EEEE, dd MMMM yyyy hh:mm a")
+      }}</span>
     </div>
     <div class="date-item">
       <span class="date-label">Due:</span>
-      <span class="date-value">{{ formatDate(topic.data.close) }}</span>
+      <span class="date-value">{{
+        formatDate(topic.data.open, "EEEE, dd MMMM yyyy hh:mm a")
+      }}</span>
     </div>
   </div>
 
@@ -14,7 +18,8 @@
     <p>{{ topic.data.description }}</p>
   </div>
 
-  <app-button label="Attempt Quiz" (onClick)="startQuiz()" />
+  <app-confirm-message />
+  <app-button label="Attempt Quiz" trigger (onClick)="openConfirmMessage()" />
 
   <div class="quiz-settings" (click)="startQuiz()">
     <div class="setting-item">

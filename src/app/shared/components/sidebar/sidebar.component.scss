@@ -1,7 +1,7 @@
 @use "styles/theme/theme.variables" as *;
 
 .container {
-  --side-bar-width: 350px;
+  --side-bar-width: 300px;
   display: flex;
   flex-direction: column;
   height: 100%;

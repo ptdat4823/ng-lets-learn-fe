@@ -3,6 +3,10 @@ import { QuestionResult } from '@modules/courses/constants/quiz.constant';
 import { Question } from '@shared/models/question';
 import { QuizNavigationService } from './quiz-navigation.service';
 import { Location } from '@angular/common';
+import {
+  ConfirmMessageData,
+  ConfirmMessageService,
+} from '@shared/components/confirm-message/confirm-message.service';
 
 @Component({
   selector: 'quiz-navigation',
@@ -20,14 +24,26 @@ export class QuizNavigationComponent implements OnInit {
   questionResultMap: Record<string, QuestionResult> = {};
   answeredQuestionMap: Record<string, boolean> = {};
 
+  confirmMessageSubmit: ConfirmMessageData = {
+    title: 'Submit quiz',
+    message: 'Are you sure you want to submit this quiz?',
+    variant: 'info',
+  };
+
+  confirmMessageNotFulfilTheAnswer: ConfirmMessageData = {
+    title: 'Missing answers',
+    message:
+      'You have not answered all questions. Do you want to submit anyway?',
+    variant: 'warning',
+  };
+
   constructor(
     private quizNavigationService: QuizNavigationService,
-    private location: Location
+    private location: Location,
+    private confirmMessageService: ConfirmMessageService
   ) {}
 
   ngOnInit(): void {
-    this.calculateQuestionResult();
-    this.updateAnsweredMap();
     this.quizNavigationService.questions$.subscribe((questions) => {
       this.questions = questions;
     });
@@ -39,8 +55,39 @@ export class QuizNavigationComponent implements OnInit {
     });
     this.quizNavigationService.answerRecord$.subscribe((record) => {
       this.answerRecord = record;
+      const answeredAll = this.quizNavigationService.hasAnsweredAll();
+      if (answeredAll) {
+        this.confirmMessageService.setData(this.confirmMessageSubmit);
+      } else {
+        this.confirmMessageService.setData(
+          this.confirmMessageNotFulfilTheAnswer
+        );
+      }
       this.updateAnsweredMap();
     });
+
+    this.calculateQuestionResult();
+    this.updateAnsweredMap();
+    this.confirmMessageService.setData(this.confirmMessageNotFulfilTheAnswer);
+    this.confirmMessageService.setCancelAction(() =>
+      this.onCancelConfirmMessage()
+    );
+    this.confirmMessageService.setConfirmAction(() =>
+      this.onAcceptConfirmMessage()
+    );
+  }
+
+  onCancelConfirmMessage() {
+    this.confirmMessageService.closeDialog();
+  }
+
+  onAcceptConfirmMessage() {
+    this.finishQuiz();
+    this.confirmMessageService.closeDialog();
+  }
+
+  openConfirmMessage() {
+    this.confirmMessageService.openDialog();
   }
 
   calculateQuestionResult() {

@@ -15,6 +15,7 @@ import { CollapsibleSectionComponent } from './collapsible-section/collapsible-s
 import { TopicComponent } from './topic/topic.component';
 import { CollapsibleListComponent } from './collapsible-list/collapsible-list.component';
 import { TopicPageLayoutComponent } from './topic-page-layout/topic-page-layout.component';
+import { ConfirmMessageComponent } from './confirm-message/confirm-message.component';
 @NgModule({
   imports: [
     FormWarningComponent,
@@ -33,6 +34,7 @@ import { TopicPageLayoutComponent } from './topic-page-layout/topic-page-layout.
     CollapsibleListComponent,
     TopicComponent,
     TopicPageLayoutComponent,
+    ConfirmMessageComponent,
   ],
   exports: [
     FormWarningComponent,

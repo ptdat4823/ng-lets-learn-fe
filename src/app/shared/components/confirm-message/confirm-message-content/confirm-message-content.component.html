@@ -1,0 +1,30 @@
+<div
+  class="container"
+  [class]="{
+    warning: data.variant === 'warning',
+    info: data.variant === 'info',
+}"
+>
+  <h2
+    class="title"
+    [class]="{
+    warning: data.variant === 'warning',
+    info: data.variant === 'info',
+  }"
+    mat-dialog-title
+  >
+    {{ data.title }}
+  </h2>
+  <mat-dialog-content>
+    <p>{{ data.message }}</p>
+  </mat-dialog-content>
+  <mat-dialog-actions class="actions">
+    <app-button variant="secondary" label="Cancel" (click)="onCancel()" />
+    <app-button
+      [variant]="buttonVariant"
+      cdkFocusInitial
+      label="Yes"
+      (click)="onConfirm()"
+    />
+  </mat-dialog-actions>
+</div>

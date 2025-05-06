@@ -58,7 +58,7 @@ export class TabQuizComponent implements OnInit {
     });
   }
 
-  formatDate(date: string | null) {
-    return formatDateString(date, 'MM/dd/yyyy HH:mm a');
+  formatDate(date: string | null, pattern: string = 'MM/dd/yyyy HH:mm a') {
+    return formatDateString(date, pattern);
   }
 }

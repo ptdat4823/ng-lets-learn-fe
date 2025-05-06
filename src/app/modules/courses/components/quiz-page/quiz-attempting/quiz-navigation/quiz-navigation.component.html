@@ -3,9 +3,10 @@
   <app-timer />
 </div>
 
+<app-confirm-message />
 <app-button
   [label]="showAnswer ? 'Finish review' : 'Finish attempt'"
-  (onClick)="showAnswer ? finishReview() : finishQuiz()"
+  (onClick)="showAnswer ? finishReview() : openConfirmMessage()"
 />
 
 <div>
