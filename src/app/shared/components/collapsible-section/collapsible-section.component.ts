@@ -7,23 +7,19 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { mockTopics } from '@shared/mocks/topic';
-import { Section } from '@shared/models/course';
-import { ButtonComponent } from '../button/button.component';
 import { CollapsibleListService } from '../collapsible-list/collapsible-list.service';
-import { TopicComponent } from '../topic/topic.component';
 import { CollapsibleSectionService } from './collapsible-section.service';
 
 @Component({
-  selector: 'collapsible-section',
+  selector: 'app-collapsible-section',
   standalone: true,
   templateUrl: './collapsible-section.component.html',
   styleUrl: './collapsible-section.component.scss',
-  imports: [ButtonComponent, TopicComponent],
+  imports: [],
   providers: [CollapsibleSectionService],
 })
 export class CollapsibleSectionComponent implements OnInit, AfterViewInit {
-  @Input({ required: true }) section!: Section;
+  @Input({ required: true }) sectionId!: string;
   canEdit = true;
   isEditing = false;
   isExpanded = false;
@@ -34,20 +30,19 @@ export class CollapsibleSectionComponent implements OnInit, AfterViewInit {
   collapsibleListService = inject(CollapsibleListService);
 
   ngOnInit(): void {
-    this.collapsibleService.setSection(this.section);
-    this.collapsibleService.section$.subscribe((section) => {
-      if (section) this.section = section;
+    this.collapsibleService.setSectionId(this.sectionId);
+    this.collapsibleService.sectionId$.subscribe((sectionId) => {
+      if (sectionId) this.sectionId = sectionId;
     });
-
     this.collapsibleListService.expandedSectionIds$.subscribe((ids) => {
-      this.isExpanded = ids.includes(this.section.id);
+      this.isExpanded = ids.includes(this.sectionId);
       this.updateContentHeight();
     });
     this.collapsibleListService.canEdit$.subscribe((canEdit) => {
       this.canEdit = canEdit;
     });
     this.collapsibleListService.editingSectionIds$.subscribe((ids) => {
-      this.isEditing = ids.includes(this.section.id);
+      this.isEditing = ids.includes(this.sectionId);
     });
   }
 
@@ -55,13 +50,8 @@ export class CollapsibleSectionComponent implements OnInit, AfterViewInit {
     this.updateContentHeight();
   }
 
-  addOneMoreItem(): void {
-    this.collapsibleService.addTopic(mockTopics[0]);
-    this.updateContentHeight();
-  }
-
   toggleExpand(): void {
-    this.collapsibleListService.toggleExpand(this.section.id);
+    this.collapsibleListService.toggleExpand(this.sectionId);
     this.updateContentHeight();
   }
 

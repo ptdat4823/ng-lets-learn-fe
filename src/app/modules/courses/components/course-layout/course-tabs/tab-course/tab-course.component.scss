@@ -90,6 +90,12 @@
 .course-content {
   padding: 1rem 0;
 
+  .title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
   .content-actions {
     display: flex;
     justify-content: flex-end;
@@ -109,6 +115,52 @@
 
       &:active {
         transform: scale(0.95);
+      }
+    }
+  }
+
+  .section-content {
+    padding: 0 1rem 1rem;
+
+    span.material-symbols-outlined {
+      color: $tint-color;
+    }
+
+    .section-description {
+      color: #666;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      gap: 0.5rem;
+    }
+
+    .topic-action-buttons {
+      display: flex;
+      justify-content: center;
+
+      app-button {
+        width: fit-content;
+
+        span.material-symbols-outlined {
+          color: white;
+        }
+      }
+    }
+
+    .no-topics {
+      width: 100%;
+      max-width: 250px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0 auto 1rem;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 8px;
       }
     }
   }

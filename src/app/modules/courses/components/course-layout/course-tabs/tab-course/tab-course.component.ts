@@ -1,6 +1,7 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { CollapsibleListService } from '@shared/components/collapsible-list/collapsible-list.service';
-import { Course } from '@shared/models/course';
+import { Course, Section } from '@shared/models/course';
+import { Topic } from '@shared/models/topic';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -13,19 +14,26 @@ import { ToastrService } from 'ngx-toastr';
 export class TabCourseComponent implements OnInit {
   @Input({ required: true }) course!: Course;
   @Input() canEdit = true;
-
-  collapsibleListService = inject(CollapsibleListService);
-  toastr = inject(ToastrService);
   toggleString = 'Collapse all';
+  edittingSectionIds: string[] = [];
+
+  constructor(
+    private collapsibleListService: CollapsibleListService,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.toggleString = this.collapsibleListService.isAllCollapsed()
       ? 'Expand all'
       : 'Collapse all';
     this.collapsibleListService.setCanEdit(this.canEdit);
-    this.collapsibleListService.setSections(this.course.sections);
+    const ids = this.course.sections.map((s) => s.id);
+    this.collapsibleListService.setSectionIds(ids);
     this.collapsibleListService.expandedSectionIds$.subscribe((ids) => {
       this.toggleString = ids.length > 0 ? 'Collapse all' : 'Expand all';
+    });
+    this.collapsibleListService.editingSectionIds$.subscribe((ids) => {
+      this.edittingSectionIds = ids;
     });
   }
 
@@ -37,5 +45,25 @@ export class TabCourseComponent implements OnInit {
     navigator.clipboard.writeText(this.course.id).then(() => {
       this.toastr.success('Copied to clipboard');
     });
+  }
+
+  isEditingSection(id: string): boolean {
+    return this.edittingSectionIds.includes(id);
+  }
+
+  addTopic(sectionId: string, topic: Topic) {
+    const currentSection = this.course.sections.find(
+      (section) => section.id === sectionId
+    );
+    if (!currentSection) return;
+
+    const updatedSection: Section = {
+      ...currentSection,
+      topics: [...currentSection.topics, topic],
+    };
+
+    this.course.sections = this.course.sections.map((section) =>
+      section.id === updatedSection.id ? updatedSection : section
+    );
   }
 }

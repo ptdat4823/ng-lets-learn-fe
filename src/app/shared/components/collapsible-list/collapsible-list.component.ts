@@ -1,5 +1,12 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
-import { Section } from '@shared/models/course';
+import { CommonModule } from '@angular/common';
+import {
+  AfterContentInit,
+  Component,
+  ContentChildren,
+  inject,
+  OnInit,
+  QueryList,
+} from '@angular/core';
 import { CollapsibleSectionComponent } from '../collapsible-section/collapsible-section.component';
 import { CollapsibleListService } from './collapsible-list.service';
 
@@ -8,19 +15,15 @@ import { CollapsibleListService } from './collapsible-list.service';
   standalone: true,
   templateUrl: './collapsible-list.component.html',
   styleUrl: './collapsible-list.component.scss',
-  imports: [CollapsibleSectionComponent],
+  imports: [CommonModule],
 })
 export class CollapsibleListComponent implements OnInit {
-  sections: Section[] = [];
   canEdit = true;
   expandedSectionIds: string[] = [];
   editingSectionIds: string[] = [];
   collapsibleListService = inject(CollapsibleListService);
 
   ngOnInit(): void {
-    this.collapsibleListService.sections$.subscribe((sections) => {
-      this.sections = sections;
-    });
     this.collapsibleListService.canEdit$.subscribe((canEdit) => {
       this.canEdit = canEdit;
     });

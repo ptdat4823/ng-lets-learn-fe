@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Section } from '@shared/models/course';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class CollapsibleListService {
-  private sections = new BehaviorSubject<Section[]>([]);
-  public sections$ = this.sections.asObservable();
+  private sectionIds = new BehaviorSubject<string[]>([]);
+  public sectionIds$ = this.sectionIds.asObservable();
 
   private canEdit = new BehaviorSubject<boolean>(true);
   public canEdit$ = this.canEdit.asObservable();
@@ -32,7 +31,7 @@ export class CollapsibleListService {
   }
 
   expandAll(): void {
-    const current = this.sections.value.map((section) => section.id);
+    const current = this.sectionIds.value;
     this.expandedSectionIds.next(current);
   }
 
@@ -56,8 +55,8 @@ export class CollapsibleListService {
     }
   }
 
-  setSections(sections: Section[]): void {
-    this.sections.next([...sections]);
+  setSectionIds(ids: string[]): void {
+    this.sectionIds.next([...ids]);
   }
 
   setCanEdit(value: boolean): void {
@@ -72,21 +71,14 @@ export class CollapsibleListService {
     this.editingSectionIds.next([...ids]);
   }
 
-  addSection(section: Section): void {
-    const current = this.sections.value;
-    this.sections.next([...current, section]);
+  addSection(id: string): void {
+    const current = this.sectionIds.value;
+    this.sectionIds.next([...current, id]);
   }
-  removeSection(id: string): void {
-    const current = this.sections.value;
-    const updated = current.filter((section) => section.id !== id);
-    this.sections.next(updated);
-  }
-  updateSection(updatedSection: Section): void {
-    const current = this.sections.value;
-    const updated = current.map((section) =>
-      section.id === updatedSection.id ? updatedSection : section
-    );
-    this.sections.next(updated);
+  removeSection(idToRemove: string): void {
+    const current = this.sectionIds.value;
+    const updated = current.filter((id) => id !== idToRemove);
+    this.sectionIds.next(updated);
   }
 
   getSectionExpandState(sectionId: string) {

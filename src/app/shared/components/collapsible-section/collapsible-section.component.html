@@ -9,7 +9,8 @@
       <div class="toggle-icon" [class.rotate-right]="!isExpanded">
         <span class="material-symbols-outlined"> keyboard_arrow_down </span>
       </div>
-      <h2>{{ section.title }}</h2>
+      <ng-content select="[title]"></ng-content>
+
       @if(isEditing) {
       <span class="material-symbols-outlined"> stylus </span>
       }
@@ -25,32 +26,5 @@
     } }
   </div>
 
-  <div class="section-content">
-    @if(section.description) {
-    <div class="section-description">
-      {{ section.description }}
-      @if(isEditing) {
-      <span class="material-symbols-outlined"> stylus </span>
-      }
-    </div>
-    } @if(section.topics.length > 0) { @for(topic of section.topics; track
-    topic.id) {
-    <app-topic
-      [topic]="topic"
-      [isEditing]="isEditing"
-      [class.editting]="isEditing"
-    />
-    } } @else {
-    <div class="no-topics">
-      <img src="images/no-item-found.jpg" alt="No topic found" />
-    </div>
-    } @if(canEdit) {
-
-    <div class="action-buttons">
-      <app-button label="Add new topic" (onClick)="addOneMoreItem()">
-        <span class="material-symbols-outlined" icon> add_circle </span>
-      </app-button>
-    </div>
-    }
-  </div>
+  <ng-content select="[content]"></ng-content>
 </div>

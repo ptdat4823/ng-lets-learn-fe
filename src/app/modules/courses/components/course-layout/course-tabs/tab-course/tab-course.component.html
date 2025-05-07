@@ -22,7 +22,44 @@
     }}</span>
   </div>
 
-  <app-collapsible-list />
+  <app-collapsible-list>
+    @for(section of course.sections; track section.id) {
+    <app-collapsible-section [sectionId]="section.id">
+      <!-- Section dynamic title -->
+      <span class="title" title>{{ section.title }}</span>
+
+      <!-- Section dynamic content -->
+      <div class="section-content" content>
+        @if(section.description) {
+        <div class="section-description">
+          {{ section.description }}
+          @if(isEditingSection(section.id)) {
+          <span class="material-symbols-outlined"> stylus </span>
+          }
+        </div>
+        } @if(section.topics.length > 0) { @for(topic of section.topics; track
+        topic.id) {
+        <app-topic
+          [topic]="topic"
+          [isEditing]="isEditingSection(section.id)"
+          [class.editting]="isEditingSection(section.id)"
+        />
+        } } @else {
+        <div class="no-topics">
+          <img src="images/no-item-found.jpg" alt="No topic found" />
+        </div>
+        } @if(canEdit) {
+
+        <div class="topic-action-buttons">
+          <app-button label="Add new topic">
+            <span class="material-symbols-outlined" icon> add_circle </span>
+          </app-button>
+        </div>
+        }
+      </div>
+    </app-collapsible-section>
+    }
+  </app-collapsible-list>
 
   @if(canEdit) {
   <div class="action-buttons">
