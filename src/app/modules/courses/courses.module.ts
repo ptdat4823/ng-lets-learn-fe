@@ -30,7 +30,9 @@ import { TabQuizStudentComponent } from './components/quiz-page/quiz-tabs/tab-qu
 import { TabQuizComponent } from './components/quiz-page/quiz-tabs/tab-quiz/tab-quiz.component';
 import { TabSettingComponent } from './components/quiz-page/quiz-tabs/tab-setting/tab-setting.component';
 import { QuizResultTableComponent } from './components/quiz-result-table/quiz-result-table.component';
-import { SettingRowComponent } from './components/quiz-page/quiz-tabs/tab-setting/setting-row/setting-row.component';
+import { SettingRowComponent } from '../../shared/components/setting-row/setting-row.component';
+import { AssignmentPageComponent } from './components/assignment-page/assignment-page.component';
+import { TabAssignmentComponent } from './components/assignment-page/assignment-tabs/tab-assignment/tab-assignment.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +59,8 @@ import { SettingRowComponent } from './components/quiz-page/quiz-tabs/tab-settin
     QuizShortAnswerComponent,
     QuizResultComponent,
     TabSettingComponent,
-    SettingRowComponent,
+    AssignmentPageComponent,
+    TabAssignmentComponent,
   ],
   imports: [
     SharedModule,

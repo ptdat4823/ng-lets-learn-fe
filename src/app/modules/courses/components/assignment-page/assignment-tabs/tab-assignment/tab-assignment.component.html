@@ -1,0 +1,58 @@
+<card>
+  <div class="quiz-dates">
+    <div class="date-item">
+      <span class="date-label">Open:</span>
+      <span class="date-value">{{
+        formatDate(topic.data.open, "EEEE, dd MMMM yyyy HH:mm a")
+      }}</span>
+    </div>
+    <div class="date-item">
+      <span class="date-label">Due:</span>
+      <span class="date-value">{{
+        formatDate(topic.data.open, "EEEE, dd MMMM yyyy HH:mm a")
+      }}</span>
+    </div>
+  </div>
+
+  <div class="quiz-description">
+    <p>{{ topic.data.description }}</p>
+  </div>
+  <!-- 
+  <app-button label="Preview Quiz" class="preview-button" />
+
+  <div class="quiz-settings">
+    <div class="setting-item">
+      <span class="setting-label">Attempts allowed:</span>
+      <span class="setting-value">{{ topic.data.attemptAllowed }}</span>
+    </div>
+    <div class="setting-item">
+      <span class="setting-label">Grading method:</span>
+      <span class="setting-value">{{ topic.data.gradingMethod }}</span>
+    </div>
+    <div class="setting-item">
+      <span
+        [class]="'setting-label ' + gradeColor"
+        >{{ `${gradingMethod}: ` }}</span
+      >
+      <span [class]="'setting-value ' + gradeColor">
+        {{ `${gradeToShow} / ${fullMarkOfQuiz}` }}
+      </span>
+    </div>
+  </div>
+
+  <div class="attempts-section">
+    <h3 class="attempts-title">Your attempts</h3>
+
+    <quiz-result-table [studentReponses]="studentResponses" />
+  </div> -->
+</card>
+
+<card>
+  <div class="comments-header">
+    <span class="material-symbols-outlined"> group </span>
+    <h3>Class comments</h3>
+  </div>
+
+  <comment-list />
+  <comment-input />
+</card>

@@ -25,3 +25,28 @@ export const mockStudentResponses: StudentResponse[] = [
     },
   },
 ];
+
+export const mockAssignmentResponses: StudentResponse[] = [
+  {
+    id: '1',
+    student: mockUsers[0],
+    topicId: '1',
+    data: {
+      submittedAt: new Date(2025, 3, 25, 17, 30, 0, 0).toISOString(),
+      files: [],
+      mark: null,
+      note: '',
+    },
+  },
+  {
+    id: '2',
+    student: mockUsers[0],
+    topicId: '1',
+    data: {
+      submittedAt: new Date(2025, 3, 25, 10, 30, 0, 0).toISOString(),
+      files: [],
+      mark: null,
+      note: '',
+    },
+  },
+];

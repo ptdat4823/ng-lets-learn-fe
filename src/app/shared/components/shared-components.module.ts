@@ -39,6 +39,7 @@ import { SidebarItemCollapseComponent } from './sidebar/sidebar-item-collapse/si
 import { SidebarItemComponent } from './sidebar/sidebar-item/sidebar-item.component';
 import { TabComponent } from './tab-list/tab/tab.component';
 import { TimerComponent } from './timer/timer.component';
+import { SettingRowComponent } from './setting-row/setting-row.component';
 @NgModule({
   declarations: [
     ButtonComponent,
@@ -64,6 +65,7 @@ import { TimerComponent } from './timer/timer.component';
     TopicComponent,
     TopicPageLayoutComponent,
     FormFieldComponent,
+    SettingRowComponent,
   ],
   imports: [
     CommonModule,
@@ -101,6 +103,7 @@ import { TimerComponent } from './timer/timer.component';
     TimerComponent,
     TabComponent,
     FormFieldComponent,
+    SettingRowComponent,
   ],
 })
 export class SharedComponentsModule {}

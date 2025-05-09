@@ -1,0 +1,9 @@
+<topic-page-layout [topic]="topic">
+  @if(selectedTab === tabs.ASSIGNMENT){ @if(!isStudent){
+  <tab-assignment [topic]="topic" />
+  } @else {
+  <!-- <tab-assignment-student [topic]="topic" /> -->
+  } } @else if(selectedTab === tabs.SETTINGS) {
+  <!-- <tab-setting [topic]="topic" /> -->
+  }
+</topic-page-layout>
