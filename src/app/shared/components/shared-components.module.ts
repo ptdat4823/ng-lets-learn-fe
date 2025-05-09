@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -32,14 +32,17 @@ import { TopicPageLayoutComponent } from './topic-page-layout/topic-page-layout.
 import { TopicComponent } from './topic/topic.component';
 
 import { RouterOutlet } from '@angular/router';
+import { CommentInputComponent } from './comment-list/comment-input/comment-input.component';
+import { CommentListComponent } from './comment-list/comment-list.component';
 import { ConfirmMessageContentComponent } from './confirm-message/confirm-message-content/confirm-message-content.component';
 import { FormFieldComponent } from './form-field/form-field.component';
+import { SettingRowComponent } from './setting-row/setting-row.component';
 import { SidebarGroupComponent } from './sidebar/sidebar-group/sidebar-group.component';
 import { SidebarItemCollapseComponent } from './sidebar/sidebar-item-collapse/sidebar-item-collapse.component';
 import { SidebarItemComponent } from './sidebar/sidebar-item/sidebar-item.component';
 import { TabComponent } from './tab-list/tab/tab.component';
 import { TimerComponent } from './timer/timer.component';
-import { SettingRowComponent } from './setting-row/setting-row.component';
+import { CommentComponent } from './comment-list/comment/comment.component';
 @NgModule({
   declarations: [
     ButtonComponent,
@@ -66,6 +69,9 @@ import { SettingRowComponent } from './setting-row/setting-row.component';
     TopicPageLayoutComponent,
     FormFieldComponent,
     SettingRowComponent,
+    CommentListComponent,
+    CommentInputComponent,
+    CommentComponent,
   ],
   imports: [
     CommonModule,
@@ -80,6 +86,7 @@ import { SettingRowComponent } from './setting-row/setting-row.component';
     RouterOutlet,
     MatExpansionModule,
     MatCheckboxModule,
+    FormsModule,
   ],
   exports: [
     FormWarningComponent,
@@ -104,6 +111,8 @@ import { SettingRowComponent } from './setting-row/setting-row.component';
     TabComponent,
     FormFieldComponent,
     SettingRowComponent,
+    CommentListComponent,
+    CommentInputComponent,
   ],
 })
 export class SharedComponentsModule {}

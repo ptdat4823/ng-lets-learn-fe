@@ -1,4 +1,14 @@
-<div class="topic-header">
+<div
+  class="topic-header"
+  [class]="{
+  quiz: topic.type === 'quiz',
+  assignment: topic.type === 'assignment',
+  meeting: topic.type === 'meeting',
+  page: topic.type === 'page',
+  file: topic.type === 'file',
+  link: topic.type === 'link',
+}"
+>
   <div class="topic-title">
     <span class="material-symbols-outlined"> {{ topicIcon }}</span>
     <h2>{{ topic.title }}</h2>
@@ -6,6 +16,16 @@
 
   <app-tab-list [tabs]="tabs" variant="white"></app-tab-list>
 </div>
-<div class="topic-content">
+<div
+  class="topic-content"
+  [class]="{
+  quiz: topic.type === 'quiz',
+  assignment: topic.type === 'assignment',
+  meeting: topic.type === 'meeting',
+  page: topic.type === 'page',
+  file: topic.type === 'file',
+  link: topic.type === 'link',
+}"
+>
   <ng-content />
 </div>

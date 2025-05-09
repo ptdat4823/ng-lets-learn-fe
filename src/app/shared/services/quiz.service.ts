@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   QuestionResult,
   QuizResult,
-} from '@modules/courses/constants/quiz.constant';
+} from '@modules/quiz/constants/quiz.constant';
 import { TimeLimitType } from '@shared/models/quiz';
 
 @Injectable({ providedIn: 'root' })

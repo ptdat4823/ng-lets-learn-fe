@@ -10,6 +10,8 @@ import { ToastrModule } from 'ngx-toastr';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
 import { CalendarModule } from '@modules/calendar/calendar.module';
+import { QuizModule } from '@modules/quiz/quiz.module';
+import { AssignmentModule } from '@modules/assignment/assignment.module';
 
 @NgModule({
   imports: [
@@ -19,6 +21,8 @@ import { CalendarModule } from '@modules/calendar/calendar.module';
     AppRoutingModule,
     AuthModule,
     CoursesModule,
+    QuizModule,
+    AssignmentModule,
     CalendarModule,
     ToastrModule.forRoot(),
   ],

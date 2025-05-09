@@ -36,6 +36,9 @@ $meeting-color: #1e40af;
 $assignment-background: #faf5ff;
 $meeting-background: #eff6ff;
 $quiz-background: #fdf2f8;
+$page-background: #fdf2f8;
+$file-background: #f0f9ff;
+$link-background: #f0fdfa;
 
 $gradient-blue-1: #6366f1;
 $gradient-blue-2: #22d3ee;
@@ -48,3 +51,21 @@ $gradient-red-2: #ef4444;
 
 $question-selected-color: #0891b2;
 $question-selected-color-hover: #cffafe;
+
+$quiz-header-start-color: $quiz-color;
+$quiz-header-end-color: #751540;
+
+$assignment-header-start-color: $assignment-color;
+$assignment-header-end-color: #480373;
+
+$meeting-header-start-color: $meeting-color;
+$meeting-header-end-color: #1e3a8a;
+
+$page-header-start-color: $page-color;
+$page-header-end-color: #823690;
+
+$file-header-start-color: $file-color;
+$file-header-end-color: #396294;
+
+$link-header-start-color: $link-color;
+$link-header-end-color: #09524a;

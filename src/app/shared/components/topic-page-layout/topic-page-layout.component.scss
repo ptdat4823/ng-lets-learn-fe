@@ -7,7 +7,6 @@
   position: relative;
   font-family: Nunito;
   color: $text-color;
-  background-color: $quiz-background;
   overflow-y: hidden;
   display: flex;
   flex-direction: column;
@@ -22,6 +21,35 @@
       --width: auto;
     }
   }
+
+  &.quiz {
+    background-color: $quiz-background;
+  }
+  &.assignment {
+    background-color: $assignment-background;
+  }
+  &.meeting {
+    background-color: $meeting-background;
+  }
+  &.page {
+    background-color: $page-background;
+  }
+  &.file {
+    background-color: $file-background;
+  }
+  &.link {
+    background-color: $link-background;
+  }
+}
+
+@mixin header-gradient($start-color, $end-color) {
+  background: linear-gradient(
+    to bottom right,
+    $start-color,
+    $end-color 75%,
+    $end-color
+  );
+  box-shadow: inset 4px 4px 20px 0px $end-color;
 }
 
 .topic-header {
@@ -35,14 +63,31 @@
   display: flex;
   flex-direction: column;
   color: white;
-  box-shadow: inset 4px 4px 20px 0px #751540;
 
-  background: linear-gradient(
-    to bottom right,
-    $quiz-color,
-    #751540 75%,
-    #751540
-  );
+  &.quiz {
+    @include header-gradient($quiz-header-start-color, $quiz-header-end-color);
+  }
+  &.assignment {
+    @include header-gradient(
+      $assignment-header-start-color,
+      $assignment-header-end-color
+    );
+  }
+  &.meeting {
+    @include header-gradient(
+      $meeting-header-start-color,
+      $meeting-header-end-color
+    );
+  }
+  &.page {
+    @include header-gradient($page-header-start-color, $page-header-end-color);
+  }
+  &.file {
+    @include header-gradient($file-header-start-color, $file-header-end-color);
+  }
+  &.link {
+    @include header-gradient($link-header-start-color, $link-header-end-color);
+  }
 
   .topic-title {
     display: flex;
