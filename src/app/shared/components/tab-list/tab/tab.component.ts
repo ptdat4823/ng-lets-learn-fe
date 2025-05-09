@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-tab',
-  standalone: true,
+  standalone: false,
   templateUrl: './tab.component.html',
   styleUrl: './tab.component.scss',
 })

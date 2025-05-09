@@ -1,0 +1,24 @@
+@use "styles/theme/theme.variables" as *;
+
+.content-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+
+  .collapse-all {
+    font-size: 0.85rem;
+    color: $tint-color;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+}

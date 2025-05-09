@@ -48,7 +48,9 @@
     >
   </form-input>
 
-  <mat-checkbox>Are you a teacher?</mat-checkbox>
+  <mat-checkbox [formGroup]="form" formControlName="isTeacher"
+    >Are you a teacher?</mat-checkbox
+  >
 
   <app-button label="SIGN UP" type="submit" />
 

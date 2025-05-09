@@ -21,16 +21,6 @@
       --max-width: auto;
       --width: auto;
     }
-
-    app-button {
-      width: fit-content;
-      button {
-        padding-left: 24px;
-        padding-right: 24px;
-        background-color: $tint-secondary-color !important;
-        border-radius: 6px;
-      }
-    }
   }
 }
 

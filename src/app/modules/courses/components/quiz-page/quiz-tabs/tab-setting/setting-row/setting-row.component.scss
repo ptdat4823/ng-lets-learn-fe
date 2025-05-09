@@ -1,0 +1,18 @@
+.setting-row {
+  display: flex;
+  flex-direction: row;
+
+  &.align-center {
+    align-items: center;
+  }
+  &.align-start {
+    align-items: flex-start;
+  }
+  &.align-end {
+    align-items: flex-end;
+  }
+
+  label {
+    min-width: 150px;
+  }
+}

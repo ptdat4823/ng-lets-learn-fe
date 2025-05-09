@@ -1,58 +1,79 @@
 <card>
-  <div class="quiz-dates">
-    <div class="date-item">
-      <span class="date-label">Open:</span>
-      <span class="date-value">{{
-        formatDate(topic.data.open, "EEEE, dd MMMM yyyy HH:mm a")
-      }}</span>
+  <h3 class="card-title">Edit setting</h3>
+  <form [formGroup]="form" (submit)="onSubmit($event)">
+    <app-collapsible-list>
+      <app-collapsible-section [sectionId]="sectionIds[0]" [hasBorder]="false">
+        <!-- Section dynamic title -->
+        <span class="title" title>General</span>
+
+        <!-- Section dynamic content -->
+        <div class="content" content>
+          @for(control of generalFormControls; track control.id) {
+          <setting-row [label]="control.label" [id]="control.id">
+            <app-form-field
+              [control]="control"
+              [controlName]="control.id"
+              [form]="form"
+              [showLabel]="false"
+            />
+          </setting-row>
+          }
+        </div>
+      </app-collapsible-section>
+
+      <app-collapsible-section [sectionId]="sectionIds[1]" [hasBorder]="false">
+        <!-- Section dynamic title -->
+        <span class="title" title>Timing</span>
+
+        <!-- Section dynamic content -->
+        <div class="content timing-content" content>
+          @for(controls of timingFormControls; track controls) {
+          <setting-row [label]="controls[0].label">
+            <div class="flex-row">
+              @for(control of controls; track control.id) {
+              @if(control.componentType === 'checkbox') {
+              <div class="checkbox-container">
+                <app-form-field
+                  [control]="control"
+                  [form]="form"
+                  [controlName]="control.id"
+                  [showLabel]="false"
+                  (onCheckChange)="onCheckboxChange($event)"
+                />
+              </div>
+              } @else {<app-form-field
+                [control]="control"
+                [controlName]="control.id"
+                [form]="form"
+                [showLabel]="false"
+              />} }
+            </div>
+          </setting-row>
+          }
+        </div>
+      </app-collapsible-section>
+
+      <app-collapsible-section [sectionId]="sectionIds[2]" [hasBorder]="false">
+        <!-- Section dynamic title -->
+        <span class="title" title>Grade</span>
+
+        <!-- Section dynamic content -->
+        <div class="content" content>
+          @for(control of gradeFormControls; track control.id) {
+          <setting-row [label]="control.label">
+            <app-form-field
+              [control]="control"
+              [controlName]="control.id"
+              [form]="form"
+              [showLabel]="false"
+            />
+          </setting-row>
+          }
+        </div>
+      </app-collapsible-section>
+    </app-collapsible-list>
+    <div class="submit-container">
+      <app-button type="submit" label="Save" class="submit-button" />
     </div>
-    <div class="date-item">
-      <span class="date-label">Due:</span>
-      <span class="date-value">{{
-        formatDate(topic.data.open, "EEEE, dd MMMM yyyy HH:mm a")
-      }}</span>
-    </div>
-  </div>
-
-  <div class="quiz-description">
-    <p>{{ topic.data.description }}</p>
-  </div>
-
-  <app-button label="Preview Quiz" />
-
-  <div class="quiz-settings">
-    <div class="setting-item">
-      <span class="setting-label">Attempts allowed:</span>
-      <span class="setting-value">{{ topic.data.attemptAllowed }}</span>
-    </div>
-    <div class="setting-item">
-      <span class="setting-label">Grading method:</span>
-      <span class="setting-value">{{ topic.data.gradingMethod }}</span>
-    </div>
-    <div class="setting-item">
-      <span
-        [class]="'setting-label ' + gradeColor"
-        >{{ `${gradingMethod}: ` }}</span
-      >
-      <span [class]="'setting-value ' + gradeColor">
-        {{ `${gradeToShow} / ${fullMarkOfQuiz}` }}
-      </span>
-    </div>
-  </div>
-
-  <div class="attempts-section">
-    <h3 class="attempts-title">Your attempts</h3>
-
-    <quiz-result-table [studentReponses]="studentResponses" />
-  </div>
-</card>
-
-<card>
-  <div class="comments-header">
-    <span class="material-symbols-outlined"> group </span>
-    <h3>Class comments</h3>
-  </div>
-
-  <comment-list />
-  <comment-input />
+  </form>
 </card>

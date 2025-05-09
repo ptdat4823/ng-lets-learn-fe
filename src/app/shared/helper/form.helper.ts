@@ -1,20 +1,7 @@
-import { ValidatorFn } from '@angular/forms';
 import { ComboboxOption } from '@shared/components/combobox/combobox.type';
 
 export type UpdateOnType = 'change' | 'blur' | 'submit';
-export type ComponentType = 'input' | 'select';
-
-export const createControl = (
-  defaultValue: any,
-  validators: ValidatorFn[] = [],
-  updateOn: UpdateOnType = 'submit'
-) => [
-  defaultValue,
-  {
-    validators,
-    updateOn,
-  },
-];
+type ComponentType = 'input' | 'select' | 'datetime' | 'checkbox';
 
 export interface FormControlField {
   id: string;

@@ -14,7 +14,6 @@ import { ToastrService } from 'ngx-toastr';
 export class TabCourseComponent implements OnInit {
   @Input({ required: true }) course!: Course;
   @Input() canEdit = true;
-  toggleString = 'Collapse all';
   edittingSectionIds: string[] = [];
 
   constructor(
@@ -23,22 +22,12 @@ export class TabCourseComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.toggleString = this.collapsibleListService.isAllCollapsed()
-      ? 'Expand all'
-      : 'Collapse all';
     this.collapsibleListService.setCanEdit(this.canEdit);
     const ids = this.course.sections.map((s) => s.id);
     this.collapsibleListService.setSectionIds(ids);
-    this.collapsibleListService.expandedSectionIds$.subscribe((ids) => {
-      this.toggleString = ids.length > 0 ? 'Collapse all' : 'Expand all';
-    });
     this.collapsibleListService.editingSectionIds$.subscribe((ids) => {
       this.edittingSectionIds = ids;
     });
-  }
-
-  toggleAllSectionState() {
-    this.collapsibleListService.toggleAllSectionStates();
   }
 
   onCopyCourseId() {

@@ -12,28 +12,25 @@ import { CollapsibleSectionService } from './collapsible-section.service';
 
 @Component({
   selector: 'app-collapsible-section',
-  standalone: true,
+  standalone: false,
   templateUrl: './collapsible-section.component.html',
   styleUrl: './collapsible-section.component.scss',
-  imports: [],
   providers: [CollapsibleSectionService],
 })
 export class CollapsibleSectionComponent implements OnInit, AfterViewInit {
   @Input({ required: true }) sectionId!: string;
+  @Input() hasBorder: boolean = true;
   canEdit = true;
   isEditing = false;
   isExpanded = false;
   @ViewChild('collapsibleRef') collapsibleRef!: ElementRef;
 
-  maxCollapsibleHeight = '60px';
+  maxCollapsibleHeight = '0px';
   collapsibleService = inject(CollapsibleSectionService);
   collapsibleListService = inject(CollapsibleListService);
 
   ngOnInit(): void {
     this.collapsibleService.setSectionId(this.sectionId);
-    this.collapsibleService.sectionId$.subscribe((sectionId) => {
-      if (sectionId) this.sectionId = sectionId;
-    });
     this.collapsibleListService.expandedSectionIds$.subscribe((ids) => {
       this.isExpanded = ids.includes(this.sectionId);
       this.updateContentHeight();
@@ -67,8 +64,8 @@ export class CollapsibleSectionComponent implements OnInit, AfterViewInit {
     requestAnimationFrame(() => {
       const scrollHeight = this.collapsibleRef.nativeElement.scrollHeight;
       this.maxCollapsibleHeight = this.isExpanded
-        ? `${scrollHeight + 100}px`
-        : '60px';
+        ? `${scrollHeight + 200}px`
+        : '0px';
     });
   }
 }

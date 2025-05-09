@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 @Component({
-  standalone: true,
+  standalone: false,
   selector: 'form-warning',
   templateUrl: './form-warning.component.html',
   styleUrl: './form-warning.component.scss',

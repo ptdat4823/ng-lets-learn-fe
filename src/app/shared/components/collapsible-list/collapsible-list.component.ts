@@ -1,41 +1,36 @@
-import { CommonModule } from '@angular/common';
-import {
-  AfterContentInit,
-  Component,
-  ContentChildren,
-  inject,
-  OnInit,
-  QueryList,
-} from '@angular/core';
-import { CollapsibleSectionComponent } from '../collapsible-section/collapsible-section.component';
+import { Component, inject, OnInit } from '@angular/core';
 import { CollapsibleListService } from './collapsible-list.service';
 
 @Component({
   selector: 'app-collapsible-list',
-  standalone: true,
+  standalone: false,
   templateUrl: './collapsible-list.component.html',
   styleUrl: './collapsible-list.component.scss',
-  imports: [CommonModule],
 })
 export class CollapsibleListComponent implements OnInit {
   canEdit = true;
   expandedSectionIds: string[] = [];
   editingSectionIds: string[] = [];
   collapsibleListService = inject(CollapsibleListService);
+  toggleString = 'Collapse all';
 
   ngOnInit(): void {
+    this.toggleString = this.collapsibleListService.isAllCollapsed()
+      ? 'Expand all'
+      : 'Collapse all';
     this.collapsibleListService.canEdit$.subscribe((canEdit) => {
       this.canEdit = canEdit;
     });
     this.collapsibleListService.expandedSectionIds$.subscribe((ids) => {
       this.expandedSectionIds = ids;
+      this.toggleString = ids.length > 0 ? 'Collapse all' : 'Expand all';
     });
     this.collapsibleListService.editingSectionIds$.subscribe((ids) => {
       this.editingSectionIds = ids;
     });
   }
 
-  toggleExpand(sectionId: string): void {
-    this.collapsibleListService.toggleExpand(sectionId);
+  toggleAllSectionState() {
+    this.collapsibleListService.toggleAllSectionStates();
   }
 }

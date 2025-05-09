@@ -11,7 +11,7 @@ export type ButtonVariant =
 
 @Component({
   selector: 'app-button',
-  standalone: true,
+  standalone: false,
   templateUrl: './button.component.html',
   styleUrl: './button.component.scss',
 })

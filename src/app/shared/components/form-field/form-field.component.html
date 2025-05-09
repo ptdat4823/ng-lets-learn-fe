@@ -1,0 +1,41 @@
+<div [formGroup]="form" class="container">
+  @if(showLabel) {
+  <label [for]="control.id" class="input-label">
+    {{ control.label }}
+  </label>
+  } @if(control.componentType === 'input') {
+  <form-input
+    [id]="control.id"
+    [form]="form"
+    [type]="control.type"
+    [controlName]="controlName"
+    [placeholder]="control.placeholder"
+    [validationMessages]="control.validationMessages"
+  />
+  <span class="description">{{ control.description }}</span>
+  } @else if (control.componentType === 'select') {
+  <app-combobox
+    [form]="form"
+    [controlName]="controlName"
+    [validationMessages]="control.validationMessages"
+    [options]="control.options ?? []"
+  />
+  @if(control.descriptionOnOption) {
+  <span class="description">{{
+    control.descriptionOnOption[descriptionOptionKey]
+  }}</span
+  >} } @else if(control.componentType === 'datetime') {
+  <app-date-time-picker
+    [form]="form"
+    [controlName]="controlName"
+    [validationMessages]="control.validationMessages"
+  />
+  } @else if(control.componentType === 'checkbox') {
+  <mat-checkbox
+    [formGroup]="form"
+    [formControlName]="controlName"
+    [name]="controlName"
+    (change)="onCheckboxChange($event)"
+  />
+  }
+</div>

@@ -5,10 +5,9 @@ import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'sidebar-item',
-  standalone: true,
+  standalone: false,
   templateUrl: './sidebar-item.component.html',
   styleUrl: './sidebar-item.component.scss',
-  imports: [MatExpansionModule],
 })
 export class SidebarItemComponent implements OnInit {
   @Input({ required: true }) label!: string;

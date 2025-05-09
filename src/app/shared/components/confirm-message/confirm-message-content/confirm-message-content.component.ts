@@ -1,12 +1,6 @@
 import { Component, inject } from '@angular/core';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogActions,
-  MatDialogContent,
-  MatDialogRef,
-  MatDialogTitle,
-} from '@angular/material/dialog';
-import { ButtonComponent, ButtonVariant } from '../../button/button.component';
+import { MatDialogRef } from '@angular/material/dialog';
+import { ButtonVariant } from '../../button/button.component';
 import {
   ConfirmMessageData,
   ConfirmMessageService,
@@ -14,12 +8,7 @@ import {
 
 @Component({
   selector: 'app-confirm-message-content',
-  imports: [
-    MatDialogActions,
-    MatDialogContent,
-    MatDialogTitle,
-    ButtonComponent,
-  ],
+  standalone: false,
   templateUrl: './confirm-message-content.component.html',
   styleUrl: './confirm-message-content.component.scss',
 })

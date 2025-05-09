@@ -4,8 +4,7 @@ import { LayoutService } from '@shared/components/layout/layout.service';
 
 @Component({
   selector: 'sidebar-item-collapse',
-  standalone: true,
-  imports: [MatExpansionModule],
+  standalone: false,
   templateUrl: './sidebar-item-collapse.component.html',
   styleUrl: './sidebar-item-collapse.component.scss',
 })

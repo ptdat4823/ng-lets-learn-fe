@@ -1,10 +1,9 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { TabComponent } from './tab/tab.component';
 import { TabService } from './tab-list.service';
 
 @Component({
   selector: 'app-tab-list',
-  imports: [TabComponent],
+  standalone: false,
   templateUrl: './tab-list.component.html',
   styleUrl: './tab-list.component.scss',
 })

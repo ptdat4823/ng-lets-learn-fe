@@ -1,14 +1,14 @@
-import { Validators } from '@angular/forms';
-import { createControl, FormControlField } from '@shared/helper/form.helper';
+import { FormControl, Validators } from '@angular/forms';
+import { FormControlField } from '@shared/helper/form.helper';
 
 export const newCourseFormSchema = {
-  title: createControl('', [Validators.required, Validators.minLength(3)]),
-  category: createControl('Academic', [
+  title: new FormControl('', [Validators.required, Validators.minLength(3)]),
+  category: new FormControl('Academic', [
     Validators.required,
     Validators.minLength(3),
   ]),
-  level: createControl('Beginner', [Validators.required]),
-  visibility: createControl(null, [Validators.required]),
+  level: new FormControl('Beginner', [Validators.required]),
+  visibility: new FormControl(null, [Validators.required]),
 };
 
 export const newCourseFormControls: FormControlField[] = [

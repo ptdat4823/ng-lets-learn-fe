@@ -4,7 +4,7 @@ import { iconMap, Topic } from '@shared/models/topic';
 
 @Component({
   selector: 'app-topic',
-  standalone: true,
+  standalone: false,
   templateUrl: './topic.component.html',
   styleUrl: './topic.component.scss',
 })

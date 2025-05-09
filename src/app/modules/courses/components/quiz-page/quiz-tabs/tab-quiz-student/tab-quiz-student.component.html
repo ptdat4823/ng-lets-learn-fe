@@ -19,7 +19,12 @@
   </div>
 
   <app-confirm-message />
-  <app-button label="Attempt Quiz" trigger (onClick)="openConfirmMessage()" />
+  <app-button
+    label="Attempt Quiz"
+    class="attempt-button"
+    trigger
+    (onClick)="openConfirmMessage()"
+  />
 
   <div class="quiz-settings" (click)="startQuiz()">
     <div class="setting-item">

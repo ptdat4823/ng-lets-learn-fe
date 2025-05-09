@@ -1,22 +1,22 @@
 import {
   Component,
+  ElementRef,
   EventEmitter,
   inject,
   Input,
   OnInit,
   Output,
+  ViewChild,
 } from '@angular/core';
-import { ComboboxOption } from './combobox.type';
+import { FormGroup } from '@angular/forms';
 import { ComboboxService } from './combobox.service';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { FormWarningComponent } from '../form-warning/form-warning.component';
+import { ComboboxOption } from './combobox.type';
 
 @Component({
   selector: 'app-combobox',
-  standalone: true,
+  standalone: false,
   templateUrl: './combobox.component.html',
   styleUrl: './combobox.component.scss',
-  imports: [ReactiveFormsModule, FormWarningComponent],
 })
 export class ComboboxComponent implements OnInit {
   @Input() form: FormGroup = new FormGroup({});
@@ -25,13 +25,15 @@ export class ComboboxComponent implements OnInit {
 
   @Input() options: ComboboxOption[] = [];
   @Input() placeholder = 'Select an option';
-  @Input() disabled = false;
   @Output() onSelect = new EventEmitter<ComboboxOption>();
+  @ViewChild('comboboxRef', { static: false }) comboboxRef!: ElementRef;
 
   comboboxService = inject(ComboboxService);
 
   isOpen = false;
   selectedOption: ComboboxOption | null = null;
+  dropdownPosition = { top: '', left: '', bottom: '', right: '' };
+  dropDownWidth = 0;
 
   findOptionByValue(value: string): ComboboxOption | null {
     if (!value) return null;
@@ -53,6 +55,7 @@ export class ComboboxComponent implements OnInit {
   }
 
   toggleDropdown(): void {
+    this.dropdownPosition = this.getPositionOfDropdown();
     this.comboboxService.toggleDropdown();
   }
 
@@ -60,5 +63,38 @@ export class ComboboxComponent implements OnInit {
     this.comboboxService.selectOption(option);
     this.onSelect.emit(option);
     this.form?.get(this.controlName)?.setValue(option.value);
+  }
+
+  getPositionOfDropdown() {
+    const rect = this.comboboxRef.nativeElement.getBoundingClientRect();
+    const dropdownHeight = 200; // should match your max dropdown height
+    const spaceBelow = window.innerHeight - rect.bottom;
+
+    if (spaceBelow < dropdownHeight) {
+      return {
+        top: 'auto',
+        left: `${rect.left}px`,
+        bottom: `${window.innerHeight - rect.top + 4}px`, // 4px for the gap
+        right: `${window.innerWidth - rect.right}px`,
+      };
+    } else {
+      return {
+        top: `${rect.bottom + 4}px`,
+        left: `${rect.left}px`,
+        bottom: `auto`,
+        right: `${window.innerWidth - rect.right}px`,
+      };
+    }
+  }
+
+  getDropdownWidth() {
+    if (!this.comboboxRef) return 0;
+    const rect = this.comboboxRef.nativeElement.getBoundingClientRect();
+    return rect.width;
+  }
+
+  getDisabledState(): boolean {
+    const control = this.form.get(this.controlName);
+    return control?.disabled || false;
   }
 }

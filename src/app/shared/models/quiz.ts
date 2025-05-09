@@ -1,4 +1,4 @@
-import { Question } from "./question";
+import { Question } from './question';
 
 export type QuizData = {
   description: string;
@@ -8,15 +8,15 @@ export type QuizData = {
   timeLimitUnit: TimeLimitType;
   gradeToPass: number;
   gradingMethod: GradingMethod;
-  attemptAllowed: "Unlimited" | string;
+  attemptAllowed: 'Unlimited' | string;
   questions: Question[];
 };
 export enum TimeLimitType {
-  SECONDS = "Seconds",
-  MINUTES = "Minutes",
-  HOURS = "Hours",
-  DAYS = "Days",
-  WEEKS = "Weeks",
+  SECONDS = 'Seconds',
+  MINUTES = 'Minutes',
+  HOURS = 'Hours',
+  DAYS = 'Days',
+  WEEKS = 'Weeks',
 }
 
 // function to get seconds from time limit value and unit
@@ -50,24 +50,24 @@ export const getSecondFromTimeLimitType = (
 };
 
 export enum GradingMethod {
-  HIGHEST_GRADE = "Highest Grade",
-  AVERAGE_GRADE = "Average Grade",
-  FIRST_GRADE = "First Grade",
-  LAST_GRADE = "Last Grade",
+  HIGHEST_GRADE = 'Highest Grade',
+  AVERAGE_GRADE = 'Average Grade',
+  FIRST_GRADE = 'First Attempt',
+  LAST_GRADE = 'Last Attempt',
 }
 
 export const attemptsAllowedOptions = [
-  "Unlimited",
-  "1",
-  "2",
-  "3",
-  "4",
-  "5",
-  "6",
-  "7",
-  "8",
-  "9",
-  "10",
+  'Unlimited',
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  '10',
 ];
 
 export const getQuizTotalMark = (questions: Question[]) => {

@@ -1,14 +1,12 @@
 import { Component, inject } from '@angular/core';
-import { CircleImageComponent } from '../circle-image/circle-image.component';
-import { LayoutService } from '../layout/layout.service';
 import { Router } from '@angular/router';
+import { LayoutService } from '../layout/layout.service';
 
 @Component({
   selector: 'app-header',
-  standalone: true,
+  standalone: false,
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
-  imports: [CircleImageComponent],
 })
 export class HeaderComponent {
   router = inject(Router);

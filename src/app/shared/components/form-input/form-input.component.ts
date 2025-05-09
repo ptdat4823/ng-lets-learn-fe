@@ -1,17 +1,11 @@
-import { Component, Input, type OnInit } from '@angular/core';
-import {
-  ReactiveFormsModule,
-  type FormControl,
-  type FormGroup,
-} from '@angular/forms';
-import { FormWarningComponent } from '../form-warning/form-warning.component';
+import { Component, Input } from '@angular/core';
+import { type FormControl, type FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'form-input',
-  standalone: true,
+  standalone: false,
   templateUrl: './form-input.component.html',
   styleUrls: ['./form-input.component.scss'],
-  imports: [FormWarningComponent, ReactiveFormsModule],
 })
 export class FormInputComponent {
   // Form control inputs
@@ -28,7 +22,6 @@ export class FormInputComponent {
   @Input() max: number | undefined = undefined;
   @Input() step: number | undefined = undefined;
   @Input() required = false;
-  @Input() disabled = false;
   @Input() readonly = false;
 
   // Internal state

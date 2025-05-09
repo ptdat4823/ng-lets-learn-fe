@@ -1,0 +1,43 @@
+@use "styles/theme/theme.variables" as *;
+
+:host {
+  width: 100%;
+}
+
+.date-time-picker {
+  border-radius: 8px;
+  border: 1px solid $border-color;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+
+  input {
+    width: 100%;
+    border: none;
+    background-color: transparent;
+    padding: 12px 0;
+    font-family: Nunito;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  span.material-symbols-outlined {
+    font-size: 20px;
+    color: $icon-color;
+
+    &.disabled {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+
+  .picker {
+    display: none;
+    transition: all 0.3s ease-in-out;
+    font-family: Nunito;
+  }
+}

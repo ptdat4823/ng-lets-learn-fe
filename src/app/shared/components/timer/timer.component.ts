@@ -1,13 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { getTimeBySeconds } from '@shared/helper/date.helper';
 import { format } from 'date-fns';
 import { TimerService } from './timer.service';
-import { getBaseTime, getTimeBySeconds } from '@shared/helper/date.helper';
 
 export type TimerType = 'count-up' | 'count-down';
 
 @Component({
   selector: 'app-timer',
-  imports: [],
+  standalone: false,
   templateUrl: './timer.component.html',
   styleUrl: './timer.component.scss',
 })

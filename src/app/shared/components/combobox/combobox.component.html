@@ -1,8 +1,9 @@
 <div
   [formGroup]="form"
   class="combobox-field"
-  [class.disabled]="disabled"
+  [class.disabled]="getDisabledState()"
   (click)="toggleDropdown()"
+  #comboboxRef
 >
   <span class="combobox-value">{{ selectedOption?.label || placeholder }}</span>
 
@@ -16,7 +17,16 @@
   [messages]="validationMessages"
 />
 @if(isOpen) {
-<div class="combobox-dropdown">
+<div
+  class="combobox-dropdown"
+  [style]="
+{
+  top: dropdownPosition.top,
+  left: dropdownPosition.left,
+  bottom: dropdownPosition.bottom,
+  right: dropdownPosition.right,
+}"
+>
   @if(options.length === 0) {
   <div class="combobox-option">No options available</div>
   } @for(option of options; track option.value) {

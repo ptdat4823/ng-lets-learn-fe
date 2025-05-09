@@ -1,0 +1,13 @@
+<div
+  class="setting-row"
+  [class]="{
+    'align-center': align === 'center',
+    'align-start': align === 'start',
+    'align-end': align === 'end',
+}"
+>
+  @if(label) {
+  <label [for]="for">{{ label }}</label>
+  }
+  <ng-content></ng-content>
+</div>

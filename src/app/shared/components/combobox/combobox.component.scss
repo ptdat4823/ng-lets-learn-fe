@@ -21,7 +21,6 @@
   background-color: #fff;
   cursor: pointer;
   transition: border-color 0.2s, box-shadow 0.2s;
-  height: 40px;
   box-sizing: border-box;
 
   &:hover {
@@ -60,10 +59,9 @@ span.material-symbols-outlined {
 
 .combobox-dropdown {
   --max-dropdown-height: 200px;
-  position: absolute;
-  top: calc(100% + 2px);
-  left: 0;
-  width: 100%;
+  position: fixed;
+
+  width: auto;
   max-height: var(--max-dropdown-height);
   overflow-y: auto;
   background-color: #fff;
@@ -71,6 +69,11 @@ span.material-symbols-outlined {
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   z-index: 10;
+
+  // &.show-above {
+  //   top: auto;
+  //   bottom: calc(100% + 2px);
+  // }
 }
 
 .combobox-option {

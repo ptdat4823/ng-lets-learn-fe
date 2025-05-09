@@ -1,0 +1,24 @@
+<div class="date-time-picker" [formGroup]="form">
+  <input
+    matInput
+    [matDatetimepicker]="picker"
+    [placeholder]="placeholder"
+    (dateChange)="onDateChange($event)"
+    readonly
+    [disabled]="getDisabledState()"
+    [value]="value"
+  />
+  <span
+    class="material-symbols-outlined"
+    [class.disabled]="getDisabledState()"
+    (click)="picker.open()"
+  >
+    calendar_month
+  </span>
+  <mat-datetimepicker #picker type="datetime" class="picker" />
+</div>
+<form-warning
+  [form]="form"
+  [controlName]="controlName"
+  [messages]="validationMessages"
+/>

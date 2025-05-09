@@ -1,16 +1,12 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { HeaderComponent } from '../header/header.component';
-import { SidebarComponent } from '../sidebar/sidebar.component';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { LayoutService } from './layout.service';
-import { RouterOutlet } from '@angular/router';
-import { UserService } from '@shared/services/user.service';
+import { Component, inject, OnInit } from '@angular/core';
 import { mockUsers } from '@shared/mocks/user';
+import { UserService } from '@shared/services/user.service';
+import { LayoutService } from './layout.service';
 
 @Component({
   selector: 'app-layout',
-  standalone: true,
-  imports: [HeaderComponent, SidebarComponent, RouterOutlet],
+  standalone: false,
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss',
 })

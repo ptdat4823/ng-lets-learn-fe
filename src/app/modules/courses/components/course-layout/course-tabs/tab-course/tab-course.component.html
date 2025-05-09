@@ -16,12 +16,6 @@
 </div>
 
 <div class="course-content">
-  <div class="content-actions">
-    <span class="collapse-all" (click)="toggleAllSectionState()">{{
-      toggleString
-    }}</span>
-  </div>
-
   <app-collapsible-list>
     @for(section of course.sections; track section.id) {
     <app-collapsible-section [sectionId]="section.id">

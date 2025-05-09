@@ -1,40 +1,83 @@
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import {
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogTitle,
+} from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
+import {
+  MatDatetimepickerModule,
+  MatNativeDatetimeModule,
+} from '@mat-datetimepicker/core';
 import { ButtonComponent } from './button/button.component';
 import { CardComponent } from './card/card.component';
 import { CircleImageComponent } from './circle-image/circle-image.component';
+import { CollapsibleListComponent } from './collapsible-list/collapsible-list.component';
+import { CollapsibleSectionComponent } from './collapsible-section/collapsible-section.component';
 import { ComboboxComponent } from './combobox/combobox.component';
+import { ConfirmMessageComponent } from './confirm-message/confirm-message.component';
+import { DateTimePickerComponent } from './date-time-picker/date-time-picker.component';
 import { FormInputComponent } from './form-input/form-input.component';
 import { FormWarningComponent } from './form-warning/form-warning.component';
 import { HeaderComponent } from './header/header.component';
 import { LayoutComponent } from './layout/layout.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { TabListComponent } from './tab-list/tab-list.component';
-import { CollapsibleSectionComponent } from './collapsible-section/collapsible-section.component';
-import { TopicComponent } from './topic/topic.component';
-import { CollapsibleListComponent } from './collapsible-list/collapsible-list.component';
 import { TopicPageLayoutComponent } from './topic-page-layout/topic-page-layout.component';
-import { ConfirmMessageComponent } from './confirm-message/confirm-message.component';
+import { TopicComponent } from './topic/topic.component';
+
+import { RouterOutlet } from '@angular/router';
+import { ConfirmMessageContentComponent } from './confirm-message/confirm-message-content/confirm-message-content.component';
+import { FormFieldComponent } from './form-field/form-field.component';
+import { SidebarGroupComponent } from './sidebar/sidebar-group/sidebar-group.component';
+import { SidebarItemCollapseComponent } from './sidebar/sidebar-item-collapse/sidebar-item-collapse.component';
+import { SidebarItemComponent } from './sidebar/sidebar-item/sidebar-item.component';
+import { TabComponent } from './tab-list/tab/tab.component';
+import { TimerComponent } from './timer/timer.component';
 @NgModule({
-  imports: [
-    FormWarningComponent,
-    FormInputComponent,
-    CardComponent,
-    MatCheckboxModule,
-    HeaderComponent,
-    SidebarComponent,
-    MatExpansionModule,
-    LayoutComponent,
-    CircleImageComponent,
+  declarations: [
     ButtonComponent,
-    ComboboxComponent,
-    TabListComponent,
-    CollapsibleSectionComponent,
+    CardComponent,
+    CircleImageComponent,
     CollapsibleListComponent,
+    CollapsibleSectionComponent,
+    ComboboxComponent,
+    FormWarningComponent,
+    ConfirmMessageComponent,
+    ConfirmMessageContentComponent,
+    DateTimePickerComponent,
+    FormInputComponent,
+    HeaderComponent,
+    LayoutComponent,
+    SidebarComponent,
+    SidebarItemCollapseComponent,
+    SidebarItemComponent,
+    SidebarGroupComponent,
+    TabComponent,
+    TabListComponent,
+    TimerComponent,
     TopicComponent,
     TopicPageLayoutComponent,
-    ConfirmMessageComponent,
+    FormFieldComponent,
+  ],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatDialogActions,
+    MatDialogContent,
+    MatDialogTitle,
+    MatDatepickerModule,
+    MatMomentDateModule,
+    MatDatetimepickerModule,
+    MatNativeDatetimeModule,
+    RouterOutlet,
+    MatExpansionModule,
+    MatCheckboxModule,
   ],
   exports: [
     FormWarningComponent,
@@ -53,6 +96,11 @@ import { ConfirmMessageComponent } from './confirm-message/confirm-message.compo
     TopicComponent,
     CollapsibleListComponent,
     TopicPageLayoutComponent,
+    DateTimePickerComponent,
+    ConfirmMessageComponent,
+    TimerComponent,
+    TabComponent,
+    FormFieldComponent,
   ],
 })
 export class SharedComponentsModule {}

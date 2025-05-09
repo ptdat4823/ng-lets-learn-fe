@@ -8,16 +8,9 @@ import { SidebarItemComponent } from './sidebar-item/sidebar-item.component';
 import { mockCourses } from '@shared/mocks/course';
 @Component({
   selector: 'app-sidebar',
-  standalone: true,
+  standalone: false,
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
-  imports: [
-    SidebarItemCollapseComponent,
-    MatExpansionModule,
-    SidebarItemComponent,
-    SidebarGroupComponent,
-    CircleImageComponent,
-  ],
 })
 export class SidebarComponent implements OnInit {
   layoutService = inject(LayoutService);

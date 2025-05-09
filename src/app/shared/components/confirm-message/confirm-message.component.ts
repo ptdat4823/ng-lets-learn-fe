@@ -5,7 +5,7 @@ import { ConfirmMessageService } from './confirm-message.service';
 
 @Component({
   selector: 'app-confirm-message',
-  imports: [],
+  standalone: false,
   templateUrl: './confirm-message.component.html',
   styleUrl: './confirm-message.component.scss',
 })

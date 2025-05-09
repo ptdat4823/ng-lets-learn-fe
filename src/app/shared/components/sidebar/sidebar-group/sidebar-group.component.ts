@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'sidebar-group',
-  standalone: true,
+  standalone: false,
   templateUrl: './sidebar-group.component.html',
   styleUrl: './sidebar-group.component.scss',
 })

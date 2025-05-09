@@ -2,6 +2,7 @@ const iconKeys = [
   'account_circle',
   'add_circle',
   'calendar_today',
+  'calendar_month',
   'chat_bubble',
   'checkbook',
   'group',
