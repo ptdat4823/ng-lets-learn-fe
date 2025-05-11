@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { QuizTopic } from '@shared/models/topic';
 
 @Component({
   selector: 'tab-result',
@@ -6,4 +7,6 @@ import { Component } from '@angular/core';
   templateUrl: './tab-result.component.html',
   styleUrl: './tab-result.component.scss',
 })
-export class TabResultComponent {}
+export class TabResultComponent {
+  @Input({ required: true }) topic!: QuizTopic;
+}

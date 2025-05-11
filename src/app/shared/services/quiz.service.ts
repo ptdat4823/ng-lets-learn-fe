@@ -3,7 +3,8 @@ import {
   QuestionResult,
   QuizResult,
 } from '@modules/quiz/constants/quiz.constant';
-import { TimeLimitType } from '@shared/models/quiz';
+import { QuizData, TimeLimitType } from '@shared/models/quiz';
+import { QuizTopic } from '@shared/models/topic';
 
 @Injectable({ providedIn: 'root' })
 export class QuizService {
@@ -35,5 +36,12 @@ export class QuizService {
     if (unit === TimeLimitType.WEEKS) return value * 60 * 60 * 24 * 7;
     if (onUnitError) onUnitError();
     return 0;
+  };
+  getFullMarkOfQuiz = (quiz: QuizTopic) => {
+    const quizData = quiz.data as QuizData;
+    return quizData.questions.reduce(
+      (cur, question) => cur + question.defaultMark,
+      0
+    );
   };
 }

@@ -5,5 +5,9 @@
   <tab-quiz-student [topic]="topic" />
   } } @else if(selectedTab === tabs.SETTINGS) {
   <tab-setting [topic]="topic" />
+  } @else if(selectedTab === tabs.QUESTIONS) {
+  <tab-question [topic]="topic" />
+  }@else if(selectedTab === tabs.RESULTS) {
+  <tab-result [topic]="topic" />
   }
 </topic-page-layout>

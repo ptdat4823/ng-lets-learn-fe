@@ -1,0 +1,11 @@
+<div
+  class="container"
+  [class]="{
+    info: variant === 'info',
+    success: variant === 'success',
+    warning: variant === 'warning',
+    error: variant === 'error',
+}"
+>
+  {{ quizStatusText }}
+</div>

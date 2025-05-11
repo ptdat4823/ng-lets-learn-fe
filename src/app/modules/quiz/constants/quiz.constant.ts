@@ -1,3 +1,5 @@
+import { QuestionType } from '@shared/models/question';
+
 export enum QuizTab {
   QUIZ = 'Quiz',
   SETTINGS = 'Settings',
@@ -20,3 +22,9 @@ export enum QuizResult {
   BAD = 'Bad',
   DEFAULT = 'Default',
 }
+
+export const questionIconMap = {
+  [QuestionType.CHOICE]: 'list',
+  [QuestionType.SHORT_ANSWER]: 'crop_7_5',
+  [QuestionType.TRUE_FALSE]: 'hdr_strong',
+};

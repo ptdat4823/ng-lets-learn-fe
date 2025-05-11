@@ -1,6 +1,6 @@
 @use "styles/theme/theme.variables" as *;
 
-:host {
+.container {
   z-index: 0;
   height: 100%;
   width: 100%;

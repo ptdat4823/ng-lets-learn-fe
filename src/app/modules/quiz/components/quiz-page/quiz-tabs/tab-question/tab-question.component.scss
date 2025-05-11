@@ -1,0 +1,31 @@
+@use "styles/theme/theme.variables" as *;
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  & .preview-button {
+    ::ng-deep {
+      button {
+        width: fit-content;
+        padding-left: 24px;
+        padding-right: 24px;
+        background-color: $tint-secondary-color !important;
+        border-radius: 6px;
+      }
+    }
+  }
+}
+
+.card-title {
+  font-weight: 600;
+  color: $tint-third-color;
+}
+
+.question-list-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}

@@ -1,0 +1,22 @@
+@use "styles/theme/theme.variables" as *;
+
+.container {
+  padding: 12px 20px;
+  border-radius: 8px;
+  &.info {
+    background-color: $info-hover-color;
+    color: $info-color;
+  }
+  &.success {
+    background-color: $success-hover-color;
+    color: $success-color;
+  }
+  &.error {
+    background-color: $error-hover-color;
+    color: $error-color;
+  }
+  &.warning {
+    background-color: $warning-hover-color;
+    color: $warning-color;
+  }
+}

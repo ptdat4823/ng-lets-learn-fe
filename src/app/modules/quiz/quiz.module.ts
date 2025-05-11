@@ -1,5 +1,7 @@
+import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatTableModule } from '@angular/material/table';
 import { RouterOutlet } from '@angular/router';
 import { SharedComponentsModule } from '@shared/components/shared-components.module';
 import { SharedModule } from '@shared/shared.module';
@@ -11,11 +13,17 @@ import { QuizResultComponent } from './components/quiz-page/quiz-attempting/quiz
 import { QuizShortAnswerComponent } from './components/quiz-page/quiz-attempting/quiz-short-answer/quiz-short-answer.component';
 import { QuizTrueFalseAnswerComponent } from './components/quiz-page/quiz-attempting/quiz-true-false-answer/quiz-true-false-answer.component';
 import { QuizPageComponent } from './components/quiz-page/quiz-page.component';
+import { TabQuestionBankComponent } from './components/quiz-page/quiz-tabs/tab-question-bank/tab-question-bank.component';
+import { QuestionItemComponent } from './components/quiz-page/quiz-tabs/tab-question/question-list/question-item/question-item.component';
+import { QuestionListComponent } from './components/quiz-page/quiz-tabs/tab-question/question-list/question-list.component';
+import { QuizStatusBannerComponent } from './components/quiz-page/quiz-tabs/tab-question/quiz-status-banner/quiz-status-banner.component';
+import { TabQuestionComponent } from './components/quiz-page/quiz-tabs/tab-question/tab-question.component';
 import { TabQuizStudentComponent } from './components/quiz-page/quiz-tabs/tab-quiz-student/tab-quiz-student.component';
 import { TabQuizComponent } from './components/quiz-page/quiz-tabs/tab-quiz/tab-quiz.component';
+import { ResultTableComponent } from './components/quiz-page/quiz-tabs/tab-result/result-table/result-table.component';
+import { TabResultComponent } from './components/quiz-page/quiz-tabs/tab-result/tab-result.component';
 import { TabSettingComponent } from './components/quiz-page/quiz-tabs/tab-setting/tab-setting.component';
 import { QuizResultTableComponent } from './components/quiz-result-table/quiz-result-table.component';
-
 @NgModule({
   declarations: [
     QuizResultTableComponent,
@@ -30,8 +38,23 @@ import { QuizResultTableComponent } from './components/quiz-result-table/quiz-re
     QuizShortAnswerComponent,
     QuizResultComponent,
     TabSettingComponent,
+    TabQuestionBankComponent,
+    TabQuestionComponent,
+    TabResultComponent,
+    QuizStatusBannerComponent,
+    QuestionItemComponent,
+    QuestionListComponent,
+    ResultTableComponent,
   ],
-  imports: [SharedModule, RouterOutlet, FormsModule, SharedComponentsModule],
+  imports: [
+    SharedModule,
+    RouterOutlet,
+    FormsModule,
+    SharedComponentsModule,
+    CdkDropList,
+    CdkDrag,
+    MatTableModule,
+  ],
   exports: [QuizAttemptingComponent],
 })
 export class QuizModule {}

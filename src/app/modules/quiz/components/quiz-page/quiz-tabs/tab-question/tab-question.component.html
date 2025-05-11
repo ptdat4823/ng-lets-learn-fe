@@ -1,4 +1,11 @@
-<!-- <card>
-  <h3 class="card-title">Edit setting</h3>
-  
-</card> -->
+<card>
+  <h3 class="card-title">Question</h3>
+  <div class="question-list-header">
+    <span class="question-number"
+      >Number of question: {{ getQuestions().length }}</span
+    >
+    <quiz-status-banner [topic]="topic" />
+    <span class="question-total-mark">Total mark: {{ getTotalMarks() }}</span>
+  </div>
+  <question-list [questions]="getQuestions()" />
+</card>

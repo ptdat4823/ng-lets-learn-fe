@@ -1,0 +1,16 @@
+<div cdkDropList class="container" (cdkDropListDropped)="drop($event)">
+  @for(question of questions; track question.id) {
+  <question-item
+    [question]="question"
+    [index]="questionIndexMap[question.id]"
+    cdkDrag
+  />
+  }
+</div>
+<div class="actions">
+  @if(isEditing) {
+  <span class="action cancel" (click)="onCancel()">Cancel</span>
+  <span class="action save" (click)="onSave()">Save</span>
+  }
+  <span class="action">Add</span>
+</div>

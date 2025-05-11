@@ -1,5 +1,5 @@
 <div
-  class="topic-header"
+  class="container"
   [class]="{
   quiz: topic.type === 'quiz',
   assignment: topic.type === 'assignment',
@@ -9,16 +9,27 @@
   link: topic.type === 'link',
 }"
 >
-  <div class="topic-title">
-    <span class="material-symbols-outlined"> {{ topicIcon }}</span>
-    <h2>{{ topic.title }}</h2>
-  </div>
+  <div
+    class="topic-header"
+    [class]="{
+  quiz: topic.type === 'quiz',
+  assignment: topic.type === 'assignment',
+  meeting: topic.type === 'meeting',
+  page: topic.type === 'page',
+  file: topic.type === 'file',
+  link: topic.type === 'link',
+}"
+  >
+    <div class="topic-title">
+      <span class="material-symbols-outlined"> {{ topicIcon }}</span>
+      <h2>{{ topic.title }}</h2>
+    </div>
 
-  <app-tab-list [tabs]="tabs" variant="white"></app-tab-list>
-</div>
-<div
-  class="topic-content"
-  [class]="{
+    <app-tab-list [tabs]="tabs" variant="white"></app-tab-list>
+  </div>
+  <div
+    class="topic-content"
+    [class]="{
   quiz: topic.type === 'quiz',
   assignment: topic.type === 'assignment',
   meeting: topic.type === 'meeting',
@@ -26,6 +37,7 @@
   file: topic.type === 'file',
   link: topic.type === 'link',
 }"
->
-  <ng-content />
+  >
+    <ng-content />
+  </div>
 </div>

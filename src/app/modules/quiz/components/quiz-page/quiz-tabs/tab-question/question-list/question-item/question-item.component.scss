@@ -1,0 +1,63 @@
+@use "styles/theme/theme.variables" as *;
+
+@mixin flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.container {
+  @include flex-row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #cffafe;
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+  user-select: none;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: $box-shadow;
+
+    & .actions {
+      opacity: 1;
+      pointer-events: all;
+    }
+  }
+
+  .content {
+    @include flex-row;
+    gap: 1rem;
+
+    .question-text {
+      color: #0891b2;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+  }
+
+  .actions {
+    @include flex-row;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+    pointer-events: none;
+
+    span.material-symbols-outlined {
+      color: $icon-color;
+
+      &:hover {
+        color: $error-color;
+      }
+    }
+  }
+}

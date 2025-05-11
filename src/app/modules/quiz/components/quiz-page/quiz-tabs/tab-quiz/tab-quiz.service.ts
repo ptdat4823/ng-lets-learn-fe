@@ -5,6 +5,7 @@ import {
   StudentResponse,
 } from '@shared/models/student-response';
 import { QuizTopic } from '@shared/models/topic';
+import { QuizService } from '@shared/services/quiz.service';
 import { StudentResponseService } from '@shared/services/student-response.service';
 import { BehaviorSubject } from 'rxjs';
 
@@ -17,7 +18,10 @@ export class TabQuizService {
     this.topic.next(topic);
   }
 
-  constructor(private studentResponseService: StudentResponseService) {}
+  constructor(
+    private studentResponseService: StudentResponseService,
+    private quizService: QuizService
+  ) {}
 
   private getQuizResponseMark = (quizResponse: QuizResponseData) => {
     return this.studentResponseService.getQuizResponseMark(quizResponse);
@@ -70,11 +74,7 @@ export class TabQuizService {
     return this.getQuizResponseMark(data);
   };
 
-  getFullMarkOfQuiz = (quiz: QuizTopic) => {
-    const quizData = quiz.data as QuizData;
-    return quizData.questions.reduce(
-      (cur, question) => cur + question.defaultMark,
-      0
-    );
+  getFullMarkOfQuiz = (topic: QuizTopic) => {
+    return this.quizService.getFullMarkOfQuiz(topic);
   };
 }
