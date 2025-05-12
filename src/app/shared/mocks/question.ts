@@ -14,7 +14,7 @@ export const mockQuestions: Question[] = [
     defaultMark: 10,
     createdBy: 'John Doe',
     createdAt: new Date(2024, 0, 1).toISOString(),
-    modifiedAt: '2021-10-01',
+    modifiedAt: new Date(2024, 0, 1).toISOString(),
     modifiedBy: 'John Doe',
     usage: 10,
     data: {
@@ -101,8 +101,8 @@ export const mockQuestions: Question[] = [
     status: QuestionStatus.READY,
     defaultMark: 10,
     createdBy: 'John Doe',
-    createdAt: '2021-10-01',
-    modifiedAt: '2021-10-01',
+    createdAt: new Date(2024, 0, 1).toISOString(),
+    modifiedAt: new Date(2024, 0, 1).toISOString(),
     modifiedBy: 'John Doe',
     usage: 10,
     data: {
@@ -147,8 +147,8 @@ export const mockQuestions: Question[] = [
     status: QuestionStatus.READY,
     defaultMark: 10,
     createdBy: 'John Doe',
-    createdAt: '2021-10-01',
-    modifiedAt: '2021-10-01',
+    createdAt: new Date(2024, 0, 1).toISOString(),
+    modifiedAt: new Date(2024, 0, 1).toISOString(),
     modifiedBy: 'John Doe',
     usage: 10,
     data: {

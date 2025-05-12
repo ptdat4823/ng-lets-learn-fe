@@ -9,5 +9,7 @@
   <tab-question [topic]="topic" />
   }@else if(selectedTab === tabs.RESULTS) {
   <tab-result [topic]="topic" />
+  } @else if(selectedTab === tabs.QUESTION_BANK) {
+  <tab-question-bank [topic]="topic" />
   }
 </topic-page-layout>

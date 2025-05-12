@@ -24,6 +24,10 @@ import { ResultTableComponent } from './components/quiz-page/quiz-tabs/tab-resul
 import { TabResultComponent } from './components/quiz-page/quiz-tabs/tab-result/tab-result.component';
 import { TabSettingComponent } from './components/quiz-page/quiz-tabs/tab-setting/tab-setting.component';
 import { QuizResultTableComponent } from './components/quiz-result-table/quiz-result-table.component';
+import { ImageColumnComponent } from './components/quiz-page/quiz-tabs/tab-result/result-table/table-columns/image-column/image-column.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { QuestionBankTableComponent } from './components/quiz-page/quiz-tabs/tab-question-bank/question-bank-table/question-bank-table.component';
+import { StatusColumnComponent } from './components/quiz-page/quiz-tabs/tab-question-bank/question-bank-table/table-columns/status-column/status-column.component';
 @NgModule({
   declarations: [
     QuizResultTableComponent,
@@ -45,6 +49,9 @@ import { QuizResultTableComponent } from './components/quiz-result-table/quiz-re
     QuestionItemComponent,
     QuestionListComponent,
     ResultTableComponent,
+    ImageColumnComponent,
+    QuestionBankTableComponent,
+    StatusColumnComponent,
   ],
   imports: [
     SharedModule,
@@ -54,6 +61,7 @@ import { QuizResultTableComponent } from './components/quiz-result-table/quiz-re
     CdkDropList,
     CdkDrag,
     MatTableModule,
+    MatPaginatorModule,
   ],
   exports: [QuizAttemptingComponent],
 })

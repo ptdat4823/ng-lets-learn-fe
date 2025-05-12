@@ -16,12 +16,6 @@ export type ResultElement = {
   grade: number;
 };
 
-type TableData = {
-  headerId: string;
-  headerLabel: string;
-  tableCell: any;
-};
-
 @Component({
   selector: 'result-table',
   standalone: false,
@@ -39,39 +33,6 @@ export class ResultTableComponent implements OnInit {
     'grade',
   ];
   dataSource: ResultElement[] = [];
-
-  tableData: TableData[] = [
-    {
-      headerId: 'index',
-      headerLabel: 'No.',
-      tableCell: (element: ResultElement) => element.index,
-    },
-    {
-      headerId: 'image',
-      headerLabel: 'Image',
-      tableCell: (element: ResultElement) => element.image,
-    },
-    {
-      headerId: 'name',
-      headerLabel: 'Name',
-      tableCell: (element: ResultElement) => element.name,
-    },
-    {
-      headerId: 'email',
-      headerLabel: 'Email',
-      tableCell: (element: ResultElement) => element.email,
-    },
-    {
-      headerId: 'duration',
-      headerLabel: 'Duration',
-      tableCell: (element: ResultElement) => element.duration,
-    },
-    {
-      headerId: 'grade',
-      headerLabel: 'Grade',
-      tableCell: (element: ResultElement) => element.grade,
-    },
-  ];
 
   constructor(private studentResponseService: StudentResponseService) {}
 

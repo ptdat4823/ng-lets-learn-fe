@@ -41,9 +41,11 @@ export class ComboboxComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const initValue = this.form?.get(this.controlName)?.value;
-    const initOption = this.findOptionByValue(initValue);
-    this.comboboxService.selectOption(initOption);
+    const initValue = this.form.get(this.controlName)?.value;
+    if (initValue) {
+      const initOption = this.findOptionByValue(initValue);
+      this.comboboxService.selectOption(initOption);
+    }
 
     this.comboboxService.selectedOption$.subscribe((option) => {
       this.selectedOption = option;
