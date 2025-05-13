@@ -16,7 +16,7 @@
   [controlName]="controlName"
   [messages]="validationMessages"
 />
-@if(isOpen) {
+@if(isOpen && getDisabledState() === false) {
 <div
   class="combobox-dropdown"
   [style]="

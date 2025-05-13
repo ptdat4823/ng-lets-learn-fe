@@ -5,9 +5,14 @@ import { SharedComponentsModule } from '@shared/components/shared-components.mod
 import { SharedModule } from '@shared/shared.module';
 import { AssignmentPageComponent } from './components/assignment-page/assignment-page.component';
 import { TabAssignmentComponent } from './components/assignment-page/assignment-tabs/tab-assignment/tab-assignment.component';
+import { TabSettingComponent } from './components/assignment-page/assignment-tabs/tab-setting/tab-setting.component';
 
 @NgModule({
-  declarations: [AssignmentPageComponent, TabAssignmentComponent],
+  declarations: [
+    AssignmentPageComponent,
+    TabAssignmentComponent,
+    TabSettingComponent,
+  ],
   imports: [SharedModule, RouterOutlet, FormsModule, SharedComponentsModule],
   exports: [],
 })

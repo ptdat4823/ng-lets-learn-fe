@@ -56,6 +56,7 @@ export class ComboboxComponent implements OnInit {
   }
 
   toggleDropdown(): void {
+    if (this.getDisabledState()) return;
     this.dropdownPosition = this.getPositionOfDropdown();
     this.comboboxService.toggleDropdown();
   }

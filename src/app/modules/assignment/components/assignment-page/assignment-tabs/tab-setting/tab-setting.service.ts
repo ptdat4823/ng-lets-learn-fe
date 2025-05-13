@@ -9,7 +9,7 @@ import { StudentResponseService } from '@shared/services/student-response.servic
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
-export class TabQuizSettingService {
+export class TabAssignmentSettingService {
   private topic = new BehaviorSubject<QuizTopic | null>(null);
   public topic$ = this.topic.asObservable();
 

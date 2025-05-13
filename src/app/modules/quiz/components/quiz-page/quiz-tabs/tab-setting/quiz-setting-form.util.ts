@@ -12,16 +12,10 @@ export const arrayStringToComboboxOption = (
 
 export const getGradingMethodOptions = (): ComboboxOption[] => {
   const gradingMethodOptions = Object.values(GradingMethod);
-  return gradingMethodOptions.map((item) => ({
-    label: item,
-    value: item,
-  }));
+  return arrayStringToComboboxOption(gradingMethodOptions);
 };
 
 export const getTimeLimitUnitOptions = (): ComboboxOption[] => {
   const units = Object.values(TimeLimitType);
-  return units.map((item) => ({
-    label: item,
-    value: item,
-  }));
+  return arrayStringToComboboxOption(units);
 };

@@ -1,37 +1,31 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { CollapsibleListService } from '@shared/components/collapsible-list/collapsible-list.service';
 import { formatDateString } from '@shared/helper/date.helper';
-import { StudentResponseService } from '@shared/services/student-response.service';
+import { AssignmentTopic } from '@shared/models/topic';
 import {
-  quizGeneralSettingFormControls,
-  quizGradeSettingFormControls,
-  quizSettingFormSchema,
-  quizTimingSettingFormControls,
-} from './quiz-setting-form.config';
-import { TabQuizSettingService } from './tab-setting.service';
-import { QuizTopic } from '@shared/models/topic';
+  assignmentAvailabilitySettingFormControls,
+  assignmentGeneralSettingFormControls,
+  assignmentSettingFormSchema,
+  assignmentSubmissionSettingFormControls,
+} from './assignment-setting-form.config';
 
 @Component({
   selector: 'tab-setting',
   standalone: false,
   templateUrl: './tab-setting.component.html',
   styleUrl: './tab-setting.component.scss',
-  providers: [
-    TabQuizSettingService,
-    StudentResponseService,
-    CollapsibleListService,
-  ],
+  providers: [CollapsibleListService],
 })
-export class TabSettingComponent implements OnInit {
-  @Input({ required: true }) topic!: QuizTopic;
-  sectionIds: string[] = ['general', 'timing', 'grade'];
+export class TabSettingComponent {
+  @Input({ required: true }) topic!: AssignmentTopic;
+  sectionIds: string[] = ['general', 'availability', 'submission'];
   showPassword = false;
   form!: FormGroup;
-  generalFormControls = quizGeneralSettingFormControls;
-  timingFormControls = quizTimingSettingFormControls;
-  gradeFormControls = quizGradeSettingFormControls;
+  generalFormControls = assignmentGeneralSettingFormControls;
+  availabilityFormControls = assignmentAvailabilitySettingFormControls;
+  submissionFormControls = assignmentSubmissionSettingFormControls;
 
   constructor(
     private fb: FormBuilder,
@@ -39,7 +33,9 @@ export class TabSettingComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.form = this.fb.group(quizSettingFormSchema, { updateOn: 'submit' });
+    this.form = this.fb.group(assignmentSettingFormSchema, {
+      updateOn: 'submit',
+    });
     this.collapsibleListService.setSectionIds(this.sectionIds);
     this.collapsibleListService.setCanEdit(false); // disable edit UI in collapsible list
     this.collapsibleListService.expandAll();
@@ -58,9 +54,12 @@ export class TabSettingComponent implements OnInit {
     } else if (controlName === 'hasCloseTime') {
       if (isChecked) this.form.get('close')?.enable();
       else this.form.get('close')?.disable();
-    } else if (controlName === 'hasTimeLimit') {
-      if (isChecked) this.form.get('timeLimit')?.enable();
-      else this.form.get('timeLimit')?.disable();
+    } else if (controlName === 'hasMaximumFileUpload') {
+      if (isChecked) this.form.get('maximumFile')?.enable();
+      else this.form.get('maximumFile')?.disable();
+    } else if (controlName === 'hasMaximumFileSize') {
+      if (isChecked) this.form.get('maximumFileSize')?.enable();
+      else this.form.get('maximumFileSize')?.disable();
     }
   }
 
