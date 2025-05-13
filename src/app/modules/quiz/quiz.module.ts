@@ -28,6 +28,7 @@ import { ImageColumnComponent } from './components/quiz-page/quiz-tabs/tab-resul
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { QuestionBankTableComponent } from './components/quiz-page/quiz-tabs/tab-question-bank/question-bank-table/question-bank-table.component';
 import { StatusColumnComponent } from './components/quiz-page/quiz-tabs/tab-question-bank/question-bank-table/table-columns/status-column/status-column.component';
+import { ActionColumnComponent } from './components/quiz-page/quiz-tabs/tab-question-bank/question-bank-table/table-columns/action-column/action-column.component';
 @NgModule({
   declarations: [
     QuizResultTableComponent,
@@ -52,6 +53,7 @@ import { StatusColumnComponent } from './components/quiz-page/quiz-tabs/tab-ques
     ImageColumnComponent,
     QuestionBankTableComponent,
     StatusColumnComponent,
+    ActionColumnComponent,
   ],
   imports: [
     SharedModule,

@@ -16,6 +16,7 @@ button {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  transform-origin: center;
 
   &.primary {
     background-color: $tint-color;
@@ -29,6 +30,10 @@ button {
   &.warning {
     background-color: $warning-color;
     color: white;
+  }
+  &.ghost {
+    background-color: #f3f4f6;
+    color: #6b7280;
   }
 
   &.gradient {
@@ -65,7 +70,7 @@ button {
   }
 
   &:hover {
-    transform: scale(1.01);
+    transform: scale(1.02);
     ::ng-deep {
       & .material-symbols-outlined {
         font-variation-settings: $google-icon-hover-setting;

@@ -33,7 +33,6 @@ export class ComboboxComponent implements OnInit {
   isOpen = false;
   selectedOption: ComboboxOption | null = null;
   dropdownPosition = { top: '', left: '', bottom: '', right: '' };
-  dropDownWidth = 0;
 
   findOptionByValue(value: string): ComboboxOption | null {
     if (!value) return null;

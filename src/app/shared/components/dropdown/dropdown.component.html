@@ -1,0 +1,23 @@
+<div class="trigger-container" (click)="toggleDropdown()" #triggerRef>
+  <ng-content></ng-content>
+</div>
+@if(isOpen) {
+<div
+  class="dropdown"
+  [style]="
+{
+  top: dropdownPosition.top,
+  left: dropdownPosition.left,
+  bottom: dropdownPosition.bottom,
+  right: dropdownPosition.right,
+}"
+>
+  @if(options.length === 0) {
+  <div class="dropdown-option">No options available</div>
+  } @for(option of options; track option.value) {
+  <div class="dropdown-option" (click)="selectOption(option)">
+    {{ option.label }}
+  </div>
+  }
+</div>
+}

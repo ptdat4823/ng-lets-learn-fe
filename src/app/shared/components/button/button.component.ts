@@ -7,7 +7,8 @@ export type ButtonVariant =
   | 'gradient-green'
   | 'gradient-red'
   | 'gradient-yellow'
-  | 'warning';
+  | 'warning'
+  | 'ghost';
 
 @Component({
   selector: 'app-button',

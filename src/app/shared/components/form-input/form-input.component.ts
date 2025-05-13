@@ -1,5 +1,7 @@
-import { Component, Input } from '@angular/core';
-import { type FormControl, type FormGroup } from '@angular/forms';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+
+type Size = 'xs' | 'sm' | 'default';
 
 @Component({
   selector: 'form-input',
@@ -8,10 +10,10 @@ import { type FormControl, type FormGroup } from '@angular/forms';
   styleUrls: ['./form-input.component.scss'],
 })
 export class FormInputComponent {
-  // Form control inputs
-  @Input({ required: true }) form!: FormGroup;
-  @Input({ required: true }) controlName!: string;
+  @Input() form: FormGroup = new FormGroup({ temp: new FormControl('') });
+  @Input() controlName: string = 'temp';
   @Input() validationMessages: Record<string, string> | null = null;
+  @Output() onChange = new EventEmitter<string>();
 
   // Input properties
   @Input() id = '';
@@ -23,6 +25,8 @@ export class FormInputComponent {
   @Input() step: number | undefined = undefined;
   @Input() required = false;
   @Input() readonly = false;
+
+  @Input() size: Size = 'default';
 
   // Internal state
   showPassword = false;
@@ -41,5 +45,11 @@ export class FormInputComponent {
   get isInvalid(): boolean {
     const control = this.form.get(this.controlName) as FormControl;
     return control?.invalid && (control?.dirty || control?.touched);
+  }
+
+  onValueChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+    this.onChange.emit(value);
   }
 }

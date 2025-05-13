@@ -12,6 +12,11 @@
       [required]="required"
       [readonly]="readonly"
       class="form-input"
+      (change)="onValueChange($event)"
+      [class]="{
+        'extra-small': size === 'xs',
+        small: size === 'sm',
+      }"
     />
 
     @if (type === "password") {

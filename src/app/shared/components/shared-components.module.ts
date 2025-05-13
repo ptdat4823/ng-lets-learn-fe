@@ -43,6 +43,7 @@ import { SidebarItemComponent } from './sidebar/sidebar-item/sidebar-item.compon
 import { TabComponent } from './tab-list/tab/tab.component';
 import { TimerComponent } from './timer/timer.component';
 import { CommentComponent } from './comment-list/comment/comment.component';
+import { DropdownComponent } from './dropdown/dropdown.component';
 @NgModule({
   declarations: [
     ButtonComponent,
@@ -72,6 +73,7 @@ import { CommentComponent } from './comment-list/comment/comment.component';
     CommentListComponent,
     CommentInputComponent,
     CommentComponent,
+    DropdownComponent,
   ],
   imports: [
     CommonModule,
@@ -113,6 +115,7 @@ import { CommentComponent } from './comment-list/comment/comment.component';
     SettingRowComponent,
     CommentListComponent,
     CommentInputComponent,
+    DropdownComponent,
   ],
 })
 export class SharedComponentsModule {}

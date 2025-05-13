@@ -1,3 +1,27 @@
+.table-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  span.material-symbols-outlined {
+    font-size: 20px;
+  }
+
+  .filter-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .actions-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
 table {
   width: 100%;
   background-color: transparent;
