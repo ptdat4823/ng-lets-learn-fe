@@ -1,0 +1,72 @@
+<card>
+  <div class="assignment-card">
+    <!-- Left Section - Submissions -->
+    <div class="submissions-section">
+      <h3 class="section-title">Submissions</h3>
+
+      <div class="search-container">
+        <form-input
+          placeholder="Search student name"
+          [debounceTime]="200"
+          (onChange)="onSearchChange($event)"
+          size="xs"
+        />
+
+        <app-button label="Filter" variant="ghost">
+          <span class="material-symbols-outlined" icon> filter_alt </span>
+        </app-button>
+      </div>
+
+      <div class="students-list">
+        <div class="student-item" *ngFor="let res of filteredStudentResponses">
+          <div class="student-info">
+            <circle-image />
+            <span class="student-name">{{ res.student.username }}</span>
+          </div>
+          <div class="student-score">
+            <span>{{ getMarkOfResponse(res) }}/100</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Section - Assignment Details -->
+    <div class="details-section">
+      <div class="dates-info">
+        <div class="date-item">
+          <span class="date-label">Open:</span>
+          <span class="date-value">{{
+            formatDate(topic.data.open, "EEEE, dd MMMM yyyy HH:mm a")
+          }}</span>
+        </div>
+        <div class="date-item">
+          <span class="date-label">Due:</span>
+          <span class="date-value">{{
+            formatDate(topic.data.open, "EEEE, dd MMMM yyyy HH:mm a")
+          }}</span>
+        </div>
+      </div>
+
+      <div class="status-section">
+        <h3 class="status-title">Status</h3>
+        <div class="status-counters">
+          <div class="status-counter">
+            <div class="counter-value">{{ studentResponses.length }}</div>
+            <div class="counter-label">Submitted</div>
+          </div>
+          <div class="status-counter">
+            <div class="counter-value">{{ studentAssigned }}</div>
+            <div class="counter-label">Assigned</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="assignment-section">
+        <h3 class="assignment-title">Assignment</h3>
+        <p class="assignment-description">
+          {{ topic.data.description }}
+        </p>
+      </div>
+    </div>
+  </div>
+</card>

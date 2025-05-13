@@ -1,0 +1,160 @@
+@use "styles/theme/theme.variables" as *;
+
+// Variables
+$primary-color: #6d28d9; // Purple
+$primary-light: #ede9fe;
+$accent-color: #f97316; // Orange
+$text-color: #333;
+$text-light: #666;
+$border-color: #e5e7eb;
+$success-color: #22c55e;
+$background-color: #f9fafb;
+$white: #fff;
+
+.assignment-card {
+  display: flex;
+  width: 100%;
+}
+
+// Left Section - Submissions
+.submissions-section {
+  width: 40%;
+  padding-right: 20px;
+  border-right: 1px solid $border-color;
+}
+
+.section-title {
+  color: $tint-third-color;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.search-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+
+  span.material-symbols-outlined {
+    font-size: 20px;
+  }
+}
+
+.students-list {
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.student-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid $border-color;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.student-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.student-name {
+  font-size: 14px;
+  color: #0ea5e9; // Blue color for student names
+  font-weight: 600;
+}
+
+.student-score {
+  font-size: 14px;
+  color: $success-color;
+  font-weight: 600;
+}
+
+// Right Section - Assignment Details
+.details-section {
+  flex: 1;
+  padding-left: 20px;
+}
+
+.dates-info {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid $border-color;
+}
+
+.date-item {
+  margin-bottom: 8px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.date-label {
+  font-weight: 600;
+  margin-right: 5px;
+}
+
+.date-value {
+  color: $text-light;
+}
+
+.status-section,
+.assignment-section {
+  margin-bottom: 24px;
+}
+
+.status-title,
+.assignment-title {
+  color: $primary-color;
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.status-counters {
+  display: flex;
+  gap: 24px;
+}
+
+.status-counter {
+  display: flex;
+  flex-direction: column;
+}
+
+.counter-value {
+  font-size: 24px;
+  font-weight: 600;
+  color: $text-color;
+}
+
+.counter-label {
+  font-size: 14px;
+  color: $text-light;
+}
+
+.assignment-description {
+  font-size: 14px;
+  line-height: 1.6;
+  color: $text-color;
+  margin: 0;
+}
+
+// Responsive styles
+@media (max-width: 768px) {
+  .assignment-card {
+    flex-direction: column;
+  }
+
+  .submissions-section {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid $border-color;
+  }
+}

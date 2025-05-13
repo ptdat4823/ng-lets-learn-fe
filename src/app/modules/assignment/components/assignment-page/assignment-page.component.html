@@ -5,5 +5,7 @@
   <!-- <tab-assignment-student [topic]="topic" /> -->
   } } @else if(selectedTab === tabs.SETTINGS) {
   <tab-setting [topic]="topic" />
+  } @else if(selectedTab === tabs.SUBMISSIONS) {
+  <tab-submission [topic]="topic" />
   }
 </topic-page-layout>

@@ -15,7 +15,7 @@ export const mockStudentResponses: StudentResponse[] = [
   },
   {
     id: '2',
-    student: mockUsers[0],
+    student: mockUsers[1],
     topicId: '1',
     data: {
       status: QuizStatus.NOT_FINISHED,
@@ -29,7 +29,7 @@ export const mockStudentResponses: StudentResponse[] = [
 export const mockAssignmentResponses: StudentResponse[] = [
   {
     id: '1',
-    student: mockUsers[0],
+    student: mockUsers[2],
     topicId: '1',
     data: {
       submittedAt: new Date(2025, 3, 25, 17, 30, 0, 0).toISOString(),
@@ -40,7 +40,7 @@ export const mockAssignmentResponses: StudentResponse[] = [
   },
   {
     id: '2',
-    student: mockUsers[0],
+    student: mockUsers[1],
     topicId: '1',
     data: {
       submittedAt: new Date(2025, 3, 25, 10, 30, 0, 0).toISOString(),
