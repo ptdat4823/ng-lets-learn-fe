@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { formatDateString } from '@shared/helper/date.helper';
 import { mockAssignmentResponses } from '@shared/mocks/student-response';
 import {
   AssignmentResponseData,
@@ -17,7 +16,8 @@ export class TabSubmissionComponent implements OnInit {
   @Input({ required: true }) topic!: AssignmentTopic;
   studentResponses: StudentResponse[] = mockAssignmentResponses;
   filteredStudentResponses: StudentResponse[] = [];
-  studentAssigned = 40;
+
+  selectedStudentResponse: StudentResponse | null = null;
 
   ngOnInit(): void {
     this.filteredStudentResponses = this.studentResponses;
@@ -33,10 +33,6 @@ export class TabSubmissionComponent implements OnInit {
     this.filteredStudentResponses = this.filteredStudents(searchTerm);
   }
 
-  formatDate(date: string | null, pattern: string = 'MM/dd/yyyy HH:mm a') {
-    return formatDateString(date, pattern);
-  }
-
   getStudents(responses: StudentResponse[]) {
     return responses.map((response) => response.student);
   }
@@ -44,5 +40,10 @@ export class TabSubmissionComponent implements OnInit {
   getMarkOfResponse(response: StudentResponse) {
     const data = response.data as AssignmentResponseData;
     return data.mark;
+  }
+
+  onResponseClick(response: StudentResponse) {
+    console.log('Response clicked:', response);
+    this.selectedStudentResponse = response;
   }
 }

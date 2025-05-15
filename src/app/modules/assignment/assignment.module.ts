@@ -16,6 +16,9 @@ import { RankCComponent } from './components/assignment-page/assignment-tabs/tab
 import { RankSComponent } from './components/assignment-page/assignment-tabs/tab-dashboard/rank-logo/rank-s.component';
 import { RankItemComponent } from './components/assignment-page/assignment-tabs/tab-dashboard/rank-item/rank-item.component';
 import { ColorItemComponent } from './components/assignment-page/assignment-tabs/tab-dashboard/color-item/color-item.component';
+import { DetailSectionComponent } from './components/assignment-page/assignment-tabs/tab-submission/detail-section/detail-section.component';
+import { DefaultViewComponent } from './components/assignment-page/assignment-tabs/tab-submission/default-view/default-view.component';
+import { SubmittedViewComponent } from './components/assignment-page/assignment-tabs/tab-submission/submitted-view/submitted-view.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +35,9 @@ import { ColorItemComponent } from './components/assignment-page/assignment-tabs
     RankSComponent,
     RankItemComponent,
     ColorItemComponent,
+    DetailSectionComponent,
+    DefaultViewComponent,
+    SubmittedViewComponent,
   ],
   imports: [SharedModule, RouterOutlet, FormsModule, SharedComponentsModule],
   exports: [],

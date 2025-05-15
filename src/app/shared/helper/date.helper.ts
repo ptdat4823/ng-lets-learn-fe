@@ -133,6 +133,12 @@ const removeMilliseconds = (date: Date) => {
   return date;
 };
 
+const compareTime = (date1: Date, date2: Date): number => {
+  if (date1.getTime() > date2.getTime()) return 1;
+  if (date1.getTime() < date2.getTime()) return -1;
+  return 0;
+};
+
 export {
   getDurationText,
   getTimeStringByDuration,
@@ -144,4 +150,5 @@ export {
   getBaseTime,
   getTimeBySeconds,
   removeMilliseconds,
+  compareTime,
 };

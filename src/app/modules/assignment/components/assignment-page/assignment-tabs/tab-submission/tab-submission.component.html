@@ -18,7 +18,11 @@
       </div>
 
       <div class="students-list">
-        <div class="student-item" *ngFor="let res of filteredStudentResponses">
+        <div
+          class="student-item"
+          *ngFor="let res of filteredStudentResponses"
+          (click)="onResponseClick(res)"
+        >
           <div class="student-info">
             <circle-image />
             <span class="student-name">{{ res.student.username }}</span>
@@ -31,42 +35,18 @@
     </div>
 
     <!-- Right Section - Assignment Details -->
-    <div class="details-section">
-      <div class="dates-info">
-        <div class="date-item">
-          <span class="date-label">Open:</span>
-          <span class="date-value">{{
-            formatDate(topic.data.open, "EEEE, dd MMMM yyyy HH:mm a")
-          }}</span>
-        </div>
-        <div class="date-item">
-          <span class="date-label">Due:</span>
-          <span class="date-value">{{
-            formatDate(topic.data.open, "EEEE, dd MMMM yyyy HH:mm a")
-          }}</span>
-        </div>
+    <div class="content">
+      @if(selectedStudentResponse) {
+      <div class="close-button">
+        <span class="material-symbols-outlined">close</span>
       </div>
-
-      <div class="status-section">
-        <h3 class="status-title">Status</h3>
-        <div class="status-counters">
-          <div class="status-counter">
-            <div class="counter-value">{{ studentResponses.length }}</div>
-            <div class="counter-label">Submitted</div>
-          </div>
-          <div class="status-counter">
-            <div class="counter-value">{{ studentAssigned }}</div>
-            <div class="counter-label">Assigned</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="assignment-section">
-        <h3 class="assignment-title">Assignment</h3>
-        <p class="assignment-description">
-          {{ topic.data.description }}
-        </p>
-      </div>
+      } @if(selectedStudentResponse) {
+      <submitted-view
+        [topic]="topic"
+        [studentResponse]="selectedStudentResponse"
+      />
+      } @else {
+      <default-view [topic]="topic" [studentResponses]="studentResponses" />}
     </div>
   </div>
 </card>

@@ -1,0 +1,35 @@
+<div class="dates-info">
+  <div class="date-item">
+    <span class="date-label">Open:</span>
+    <span class="date-value">{{
+      formatDate(topic.data.open, "EEEE, dd MMMM yyyy HH:mm a")
+    }}</span>
+  </div>
+  <div class="date-item">
+    <span class="date-label">Due:</span>
+    <span class="date-value">{{
+      formatDate(topic.data.open, "EEEE, dd MMMM yyyy HH:mm a")
+    }}</span>
+  </div>
+</div>
+
+<div class="detail-sections">
+  <detail-section title="Status">
+    <div class="status-counters">
+      <div class="status-counter">
+        <div class="counter-value">{{ studentResponses.length }}</div>
+        <div class="counter-label">Submitted</div>
+      </div>
+      <div class="status-counter">
+        <div class="counter-value">{{ studentAssigned }}</div>
+        <div class="counter-label">Assigned</div>
+      </div>
+    </div>
+  </detail-section>
+
+  <detail-section title="Assignment">
+    <p class="assignment-description">
+      {{ topic.data.description }}
+    </p>
+  </detail-section>
+</div>
