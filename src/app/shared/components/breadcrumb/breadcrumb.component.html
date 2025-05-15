@@ -1,0 +1,23 @@
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <ol class="breadcrumb-list">
+    <ng-container *ngFor="let item of items; let i = index">
+      <li class="breadcrumb-item">
+        <a
+          [href]="item.url || '#'"
+          [class]="{
+            active: item.active,
+        }"
+        >
+          {{ item.label }}
+        </a>
+      </li>
+      <li
+        *ngIf="!isLastItem(i)"
+        class="breadcrumb-separator"
+        [ngStyle]="getSeparatorStyle()"
+      >
+        {{ separator }}
+      </li>
+    </ng-container>
+  </ol>
+</nav>

@@ -1,6 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LayoutService } from '../layout/layout.service';
+import { BreadcrumbService } from '@shared/services/breadcrumb.service';
+import { BreadcrumbItem } from '../breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-header',
@@ -8,9 +10,21 @@ import { LayoutService } from '../layout/layout.service';
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   router = inject(Router);
-  layoutService = inject(LayoutService);
+  breadcrumbItems: BreadcrumbItem[] = [];
+
+  constructor(
+    private layoutService: LayoutService,
+    private breadcrumbService: BreadcrumbService
+  ) {
+    this.breadcrumbService.breadcrumbs$.subscribe((items) => {
+      this.breadcrumbItems = items;
+    });
+  }
+
+  ngOnInit(): void {}
+
   onMenuClick() {
     this.layoutService.toggleSidebar();
   }

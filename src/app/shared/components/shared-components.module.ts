@@ -45,6 +45,8 @@ import { SidebarItemCollapseComponent } from './sidebar/sidebar-item-collapse/si
 import { SidebarItemComponent } from './sidebar/sidebar-item/sidebar-item.component';
 import { TabComponent } from './tab-list/tab/tab.component';
 import { TimerComponent } from './timer/timer.component';
+import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
+
 @NgModule({
   declarations: [
     ButtonComponent,
@@ -76,6 +78,7 @@ import { TimerComponent } from './timer/timer.component';
     CommentComponent,
     DropdownComponent,
     DonutChartComponent,
+    BreadcrumbComponent,
   ],
   imports: [
     CommonModule,

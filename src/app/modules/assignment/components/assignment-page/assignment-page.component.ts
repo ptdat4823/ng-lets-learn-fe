@@ -1,13 +1,17 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import {
   ASSIGNMENT_STUDENT_TABS,
   ASSIGNMENT_TEACHER_TABS,
   AssignmentTab,
 } from '@modules/assignment/constants/assignment.constant';
 import { TabService } from '@shared/components/tab-list/tab-list.service';
+import { mockCourses } from '@shared/mocks/course';
 import { mockTopics } from '@shared/mocks/topic';
+import { Course } from '@shared/models/course';
 import { AssignmentTopic, iconMap } from '@shared/models/topic';
 import { Role, User } from '@shared/models/user';
+import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 import { UserService } from '@shared/services/user.service';
 
 @Component({
@@ -18,6 +22,7 @@ import { UserService } from '@shared/services/user.service';
   providers: [TabService],
 })
 export class AssignmentPageComponent implements OnInit {
+  course: Course | null = null;
   topic: AssignmentTopic = mockTopics[1] as AssignmentTopic;
   tabs = AssignmentTab;
   user: User | null = null;
@@ -27,8 +32,18 @@ export class AssignmentPageComponent implements OnInit {
 
   constructor(
     private tabService: TabService<AssignmentTab>,
-    private userService: UserService
-  ) {}
+    private userService: UserService,
+    private breadcrumbService: BreadcrumbService,
+    private activedRoute: ActivatedRoute
+  ) {
+    const topicId = this.activedRoute.snapshot.paramMap.get('topicId');
+    const courseId = this.activedRoute.snapshot.paramMap.get('courseId');
+    if (courseId) this.fetchCourseData(courseId);
+    if (topicId) this.fetchTopicData(topicId);
+    if (courseId && topicId) {
+      this.updateBreadcrumb(this.course as Course, this.topic);
+    }
+  }
 
   ngOnInit(): void {
     this.topicIcon = iconMap[this.topic.type];
@@ -47,5 +62,30 @@ export class AssignmentPageComponent implements OnInit {
         this.isStudent = true;
       }
     });
+  }
+
+  fetchTopicData(topicId: string) {
+    const res = mockTopics.find((topic) => topic.id === topicId);
+    if (res) this.topic = res as AssignmentTopic;
+  }
+
+  fetchCourseData(courseId: string) {
+    const res = mockCourses.find((course) => course.id === courseId);
+    if (res) this.course = res;
+  }
+
+  updateBreadcrumb(course: Course, topic: AssignmentTopic) {
+    this.breadcrumbService.setBreadcrumbs([
+      {
+        label: course.title,
+        url: `/courses/${course.id}`,
+        active: false,
+      },
+      {
+        label: topic.title,
+        url: `/courses/${course.id}/assignment/${topic.id}`,
+        active: true,
+      },
+    ]);
   }
 }

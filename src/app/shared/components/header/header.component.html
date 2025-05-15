@@ -1,4 +1,7 @@
-<span class="material-symbols-outlined" (click)="onMenuClick()"> menu </span>
+<div class="left-header">
+  <span class="material-symbols-outlined" (click)="onMenuClick()"> menu </span>
+  <app-breadcrumb [items]="breadcrumbItems" />
+</div>
 <div class="right-header">
   <span class="material-symbols-outlined" (click)="onCreateCourse()">
     add_circle

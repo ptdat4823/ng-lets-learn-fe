@@ -1,0 +1,58 @@
+@use "styles/theme/theme.variables" as *;
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  font-family: Nunito;
+  padding: 8px 0;
+
+  &-list {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &-item {
+    display: flex;
+    align-items: center;
+
+    a {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 200px;
+      color: $text-secondary-color;
+      text-decoration: none;
+      text-underline-offset: 3px;
+      font-size: 14px;
+
+      &:hover {
+        text-decoration: underline;
+      }
+      &.active {
+        color: $tint-color;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &-separator {
+    display: flex;
+    align-items: center;
+    user-select: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .breadcrumb-item a {
+    max-width: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .breadcrumb-item a {
+    max-width: 100px;
+  }
+}
