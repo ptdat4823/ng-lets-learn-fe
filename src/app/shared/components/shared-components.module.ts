@@ -34,7 +34,10 @@ import { TopicComponent } from './topic/topic.component';
 import { RouterOutlet } from '@angular/router';
 import { CommentInputComponent } from './comment-list/comment-input/comment-input.component';
 import { CommentListComponent } from './comment-list/comment-list.component';
+import { CommentComponent } from './comment-list/comment/comment.component';
 import { ConfirmMessageContentComponent } from './confirm-message/confirm-message-content/confirm-message-content.component';
+import { DonutChartComponent } from './donut-chart/donut-chart.component';
+import { DropdownComponent } from './dropdown/dropdown.component';
 import { FormFieldComponent } from './form-field/form-field.component';
 import { SettingRowComponent } from './setting-row/setting-row.component';
 import { SidebarGroupComponent } from './sidebar/sidebar-group/sidebar-group.component';
@@ -42,8 +45,6 @@ import { SidebarItemCollapseComponent } from './sidebar/sidebar-item-collapse/si
 import { SidebarItemComponent } from './sidebar/sidebar-item/sidebar-item.component';
 import { TabComponent } from './tab-list/tab/tab.component';
 import { TimerComponent } from './timer/timer.component';
-import { CommentComponent } from './comment-list/comment/comment.component';
-import { DropdownComponent } from './dropdown/dropdown.component';
 @NgModule({
   declarations: [
     ButtonComponent,
@@ -74,6 +75,7 @@ import { DropdownComponent } from './dropdown/dropdown.component';
     CommentInputComponent,
     CommentComponent,
     DropdownComponent,
+    DonutChartComponent,
   ],
   imports: [
     CommonModule,
@@ -116,6 +118,7 @@ import { DropdownComponent } from './dropdown/dropdown.component';
     CommentListComponent,
     CommentInputComponent,
     DropdownComponent,
+    DonutChartComponent,
   ],
 })
 export class SharedComponentsModule {}

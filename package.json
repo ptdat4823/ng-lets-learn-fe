@@ -24,6 +24,7 @@
     "@mat-datetimepicker/core": "^15.0.2",
     "animate-css-grid": "^1.5.1",
     "axios": "^1.8.4",
+    "chart.js": "^4.4.9",
     "date-fns": "^4.1.0",
     "ngx-toastr": "^19.0.0",
     "rxjs": "~7.8.0",
