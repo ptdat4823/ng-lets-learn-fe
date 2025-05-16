@@ -19,6 +19,9 @@ import { ColorItemComponent } from './components/assignment-page/assignment-tabs
 import { DetailSectionComponent } from './components/assignment-page/assignment-tabs/tab-submission/detail-section/detail-section.component';
 import { DefaultViewComponent } from './components/assignment-page/assignment-tabs/tab-submission/default-view/default-view.component';
 import { SubmittedViewComponent } from './components/assignment-page/assignment-tabs/tab-submission/submitted-view/submitted-view.component';
+import { FileUploadViewComponent } from './components/assignment-page/assignment-tabs/tab-submission/file-upload-view/file-upload-view.component';
+import { FileDownloadLinkComponent } from './components/assignment-page/assignment-tabs/tab-submission/file-download-link/file-download-link.component';
+import { NoteViewComponent } from './components/assignment-page/assignment-tabs/tab-submission/note-view/note-view.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +41,9 @@ import { SubmittedViewComponent } from './components/assignment-page/assignment-
     DetailSectionComponent,
     DefaultViewComponent,
     SubmittedViewComponent,
+    FileUploadViewComponent,
+    FileDownloadLinkComponent,
+    NoteViewComponent,
   ],
   imports: [SharedModule, RouterOutlet, FormsModule, SharedComponentsModule],
   exports: [],

@@ -25,7 +25,11 @@
       <h2>{{ topic.title }}</h2>
     </div>
 
-    <app-tab-list [tabs]="tabs" variant="white"></app-tab-list>
+    <app-tab-list
+      [tabs]="tabs"
+      variant="white"
+      [localStorageKey]="`${topic.type}-tab`"
+    ></app-tab-list>
   </div>
   <div
     class="topic-content"

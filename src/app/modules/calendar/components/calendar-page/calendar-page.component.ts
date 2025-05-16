@@ -9,6 +9,7 @@ import { mockCourses } from '@shared/mocks/course';
 import { CalendarRange } from '../calendar/calendar.type';
 import { CalendarPageService } from './calendar-page.service';
 import { mockTopics } from '@shared/mocks/topic';
+import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 
 @Component({
   selector: 'calendar-page',
@@ -18,7 +19,6 @@ import { mockTopics } from '@shared/mocks/topic';
   providers: [ComboboxService, CalendarPageService],
 })
 export class CalendarPageComponent {
-  calendarPageService = inject(CalendarPageService);
   courseOptions: ComboboxOption[] = [
     { value: 'all', label: 'All courses' },
     ...mockCourses.map((course) => ({
@@ -37,6 +37,19 @@ export class CalendarPageComponent {
   calendarRangeText = computed(() =>
     this.calendarPageService.formatCalendarRange(this.calendarRange())
   );
+
+  constructor(
+    private calendarPageService: CalendarPageService,
+    private breadcrumbService: BreadcrumbService
+  ) {
+    this.breadcrumbService.setBreadcrumbs([
+      {
+        label: 'Calendar',
+        url: '/calendar',
+        active: true,
+      },
+    ]);
+  }
 
   navigatePrevious(): void {
     const newDate = new Date(this.calendarRange().start);

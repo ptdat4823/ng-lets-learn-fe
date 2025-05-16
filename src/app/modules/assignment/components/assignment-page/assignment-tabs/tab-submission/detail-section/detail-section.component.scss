@@ -1,9 +1,18 @@
-$title-color: #6d28d9;
+@use "styles/theme/theme.variables" as *;
+$blue-color: #1e40af;
+$orange-color: #f97316;
 
 .title {
-  color: $title-color;
+  color: $blue-color;
   font-size: 18px;
   font-weight: 600;
   margin-top: 0;
   margin-bottom: 8px;
+
+  &.blue {
+    color: $blue-color;
+  }
+  &.orange {
+    color: $orange-color;
+  }
 }

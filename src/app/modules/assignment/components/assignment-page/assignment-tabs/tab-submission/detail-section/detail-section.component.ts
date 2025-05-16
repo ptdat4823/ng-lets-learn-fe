@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 
+type Color = 'blue' | 'orange';
+
 @Component({
   selector: 'detail-section',
   standalone: false,
@@ -8,4 +10,5 @@ import { Component, Input } from '@angular/core';
 })
 export class DetailSectionComponent {
   @Input({ required: true }) title!: string;
+  @Input() titleColor: Color = 'blue';
 }

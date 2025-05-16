@@ -46,4 +46,8 @@ export class TabSubmissionComponent implements OnInit {
     console.log('Response clicked:', response);
     this.selectedStudentResponse = response;
   }
+
+  onCloseSubmittedView() {
+    this.selectedStudentResponse = null;
+  }
 }

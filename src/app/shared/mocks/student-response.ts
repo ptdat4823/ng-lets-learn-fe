@@ -33,9 +33,16 @@ export const mockAssignmentResponses: StudentResponse[] = [
     topicId: '1',
     data: {
       submittedAt: new Date(2025, 3, 25, 17, 30, 0, 0).toISOString(),
-      files: [],
+      files: [
+        {
+          id: '1',
+          name: 'Assignment 1.pdf',
+          displayUrl: 'https://example.com/file1.pdf',
+          downloadUrl: 'https://example.com/file1.pdf',
+        },
+      ],
       mark: null,
-      note: '',
+      note: 'hihi',
     },
   },
   {
@@ -43,10 +50,10 @@ export const mockAssignmentResponses: StudentResponse[] = [
     student: mockUsers[1],
     topicId: '1',
     data: {
-      submittedAt: new Date(2025, 3, 25, 10, 30, 0, 0).toISOString(),
+      submittedAt: new Date(2024, 10, 27, 10, 30, 0, 0).toISOString(),
       files: [],
       mark: null,
-      note: '',
+      note: 'haha',
     },
   },
 ];

@@ -5,10 +5,19 @@
   </div>
   <div class="submission-status">
     <span class="date-label">Submission status:</span>
-    <span class="date-value">{{ submissionStatusText }}</span>
+    <span
+      class="date-value"
+      [class]="{
+        gray: submissionStatus === submissionStatusType.NOT_SUBMITTED,
+        green: submissionStatus === submissionStatusType.SUBMITTED_EARLY,
+        red: submissionStatus === submissionStatusType.SUBMITTED_LATE
+      }"
+      >{{ submissionStatusText }}</span
+    >
   </div>
 </div>
 
 <div class="detail-sections">
-  <detail-section title="File uploaded"> </detail-section>
+  <file-upload-view [studentResponse]="studentResponse" />
+  <note-view [note]="getNoteOfResponse()" />
 </div>

@@ -1,1 +1,7 @@
-<p>file-download-link works!</p>
+<a [href]="file.downloadUrl" [attr.download]="file.name" class="submitted-file">
+  <span class="material-symbols-outlined">docs</span>
+  <div class="file-label">
+    <span class="file-name">{{ fileName }}</span>
+    <span [class]="fileTypeClass">(.{{ extension }})</span>
+  </div>
+</a>

@@ -37,7 +37,7 @@
     <!-- Right Section - Assignment Details -->
     <div class="content">
       @if(selectedStudentResponse) {
-      <div class="close-button">
+      <div class="close-button" (click)="onCloseSubmittedView()">
         <span class="material-symbols-outlined">close</span>
       </div>
       } @if(selectedStudentResponse) {

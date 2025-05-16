@@ -1,0 +1,16 @@
+@use "styles/theme/theme.variables" as *;
+
+.file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 100px;
+  max-height: 185px;
+  overflow-y: auto;
+}
+
+.no-file {
+  font-style: italic;
+  color: $text-secondary-color;
+  font-size: 14px;
+}

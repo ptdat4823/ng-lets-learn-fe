@@ -1,1 +1,12 @@
-<p>file-upload-view works!</p>
+<detail-section title="File uploaded">
+  <div class="file-list">
+    @if(files.length === 0) {
+    <span class="no-file">No file uploaded</span>
+    } @else {
+    <file-download-link
+      *ngFor="let file of files"
+      [file]="file"
+    ></file-download-link>
+    }
+  </div>
+</detail-section>

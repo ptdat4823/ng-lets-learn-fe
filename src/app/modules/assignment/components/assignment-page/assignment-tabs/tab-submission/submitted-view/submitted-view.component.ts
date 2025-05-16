@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { SubmissionStatus } from '@modules/assignment/constants/assignment.constant';
 import {
   compareTime,
@@ -18,15 +18,20 @@ import { format } from 'date-fns';
   templateUrl: './submitted-view.component.html',
   styleUrl: './submitted-view.component.scss',
 })
-export class SubmittedViewComponent {
+export class SubmittedViewComponent implements OnInit, OnChanges {
   @Input({ required: true }) topic!: AssignmentTopic;
   @Input({ required: true }) studentResponse!: StudentResponse;
 
   submittedTime: string = '';
   submissionStatus: SubmissionStatus = SubmissionStatus.NOT_SUBMITTED;
   submissionStatusText: string = '';
+  submissionStatusType = SubmissionStatus;
 
   ngOnInit(): void {
+    this.initValues(this.topic, this.studentResponse);
+  }
+
+  ngOnChanges(): void {
     this.initValues(this.topic, this.studentResponse);
   }
 
@@ -64,5 +69,10 @@ export class SubmittedViewComponent {
 
   formatDate(date: string | null, pattern: string = 'MM/dd/yyyy HH:mm a') {
     return formatDateString(date, pattern);
+  }
+
+  getNoteOfResponse() {
+    const data = this.studentResponse.data as AssignmentResponseData;
+    return data.note;
   }
 }
