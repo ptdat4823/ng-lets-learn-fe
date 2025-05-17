@@ -7,8 +7,10 @@ import { BreadcrumbService } from '@shared/services/breadcrumb.service';
   templateUrl: './courses-layout.component.html',
   styleUrl: './courses-layout.component.scss',
 })
-export class CoursesLayoutComponent {
-  constructor(private breadcrumbService: BreadcrumbService) {
+export class CoursesLayoutComponent implements OnInit {
+  constructor(private breadcrumbService: BreadcrumbService) {}
+  ngOnInit(): void {
+    console.log('CoursesLayoutComponent initialized');
     this.breadcrumbService.setBreadcrumbs([
       {
         label: 'Home',

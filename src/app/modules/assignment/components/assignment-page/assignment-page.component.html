@@ -2,7 +2,7 @@
   @if(selectedTab === tabs.ASSIGNMENT){ @if(!isStudent){
   <tab-assignment [topic]="topic" />
   } @else {
-  <!-- <tab-assignment-student [topic]="topic" /> -->
+  <tab-assignment-student [topic]="topic" />
   } } @else if(selectedTab === tabs.SETTINGS) {
   <tab-setting [topic]="topic" />
   } @else if(selectedTab === tabs.SUBMISSIONS) {

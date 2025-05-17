@@ -18,16 +18,37 @@
     <p>{{ topic.data.description }}</p>
   </div>
 
-  <app-button
-    label="Grade"
-    class="grade-button"
-    (onClick)="onGradeBtnClick()"
-  />
+  <div class="actions">
+    <app-button
+      label="Add submission"
+      class="action-button"
+      (onClick)="openExplorer()"
+      *ngIf="!studentResponse"
+    />
+    <app-button
+      label="Remove submission"
+      class="action-button"
+      (onClick)="onRemoveSubmission()"
+      *ngIf="!!studentResponse"
+    />
+
+    <input
+      #fileInput
+      type="file"
+      hidden
+      [accept]="acceptedFileTypes"
+      multiple
+      (change)="onSelectedFile($event)"
+    />
+  </div>
 
   <div class="attempts-section">
     <h3 class="attempts-title">Your attempts</h3>
 
-    <grading-summary-table />
+    <submission-status-table
+      [assignmentResponse]="studentResponse"
+      [topic]="topic"
+    />
   </div>
 </card>
 

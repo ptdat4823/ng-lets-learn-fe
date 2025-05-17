@@ -34,7 +34,7 @@
 
       &:focus {
         outline: none;
-        border-color: $quiz-color;
+        border-color: $icon-color;
       }
     }
 
@@ -43,7 +43,7 @@
       right: 10px;
       top: 50%;
       transform: translateY(-50%);
-      color: $quiz-color;
+      color: $icon-color;
       border: none;
 
       cursor: pointer;

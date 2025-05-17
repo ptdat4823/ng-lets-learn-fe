@@ -22,6 +22,9 @@ import { SubmittedViewComponent } from './components/assignment-page/assignment-
 import { FileUploadViewComponent } from './components/assignment-page/assignment-tabs/tab-submission/file-upload-view/file-upload-view.component';
 import { FileDownloadLinkComponent } from './components/assignment-page/assignment-tabs/tab-submission/file-download-link/file-download-link.component';
 import { NoteViewComponent } from './components/assignment-page/assignment-tabs/tab-submission/note-view/note-view.component';
+import { GradingSummaryTableComponent } from './components/assignment-page/assignment-tabs/tab-assignment/grading-summary-table/grading-summary-table.component';
+import { TabAssignmentStudentComponent } from './components/assignment-page/assignment-tabs/tab-assignment-student/tab-assignment.component';
+import { SubmissionStatusTableComponent } from './components/assignment-page/assignment-tabs/tab-assignment-student/submission-status-table/submission-status-table.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +47,9 @@ import { NoteViewComponent } from './components/assignment-page/assignment-tabs/
     FileUploadViewComponent,
     FileDownloadLinkComponent,
     NoteViewComponent,
+    GradingSummaryTableComponent,
+    TabAssignmentStudentComponent,
+    SubmissionStatusTableComponent,
   ],
   imports: [SharedModule, RouterOutlet, FormsModule, SharedComponentsModule],
   exports: [],

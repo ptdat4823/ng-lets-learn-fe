@@ -1,16 +1,17 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { StudentResponseService } from '@shared/services/student-response.service';
-import { TabAssignmentService } from './tab-assignment.service';
 import { AssignmentTopic } from '@shared/models/topic';
 import { mockAssignmentResponses } from '@shared/mocks/student-response';
 import { formatDateString } from '@shared/helper/date.helper';
+import { TabService } from '@shared/components/tab-list/tab-list.service';
+import { AssignmentTab } from '@modules/assignment/constants/assignment.constant';
 
 @Component({
   selector: 'tab-assignment',
   standalone: false,
   templateUrl: './tab-assignment.component.html',
   styleUrl: './tab-assignment.component.scss',
-  providers: [TabAssignmentService, StudentResponseService],
+  providers: [StudentResponseService],
 })
 export class TabAssignmentComponent implements OnInit {
   @Input({ required: true }) topic!: AssignmentTopic;
@@ -18,19 +19,17 @@ export class TabAssignmentComponent implements OnInit {
   studentResponses = mockAssignmentResponses;
 
   constructor(
-    private tabAssignmentService: TabAssignmentService,
-    private studentResponseService: StudentResponseService
+    private studentResponseService: StudentResponseService,
+    private tabService: TabService<string>
   ) {}
 
-  ngOnInit(): void {
-    this.tabAssignmentService.setTopic(this.topic);
-    this.tabAssignmentService.topic$.subscribe((topic) => {
-      if (!topic) return;
-      this.topic = topic;
-    });
-  }
+  ngOnInit(): void {}
 
   formatDate(date: string | null, pattern: string = 'MM/dd/yyyy HH:mm a') {
     return formatDateString(date, pattern);
+  }
+
+  onGradeBtnClick() {
+    this.tabService.selectTab(AssignmentTab.SUBMISSIONS);
   }
 }

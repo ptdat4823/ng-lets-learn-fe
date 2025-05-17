@@ -26,8 +26,7 @@ export class FileUploadViewComponent implements OnInit, OnChanges {
 
   initValues(studentResponse: StudentResponse) {
     const data = studentResponse.data as AssignmentResponseData;
-    this.files = [...data.files, ...data.files, ...data.files, ...data.files];
-    this.files = [...this.files, ...this.files, ...this.files];
+    this.files = data.files || [];
     this.title = this.files.length > 1 ? 'Files uploaded' : 'File uploaded';
   }
 }
