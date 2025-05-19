@@ -2,6 +2,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  HostListener,
   inject,
   Input,
   OnInit,
@@ -98,5 +99,17 @@ export class ComboboxComponent implements OnInit {
   getDisabledState(): boolean {
     const control = this.form.get(this.controlName);
     return control?.disabled || false;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (
+      this.comboboxRef &&
+      !this.comboboxRef.nativeElement.contains(target) &&
+      this.isOpen
+    ) {
+      this.comboboxService.toggleDropdown();
+    }
   }
 }
