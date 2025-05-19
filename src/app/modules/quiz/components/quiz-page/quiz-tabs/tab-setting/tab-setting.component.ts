@@ -59,8 +59,13 @@ export class TabSettingComponent implements OnInit {
       if (isChecked) this.form.get('close')?.enable();
       else this.form.get('close')?.disable();
     } else if (controlName === 'hasTimeLimit') {
-      if (isChecked) this.form.get('timeLimit')?.enable();
-      else this.form.get('timeLimit')?.disable();
+      if (isChecked) {
+        this.form.get('timeLimit')?.enable();
+        this.form.get('timeLimitUnit')?.enable();
+      } else {
+        this.form.get('timeLimit')?.disable();
+        this.form.get('timeLimitUnit')?.disable();
+      }
     }
   }
 

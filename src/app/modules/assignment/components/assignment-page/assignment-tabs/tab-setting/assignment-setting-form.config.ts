@@ -72,7 +72,7 @@ export const assignmentAvailabilitySettingFormControls: FormControlField[][] = [
   [
     {
       id: 'hasCloseTime',
-      label: 'Close assignment',
+      label: 'Close at',
       type: '',
       componentType: 'checkbox',
       placeholder: '',

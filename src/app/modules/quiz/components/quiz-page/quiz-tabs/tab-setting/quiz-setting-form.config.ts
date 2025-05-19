@@ -19,10 +19,11 @@ export const quizSettingFormSchema = {
   hasTimeLimit: new FormControl(false),
   open: new FormControl({ value: new Date(), disabled: true }),
   close: new FormControl({ value: new Date(), disabled: true }),
-  timeLimit: new FormControl({ value: null, disabled: true }, [
-    Validators.min(1),
-  ]),
-  timeLimitUnit: new FormControl(TimeLimitType.HOURS),
+  timeLimit: new FormControl({ value: 1, disabled: true }, [Validators.min(1)]),
+  timeLimitUnit: new FormControl({
+    value: TimeLimitType.HOURS,
+    disabled: true,
+  }),
   gradeToPass: new FormControl(5),
   attemptAllowed: new FormControl(attemptsAllowedOptions[3]),
   gradingMethod: new FormControl(GradingMethod.HIGHEST_GRADE),
