@@ -24,7 +24,7 @@
   }
 
   &:hover:not(:focus-within) {
-    border-color: $icon-color;
+    border-color: $border-hover-color;
   }
 
   &:focus-within {

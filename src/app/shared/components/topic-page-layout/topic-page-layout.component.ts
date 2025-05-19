@@ -19,7 +19,6 @@ export class TopicPageLayoutComponent implements OnInit {
   ngOnInit(): void {
     this.topicIcon = iconMap[this.topic.type];
 
-    if (this.tabs.length > 0) this.tabService.selectTab(this.tabs[0]);
     this.tabService.selectedTab$.subscribe((tab) => {
       if (tab) this.selectedTab = tab;
     });

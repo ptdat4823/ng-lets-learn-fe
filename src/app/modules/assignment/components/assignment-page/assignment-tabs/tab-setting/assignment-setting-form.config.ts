@@ -2,10 +2,12 @@ import { FormControl, Validators } from '@angular/forms';
 import { FormControlField } from '@shared/helper/form.helper';
 import { FileSizeOption } from '@shared/models/assignment';
 import { getFileSizeOptions } from './assignment-setting-form.util';
+import { CloudinaryFile } from '@shared/models/cloudinary-file';
 
 export const assignmentSettingFormSchema = {
   name: new FormControl('', [Validators.required, Validators.minLength(2)]),
   description: new FormControl(''),
+  additionalFile: new FormControl([] as CloudinaryFile[]),
   hasOpenTime: new FormControl(false),
   hasCloseTime: new FormControl(false),
   hasMaximumFileUpload: new FormControl(false),
@@ -37,6 +39,14 @@ export const assignmentGeneralSettingFormControls: FormControlField[] = [
     type: 'text',
     componentType: 'input',
     placeholder: 'E.g. This is an assignment',
+    validationMessages: {},
+  },
+  {
+    id: 'additionalFile',
+    label: 'Additional file(s)',
+    type: '',
+    componentType: 'file-upload',
+    placeholder: '',
     validationMessages: {},
   },
 ];

@@ -22,7 +22,6 @@ export class TabListComponent implements OnInit {
     this.tabService.tabs$.subscribe((tabs) => {
       this.tabs = tabs;
     });
-
     if (this.localStorageKey) {
       const storedTab = localStorage.getItem(this.localStorageKey);
       if (storedTab && this.tabs.includes(storedTab)) {

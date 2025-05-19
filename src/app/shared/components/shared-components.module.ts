@@ -46,6 +46,7 @@ import { SidebarItemComponent } from './sidebar/sidebar-item/sidebar-item.compon
 import { TabComponent } from './tab-list/tab/tab.component';
 import { TimerComponent } from './timer/timer.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
+import { FileUploadComponent } from './file-upload/file-upload.component';
 
 @NgModule({
   declarations: [
@@ -79,6 +80,7 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
     DropdownComponent,
     DonutChartComponent,
     BreadcrumbComponent,
+    FileUploadComponent,
   ],
   imports: [
     CommonModule,
@@ -122,6 +124,7 @@ import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
     CommentInputComponent,
     DropdownComponent,
     DonutChartComponent,
+    FileUploadComponent,
   ],
 })
 export class SharedComponentsModule {}

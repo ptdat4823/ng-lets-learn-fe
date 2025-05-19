@@ -1,7 +1,12 @@
 import { ComboboxOption } from '@shared/components/combobox/combobox.type';
 
 export type UpdateOnType = 'change' | 'blur' | 'submit';
-type ComponentType = 'input' | 'select' | 'datetime' | 'checkbox';
+type ComponentType =
+  | 'input'
+  | 'select'
+  | 'datetime'
+  | 'checkbox'
+  | 'file-upload';
 
 export interface FormControlField {
   id: string;
