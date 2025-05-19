@@ -1,0 +1,29 @@
+<div class="submission-status-table">
+  @for(item of tableFields; track item.id;let i = $index) {
+  <div
+    class="status-row"
+    [class]="{
+      alternate: i % 2 === 0,
+      green: item.color === 'green',
+      red: item.color === 'red',
+      orange: item.color === 'orange',
+    }"
+  >
+    <div class="status-label">{{ item.label }}</div>
+    @if(hasFileSubmitted(item)) {
+    <div>
+      @for(file of getFiles(item); track file.id; let j = $index) {
+      <span>
+        <a [href]="file.downloadUrl" class="file-link">
+          {{ file.name }}
+        </a>
+        <span *ngIf="j !== getFiles(item).length - 1">,</span>
+      </span>
+      }
+    </div>
+    } @else {
+    <div class="status-value">{{ item.value }}</div>
+    }
+  </div>
+  }
+</div>

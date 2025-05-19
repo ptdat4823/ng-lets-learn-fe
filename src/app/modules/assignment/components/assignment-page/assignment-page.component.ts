@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   ASSIGNMENT_STUDENT_TABS,
@@ -34,7 +34,8 @@ export class AssignmentPageComponent implements OnInit {
     private tabService: TabService<AssignmentTab>,
     private userService: UserService,
     private breadcrumbService: BreadcrumbService,
-    private activedRoute: ActivatedRoute
+    private activedRoute: ActivatedRoute,
+    private cdr: ChangeDetectorRef
   ) {
     const topicId = this.activedRoute.snapshot.paramMap.get('topicId');
     const courseId = this.activedRoute.snapshot.paramMap.get('courseId');
@@ -47,10 +48,12 @@ export class AssignmentPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.topicIcon = iconMap[this.topic.type];
-    this.tabService.selectTab(this.selectedTab);
     this.tabService.setTabs(ASSIGNMENT_STUDENT_TABS);
     this.tabService.selectedTab$.subscribe((tab) => {
-      if (tab) this.selectedTab = tab;
+      if (tab) {
+        this.selectedTab = tab;
+        this.cdr.detectChanges();
+      }
     });
     this.userService.user$.subscribe((user) => {
       this.user = user;

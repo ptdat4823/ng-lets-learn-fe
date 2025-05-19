@@ -1,0 +1,71 @@
+@use "styles/theme/theme.variables" as *;
+
+.submission-status-table {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+  font-family: Nunito;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.status-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: white;
+
+  &.alternate {
+    background-color: #f1f5f9;
+
+    &.green {
+      background-color: $success-hover-color;
+    }
+    &.red {
+      background-color: $error-hover-color;
+    }
+    &.orange {
+      background-color: $warning-hover-color;
+    }
+  }
+
+  &:first-child {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+
+  &:last-child {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
+  &.green .status-value {
+    color: $success-color;
+  }
+  &.red .status-value {
+    color: $error-color;
+  }
+  &.orange .status-value {
+    color: $warning-color;
+  }
+}
+
+.status-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: $text-color;
+  min-width: 180px;
+}
+
+.status-value {
+  font-size: 14px;
+  color: $text-secondary-color;
+  font-weight: 600;
+}
+
+.file-link {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

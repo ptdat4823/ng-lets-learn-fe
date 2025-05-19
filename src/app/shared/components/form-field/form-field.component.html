@@ -37,5 +37,11 @@
     [name]="controlName"
     (change)="onCheckboxChange($event)"
   />
+  } @else if(control.componentType === 'file-upload') {
+  <file-upload
+    [form]="form"
+    [controlName]="controlName"
+    [validationMessages]="control.validationMessages"
+  />
   }
 </div>
