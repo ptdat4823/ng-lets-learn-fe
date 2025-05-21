@@ -1,0 +1,55 @@
+@use "styles/theme/theme.variables" as *;
+
+.form-title {
+  color: $tint-third-color;
+  font-weight: 600;
+  user-select: none;
+  font-family: Nunito;
+}
+
+.title {
+  color: $text-color;
+  font-weight: 600;
+  user-select: none;
+  font-family: Nunito;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  ::ng-deep app-combobox {
+    --max-width: 100%;
+  }
+}
+
+.flex-column {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+
+  .checkbox-container {
+    width: fit-content;
+  }
+}
+
+.submit-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  .submit-button {
+    ::ng-deep {
+      button {
+        width: fit-content;
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+    }
+  }
+}

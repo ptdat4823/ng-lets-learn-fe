@@ -6,7 +6,8 @@ type ComponentType =
   | 'select'
   | 'datetime'
   | 'checkbox'
-  | 'file-upload';
+  | 'file-upload'
+  | 'editor';
 
 export interface FormControlField {
   id: string;

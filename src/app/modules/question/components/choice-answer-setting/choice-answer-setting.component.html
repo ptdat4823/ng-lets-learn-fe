@@ -1,0 +1,14 @@
+<div class="container" [formGroup]="form">
+  @for(control of controls; track control.id) {
+  <setting-row [label]="control.label" [id]="control.id">
+    <app-form-field
+      [form]="form"
+      [controlName]="control.id"
+      [control]="control"
+      [showLabel]="false"
+      (editorChange)="onEditorChange($event, control.id)"
+      (comboboxChange)="onComboboxChange($event)"
+    />
+  </setting-row>
+  }
+</div>

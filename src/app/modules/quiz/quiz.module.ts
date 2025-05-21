@@ -1,6 +1,12 @@
 import { CdkDrag, CdkDropList } from '@angular/cdk/drag-drop';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import {
+  MatDialogActions,
+  MatDialogContent,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { RouterOutlet } from '@angular/router';
 import { SharedComponentsModule } from '@shared/components/shared-components.module';
@@ -13,6 +19,10 @@ import { QuizResultComponent } from './components/quiz-page/quiz-attempting/quiz
 import { QuizShortAnswerComponent } from './components/quiz-page/quiz-attempting/quiz-short-answer/quiz-short-answer.component';
 import { QuizTrueFalseAnswerComponent } from './components/quiz-page/quiz-attempting/quiz-true-false-answer/quiz-true-false-answer.component';
 import { QuizPageComponent } from './components/quiz-page/quiz-page.component';
+import { AddQuestionDialogComponent } from './components/quiz-page/quiz-tabs/tab-question-bank/question-bank-table/add-question-dialog/add-question-dialog.component';
+import { QuestionBankTableComponent } from './components/quiz-page/quiz-tabs/tab-question-bank/question-bank-table/question-bank-table.component';
+import { ActionColumnComponent } from './components/quiz-page/quiz-tabs/tab-question-bank/question-bank-table/table-columns/action-column/action-column.component';
+import { StatusColumnComponent } from './components/quiz-page/quiz-tabs/tab-question-bank/question-bank-table/table-columns/status-column/status-column.component';
 import { TabQuestionBankComponent } from './components/quiz-page/quiz-tabs/tab-question-bank/tab-question-bank.component';
 import { QuestionItemComponent } from './components/quiz-page/quiz-tabs/tab-question/question-list/question-item/question-item.component';
 import { QuestionListComponent } from './components/quiz-page/quiz-tabs/tab-question/question-list/question-list.component';
@@ -21,14 +31,10 @@ import { TabQuestionComponent } from './components/quiz-page/quiz-tabs/tab-quest
 import { TabQuizStudentComponent } from './components/quiz-page/quiz-tabs/tab-quiz-student/tab-quiz-student.component';
 import { TabQuizComponent } from './components/quiz-page/quiz-tabs/tab-quiz/tab-quiz.component';
 import { ResultTableComponent } from './components/quiz-page/quiz-tabs/tab-result/result-table/result-table.component';
+import { ImageColumnComponent } from './components/quiz-page/quiz-tabs/tab-result/result-table/table-columns/image-column/image-column.component';
 import { TabResultComponent } from './components/quiz-page/quiz-tabs/tab-result/tab-result.component';
 import { TabSettingComponent } from './components/quiz-page/quiz-tabs/tab-setting/tab-setting.component';
 import { QuizResultTableComponent } from './components/quiz-result-table/quiz-result-table.component';
-import { ImageColumnComponent } from './components/quiz-page/quiz-tabs/tab-result/result-table/table-columns/image-column/image-column.component';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { QuestionBankTableComponent } from './components/quiz-page/quiz-tabs/tab-question-bank/question-bank-table/question-bank-table.component';
-import { StatusColumnComponent } from './components/quiz-page/quiz-tabs/tab-question-bank/question-bank-table/table-columns/status-column/status-column.component';
-import { ActionColumnComponent } from './components/quiz-page/quiz-tabs/tab-question-bank/question-bank-table/table-columns/action-column/action-column.component';
 @NgModule({
   declarations: [
     QuizResultTableComponent,
@@ -54,6 +60,7 @@ import { ActionColumnComponent } from './components/quiz-page/quiz-tabs/tab-ques
     QuestionBankTableComponent,
     StatusColumnComponent,
     ActionColumnComponent,
+    AddQuestionDialogComponent,
   ],
   imports: [
     SharedModule,
@@ -64,6 +71,9 @@ import { ActionColumnComponent } from './components/quiz-page/quiz-tabs/tab-ques
     CdkDrag,
     MatTableModule,
     MatPaginatorModule,
+    MatDialogActions,
+    MatDialogContent,
+    MatDialogTitle,
   ],
   exports: [QuizAttemptingComponent],
 })

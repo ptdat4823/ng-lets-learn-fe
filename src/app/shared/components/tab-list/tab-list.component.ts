@@ -24,8 +24,11 @@ export class TabListComponent implements OnInit {
     });
     if (this.localStorageKey) {
       const storedTab = localStorage.getItem(this.localStorageKey);
+      console.log(`storage tab: ${storedTab}`);
+      console.log(`tabs: ${this.tabs}`);
       if (storedTab && this.tabs.includes(storedTab)) {
         this.tabService.selectTab(storedTab);
+        console.log(`Select tab: ${storedTab}`);
       }
     } else if (this.tabs.length > 0) {
       this.tabService.selectTab(this.tabs[0]);

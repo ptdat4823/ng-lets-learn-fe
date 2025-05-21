@@ -37,6 +37,8 @@ export class ComboboxComponent implements OnInit {
 
   findOptionByValue(value: string): ComboboxOption | null {
     if (!value) return null;
+    console.log('findOptionByValue', value);
+    console.log('options', this.options);
     return this.options.find((option) => option.value === value) || null;
   }
 

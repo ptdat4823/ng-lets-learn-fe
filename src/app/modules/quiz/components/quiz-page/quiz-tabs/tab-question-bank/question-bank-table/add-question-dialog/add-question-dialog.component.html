@@ -1,0 +1,45 @@
+<div class="container">
+  <h2 class="title" mat-dialog-title>
+    {{ dialogTitle }}
+  </h2>
+  <mat-dialog-content>
+    <div class="question-type-container">
+      <div class="question-type-list">
+        <h2 class="section-title">Question</h2>
+
+        <div class="type-options">
+          <div
+            *ngFor="let type of questionTypes"
+            class="type-option"
+            [class.selected]="type.id === selectedType.id"
+            (click)="selectType(type)"
+          >
+            <span class="material-symbols-outlined">
+              {{ type.icon }}
+            </span>
+            <div class="type-name">{{ type.name }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="question-type-description">
+        <h2 class="section-title">Description</h2>
+        <p class="description-text">{{ selectedType.description }}</p>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions class="actions">
+    <app-button
+      variant="ghost"
+      label="Cancel"
+      (click)="onCancel()"
+      type="button"
+    />
+    <app-button
+      variant="primary"
+      cdkFocusInitial
+      label="Add"
+      (click)="onConfirm()"
+    />
+  </mat-dialog-actions>
+</div>

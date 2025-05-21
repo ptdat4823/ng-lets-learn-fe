@@ -20,6 +20,13 @@ const routes: Routes = [
             (m) => m.TopicRoutingModule
           ),
       },
+      {
+        path: ':courseId',
+        loadChildren: () =>
+          import('@routes/question-route.module').then(
+            (m) => m.QuestionRoutingModule
+          ),
+      },
     ],
   },
 ];

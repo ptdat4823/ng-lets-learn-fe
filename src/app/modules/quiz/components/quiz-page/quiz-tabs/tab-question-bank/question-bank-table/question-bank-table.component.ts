@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { questionIconMap } from '@modules/quiz/constants/quiz.constant';
 import { mockQuestions } from '@shared/mocks/question';
 import {
@@ -8,6 +9,8 @@ import {
 } from '@shared/models/question';
 import { User } from '@shared/models/user';
 import { format } from 'date-fns';
+import { AddQuestionDialogComponent } from './add-question-dialog/add-question-dialog.component';
+import { ActivatedRoute, Router } from '@angular/router';
 
 export type QuestionElement = {
   index: number;
@@ -27,6 +30,8 @@ export type QuestionElement = {
   styleUrl: './question-bank-table.component.scss',
 })
 export class QuestionBankTableComponent implements OnInit {
+  courseId = '';
+  topicId = '';
   questions = mockQuestions;
   displayedColumns: string[] = [
     'index',
@@ -40,6 +45,15 @@ export class QuestionBankTableComponent implements OnInit {
     'actions',
   ];
   dataSource: QuestionElement[] = [];
+
+  constructor(
+    private dialog: MatDialog,
+    private router: Router,
+    private activedRoute: ActivatedRoute
+  ) {
+    this.courseId = this.activedRoute.snapshot.params['courseId'];
+    this.topicId = this.activedRoute.snapshot.params['topicId'];
+  }
 
   ngOnInit(): void {
     this.dataSource = this.convertQuestionsToQuestionElements(this.questions);
@@ -67,5 +81,23 @@ export class QuestionBankTableComponent implements OnInit {
   formatDate(date: Date): string {
     const pattern = 'MM/dd/yyyy';
     return format(date, pattern);
+  }
+
+  openAddQuestionDialog() {
+    this.dialog.open(AddQuestionDialogComponent, {
+      data: {
+        onCancelAction: () => {},
+        onAddAction: (questionType: QuestionType) => {
+          let type = '';
+          if (questionType === QuestionType.TRUE_FALSE)
+            type = 'true-false-question';
+          else if (questionType === QuestionType.SHORT_ANSWER)
+            type = 'short-answer-question';
+          else if (questionType === QuestionType.CHOICE)
+            type = 'choice-question';
+          this.router.navigate([`courses/${this.courseId}/${type}/create`]);
+        },
+      },
+    });
   }
 }

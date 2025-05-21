@@ -27,8 +27,14 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/tinymce",
+                "output": "/tinymce/"
               }
             ],
+
             "stylePreprocessorOptions": {
               "includePaths": ["src/app"]
             },

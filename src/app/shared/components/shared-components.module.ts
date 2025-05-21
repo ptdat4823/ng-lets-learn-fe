@@ -47,6 +47,7 @@ import { TabComponent } from './tab-list/tab/tab.component';
 import { TimerComponent } from './timer/timer.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { FileUploadComponent } from './file-upload/file-upload.component';
+import { RichTextEditorComponent } from './rich-text-editor/rich-text-editor.component';
 
 @NgModule({
   declarations: [
@@ -96,6 +97,7 @@ import { FileUploadComponent } from './file-upload/file-upload.component';
     MatExpansionModule,
     MatCheckboxModule,
     FormsModule,
+    RichTextEditorComponent,
   ],
   exports: [
     FormWarningComponent,
@@ -125,6 +127,7 @@ import { FileUploadComponent } from './file-upload/file-upload.component';
     DropdownComponent,
     DonutChartComponent,
     FileUploadComponent,
+    RichTextEditorComponent,
   ],
 })
 export class SharedComponentsModule {}

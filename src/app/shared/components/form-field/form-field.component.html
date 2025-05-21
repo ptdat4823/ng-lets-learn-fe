@@ -11,6 +11,7 @@
     [controlName]="controlName"
     [placeholder]="control.placeholder"
     [validationMessages]="control.validationMessages"
+    (onChange)="onInputChange($event)"
   />
   <span class="description">{{ control.description }}</span>
   } @else if (control.componentType === 'select') {
@@ -19,6 +20,7 @@
     [controlName]="controlName"
     [validationMessages]="control.validationMessages"
     [options]="control.options ?? []"
+    (onSelect)="onComboboxChange($event)"
   />
   @if(control.descriptionOnOption) {
   <span class="description">{{
@@ -29,6 +31,7 @@
     [form]="form"
     [controlName]="controlName"
     [validationMessages]="control.validationMessages"
+    (dateChange)="onDateChange($event)"
   />
   } @else if(control.componentType === 'checkbox') {
   <mat-checkbox
@@ -41,6 +44,16 @@
   <file-upload
     [form]="form"
     [controlName]="controlName"
+    [validationMessages]="control.validationMessages"
+    (uploaded)="onFileUpload($event)"
+    [validationMessages]="control.validationMessages"
+  />
+  } @else if (control.componentType === 'editor') {
+  <app-rich-text-editor
+    [form]="form"
+    [controlName]="controlName"
+    placeholder="Enter text here..."
+    (contentChange)="onEditorChange($event)"
     [validationMessages]="control.validationMessages"
   />
   }
