@@ -12,6 +12,7 @@ import { provideToastr } from 'ngx-toastr';
 import { CalendarModule } from '@modules/calendar/calendar.module';
 import { QuizModule } from '@modules/quiz/quiz.module';
 import { AssignmentModule } from '@modules/assignment/assignment.module';
+import { LinkModule } from '@modules/link/link.module';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { AssignmentModule } from '@modules/assignment/assignment.module';
     AssignmentModule,
     CalendarModule,
     ToastrModule.forRoot(),
+    LinkModule
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
