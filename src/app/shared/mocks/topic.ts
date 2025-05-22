@@ -1,6 +1,7 @@
 import { Topic, TopicType } from '@shared/models/topic';
 import { mockQuiz } from './quiz';
 import { mockAssignment } from './assignment';
+import { mockPage } from './page';
 
 export const mockTopics: Topic[] = [
   mockQuiz,
@@ -40,4 +41,5 @@ export const mockTopics: Topic[] = [
       },
     },
   },
+  mockPage,
 ];
