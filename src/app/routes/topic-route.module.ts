@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AssignmentPageComponent } from '@modules/assignment/components/assignment-page/assignment-page.component';
+import { LinkPageComponent } from '@modules/link/components/link-page/link-page.component';
 import { QuizPageComponent } from '@modules/quiz/components/quiz-page/quiz-page.component';
 
 const routes: Routes = [
@@ -12,6 +13,10 @@ const routes: Routes = [
     path: 'assignment/:topicId',
     component: AssignmentPageComponent,
   },
+  {
+    path: 'link/:topicId',
+    component:LinkPageComponent
+  }
 ];
 
 @NgModule({
