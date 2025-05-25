@@ -7,7 +7,7 @@ import { CloudinaryFile } from '@shared/models/cloudinary-file';
 export const assignmentSettingFormSchema = {
   name: new FormControl('', [Validators.required, Validators.minLength(2)]),
   description: new FormControl(''),
-  additionalFile: new FormControl([] as CloudinaryFile[]),
+  additionalFile: new FormControl([]),
   hasOpenTime: new FormControl(false),
   hasCloseTime: new FormControl(false),
   hasMaximumFileUpload: new FormControl(false),

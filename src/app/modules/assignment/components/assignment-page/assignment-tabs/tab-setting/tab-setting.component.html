@@ -73,6 +73,13 @@
                   (onCheckChange)="onCheckboxChange($event)"
                 />
               </div>
+              } @else if(control.componentType === 'file-upload') {
+              <app-form-field
+                [control]="control"
+                [form]="form"
+                [controlName]="control.id"
+                [showLabel]="false"
+              />
               } @else {<app-form-field
                 [control]="control"
                 [controlName]="control.id"

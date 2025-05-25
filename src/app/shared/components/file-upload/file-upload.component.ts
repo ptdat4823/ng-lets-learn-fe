@@ -153,7 +153,7 @@ export class FileUploadComponent {
         }));
 
         this.uploaded.emit(uploadedFiles);
-        console.log('form', this.form);
+
         this.form.get(this.controlName)?.setValue(uploadedFiles);
 
         if (this.showSuccessToast) {
