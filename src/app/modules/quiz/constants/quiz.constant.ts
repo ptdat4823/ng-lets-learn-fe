@@ -6,6 +6,7 @@ export enum QuizTab {
   QUESTIONS = 'Questions',
   RESULTS = 'Results',
   QUESTION_BANK = 'Question Bank',
+  DASHBOARD = 'Dashboard',
 }
 export const QUIZ_TEACHER_TABS = Object.values(QuizTab);
 export const QUIZ_STUDENT_TABS = [QuizTab.QUIZ];
