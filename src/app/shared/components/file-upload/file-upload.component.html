@@ -24,7 +24,6 @@
       #fileInput
       [multiple]="config.maxFiles !== undefined && config.maxFiles > 1"
       [accept]="config.acceptedFileTypes?.join(',') || ''"
-      [formControlName]="controlName"
       (change)="onFileInputChange($event)"
     />
   </div>
