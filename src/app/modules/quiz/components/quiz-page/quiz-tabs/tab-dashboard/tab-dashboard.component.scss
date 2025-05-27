@@ -1,0 +1,15 @@
+@use "styles/theme/theme.variables" as *;
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  ::ng-deep card {
+    height: 100%;
+    min-height: fit-content;
+  }
+}
+
+card {
+  background-color: $background-secondary-color;
+}
