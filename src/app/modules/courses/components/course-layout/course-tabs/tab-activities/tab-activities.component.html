@@ -1,0 +1,20 @@
+<div class="tab-activities">
+  <app-combobox
+    class="activity-type-combobox"
+    [options]="comboboxOptions"
+    [placeholder]="'Select activity type'"
+    (onSelect)="onSelectType($event)"
+  ></app-combobox>
+
+  <ng-container *ngFor="let section of filteredSections">
+    <app-activity
+      [section]="section"
+      *ngIf="isStudent; else notStudent"
+      [user]="user"
+    >
+    </app-activity>
+    <ng-template #notStudent>
+      <app-activity [section]="section"> </app-activity>
+    </ng-template>
+  </ng-container>
+</div>

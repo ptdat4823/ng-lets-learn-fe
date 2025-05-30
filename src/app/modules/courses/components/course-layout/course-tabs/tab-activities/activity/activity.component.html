@@ -1,0 +1,39 @@
+<div class="activity">
+  <!-- Section Header -->
+  <div class="activity-header">
+    {{ section.title }}
+    <span class="material-symbols-outlined section-menu-icon"> more_vert </span>
+  </div>
+
+  <!-- Topics List -->
+  <div class="activity-topics">
+    <div class="activity-topic-row" *ngFor="let topic of section.topics">
+      <!-- Topic Icon -->
+      <span [class]="'material-symbols-outlined ' + topic.type">
+        {{ iconMap[topic.type] }}
+      </span>
+      <!-- Topic Title -->
+      <span
+        class="topic-title"
+        (mouseover)="setUnderline($event, true)"
+        (mouseout)="setUnderline($event, false)"
+      >
+        {{ topic.title }}
+      </span>
+      <!-- Due Text -->
+      <span *ngIf="getDueParts(topic) as due" class="due-text">
+        {{ due.date }}
+        <ng-container *ngIf="due.status">
+          <span
+            [ngStyle]="{
+              'font-style': 'italic',
+              color: due.overdue || due.status.includes('left') ? '#dc2626' : ''
+            }"
+          >
+            ({{ due.status }})
+          </span>
+        </ng-container>
+      </span>
+    </div>
+  </div>
+</div>
