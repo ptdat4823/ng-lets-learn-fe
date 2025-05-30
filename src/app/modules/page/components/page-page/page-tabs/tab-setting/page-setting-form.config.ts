@@ -15,8 +15,8 @@ export const pageGeneralSettingFormControls: FormControlField[] = [
     componentType: 'input',
     placeholder: 'E.g. Astronomy Page',
     validationMessages: {
-      required: 'page name is required',
-      minlength: 'page name must be at least 2 characters',
+      required: 'Page name is required',
+      minlength: 'Page name must be at least 2 characters',
     },
   },
   {
