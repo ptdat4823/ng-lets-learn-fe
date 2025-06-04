@@ -4,13 +4,17 @@
   @if(selectedTab === tabs.COURSE) {
   <tab-course [course]="course" />
   } @else if(selectedTab === tabs.ACTIVITIES) {
-  <tab-activities [course]="course" [isStudent]="isStudent" [user]="user ? user : null"/>
+  <tab-activities
+    [course]="course"
+    [isStudent]="isStudent"
+    [user]="user ? user : null"
+  />
   } @else if(selectedTab === tabs.PEOPLE) {
   <tab-people [course]="course" />
   } @else if(selectedTab === tabs.DASHBOARD) {
-  <p>DASHBOARD</p>
+  <tab-dashboard [course]="course" />
   } @else if(selectedTab === tabs.SETTINGS) {
-  <p>SETTINGS</p>
+  <tab-setting [course]="course" />
   }
 </main>
 } @else {

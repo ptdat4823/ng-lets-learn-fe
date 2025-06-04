@@ -16,6 +16,8 @@ import { NewCourseFormComponent } from './components/new-course/new-course-form/
 import { NewCourseComponent } from './components/new-course/new-course.component';
 import { TabPeopleComponent } from './components/course-layout/course-tabs/tab-people/tab-people.component';
 import { ActivityComponent } from './components/course-layout/course-tabs/tab-activities/activity/activity.component';
+import { TabDashboardComponent } from './components/course-layout/course-tabs/tab-dashboard/tab-dashboard.component';
+import { TabSettingComponent } from './components/course-layout/course-tabs/tab-setting/tab-setting.component';
 
 @NgModule({
   declarations: [
@@ -26,10 +28,12 @@ import { ActivityComponent } from './components/course-layout/course-tabs/tab-ac
     NewCourseFormComponent,
     NewCourseComponent,
     CourseLayoutComponent,
-    TabCourseComponent,
     ActivityComponent,
+    TabCourseComponent,
     TabActivitiesComponent,
     TabPeopleComponent,
+    TabDashboardComponent,
+    TabSettingComponent,
   ],
   imports: [
     SharedModule,

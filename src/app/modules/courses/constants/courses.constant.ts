@@ -10,4 +10,6 @@ export const COURSE_STUDENT_TABS = [
   CourseTab.COURSE,
   CourseTab.ACTIVITIES,
   CourseTab.PEOPLE,
+  CourseTab.DASHBOARD,
+  CourseTab.SETTINGS,
 ];

@@ -46,7 +46,7 @@ export class CourseLayoutComponent implements OnInit {
     });
     this.userService.user$.subscribe((user) => {
       this.user = user;
-      if (user?.role === Role.TEACHER) {
+      if (user?.role === Role.TEACHER) { 
         this.tabService.setTabs(COURSE_TEACHER_TABS);
         this.isStudent = false;
       } else {

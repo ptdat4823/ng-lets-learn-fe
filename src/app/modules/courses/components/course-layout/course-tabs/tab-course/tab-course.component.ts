@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CollapsibleListService } from '@shared/components/collapsible-list/collapsible-list.service';
 import { Course, Section } from '@shared/models/course';
 import { Topic } from '@shared/models/topic';
