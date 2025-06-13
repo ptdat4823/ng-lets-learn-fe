@@ -18,6 +18,8 @@ import { TabPeopleComponent } from './components/course-layout/course-tabs/tab-p
 import { ActivityComponent } from './components/course-layout/course-tabs/tab-activities/activity/activity.component';
 import { TabDashboardComponent } from './components/course-layout/course-tabs/tab-dashboard/tab-dashboard.component';
 import { TabSettingComponent } from './components/course-layout/course-tabs/tab-setting/tab-setting.component';
+import { TabCourseStudentComponent } from './components/course-layout/course-tabs/tab-course-student/tab-course-student.component';
+import { TabDashboardStudentComponent } from './components/course-layout/course-tabs/tab-dashboard-student/tab-dashboard-student.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,8 @@ import { TabSettingComponent } from './components/course-layout/course-tabs/tab-
     TabPeopleComponent,
     TabDashboardComponent,
     TabSettingComponent,
+    TabCourseStudentComponent,
+    TabDashboardStudentComponent,
   ],
   imports: [
     SharedModule,

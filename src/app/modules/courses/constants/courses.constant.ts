@@ -11,5 +11,4 @@ export const COURSE_STUDENT_TABS = [
   CourseTab.ACTIVITIES,
   CourseTab.PEOPLE,
   CourseTab.DASHBOARD,
-  CourseTab.SETTINGS,
 ];
