@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ChartItem } from '@shared/components/donut-chart/donut-chart.component';
+import { DashboardStat } from '@shared/models/dashboard-stats';
 
 @Component({
   selector: 'submission-dashboard',
@@ -9,7 +10,7 @@ import { ChartItem } from '@shared/components/donut-chart/donut-chart.component'
 })
 export class DashboardComponent implements OnInit {
   studentCount = 40;
-  stats: any[] = [];
+  stats: DashboardStat[] = [];
   fileTypeSegments: ChartItem[] = [];
   gradedAssignmentsSegments: ChartItem[] = [];
 

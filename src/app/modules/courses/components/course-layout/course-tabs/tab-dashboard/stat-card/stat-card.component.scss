@@ -1,0 +1,95 @@
+@use "styles/theme/theme.variables" as *;
+
+// Mixins
+@mixin card {
+  height: 76px;
+  background-color: $background-color;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  gap: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.stat-card {
+  @include card;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  padding: 16px;
+
+  .stat-value {
+    font-size: 20px;
+    font-weight: 600;
+    margin-right: 8px;
+  }
+
+  .stat-increasement {
+    background: #DCFCE7;
+    color: #16A34A;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 8px;
+    padding: 2px 8px;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  .stat-decreasement {
+    background: #FEE2E2;
+    color: #DC2626;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 8px;
+    padding: 2px 8px;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  .stat-label {
+    font-size: 14px;
+    color: #6B7280;
+    font-weight: 700;
+    line-height: 20px;
+  }
+
+  .stat-note {
+    font-size: 12px;
+    color: #6b7280;
+    line-height: 20px;
+  }
+}
+
+.arrow {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 4px;
+
+  mat-icon {
+    font-size: 1em;
+    vertical-align: middle;
+    width: 1em;
+    height: 1em;
+    font-weight: 900;
+  }
+}
+
+.stat-increasement .arrow .mat-icon {
+  color: #22c55e;
+}
+.stat-decreasement .arrow .mat-icon {
+  color: #ef4444;
+}
+
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

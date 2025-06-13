@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ComboboxService } from '@shared/components/combobox/combobox.service';
 import { Course, Section } from '@shared/models/course';
-import { Topic, TopicType } from '@shared/models/topic';
+import { TopicType } from '@shared/models/topic';
 import { User } from '@shared/models/user';
 import { ToastrService } from 'ngx-toastr';
 
@@ -10,7 +10,7 @@ import { ToastrService } from 'ngx-toastr';
   standalone: false,
   templateUrl: './tab-activities.component.html',
   styleUrl: './tab-activities.component.scss',
-   providers: [ComboboxService],
+  providers: [ComboboxService],
 })
 export class TabActivitiesComponent implements OnInit {
   @Input({ required: true }) course!: Course;
@@ -43,9 +43,9 @@ export class TabActivitiesComponent implements OnInit {
   }
 
   onSelectType(option: { value: any }) {
-  this.selectedType = option.value as TopicType | 'all';
-  this.filterSections();
-}
+    this.selectedType = option.value as TopicType | 'all';
+    this.filterSections();
+  }
 
   filterSections() {
     if (!this.course?.sections) {

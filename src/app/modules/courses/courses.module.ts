@@ -20,9 +20,12 @@ import { TabDashboardComponent } from './components/course-layout/course-tabs/ta
 import { TabSettingComponent } from './components/course-layout/course-tabs/tab-setting/tab-setting.component';
 import { TabCourseStudentComponent } from './components/course-layout/course-tabs/tab-course-student/tab-course-student.component';
 import { TabDashboardStudentComponent } from './components/course-layout/course-tabs/tab-dashboard-student/tab-dashboard-student.component';
+import { StatCardComponent } from './components/course-layout/course-tabs/tab-dashboard/stat-card/stat-card.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
+    StatCardComponent,
     CourseListComponent,
     TeacherCourseCardComponent,
     TeacherCourseListComponent,
@@ -40,6 +43,7 @@ import { TabDashboardStudentComponent } from './components/course-layout/course-
     TabDashboardStudentComponent,
   ],
   imports: [
+    MatIconModule,
     SharedModule,
     RouterOutlet,
     CourseRoutingModule,

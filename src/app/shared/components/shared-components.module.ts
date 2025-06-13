@@ -47,6 +47,13 @@ import { TabComponent } from './tab-list/tab/tab.component';
 import { TimerComponent } from './timer/timer.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { FileUploadComponent } from './file-upload/file-upload.component';
+import { RankLogoComponent } from './ranking/rank-logo/rank-logo.component';
+import { RankAComponent } from './ranking/rank-logo/rank-a.component';
+import { RankBComponent } from './ranking/rank-logo/rank-b.component';
+import { RankCComponent } from './ranking/rank-logo/rank-c.component';
+import { RankSComponent } from './ranking/rank-logo/rank-s.component';
+import { RankItemComponent } from './ranking/rank-item/rank-item.component';
+import { ColorItemComponent } from './ranking/color-item/color-item.component';
 
 @NgModule({
   declarations: [
@@ -81,6 +88,13 @@ import { FileUploadComponent } from './file-upload/file-upload.component';
     DonutChartComponent,
     BreadcrumbComponent,
     FileUploadComponent,
+    RankLogoComponent,
+    RankAComponent,
+    RankBComponent,
+    RankCComponent,
+    RankSComponent,
+    RankItemComponent,
+    ColorItemComponent,
   ],
   imports: [
     CommonModule,
@@ -125,6 +139,13 @@ import { FileUploadComponent } from './file-upload/file-upload.component';
     DropdownComponent,
     DonutChartComponent,
     FileUploadComponent,
+    RankLogoComponent,
+    RankAComponent,
+    RankBComponent,
+    RankCComponent,
+    RankSComponent,
+    RankItemComponent,
+    ColorItemComponent,
   ],
 })
 export class SharedComponentsModule {}
