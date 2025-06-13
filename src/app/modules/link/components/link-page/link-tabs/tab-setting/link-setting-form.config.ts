@@ -4,19 +4,19 @@ import { CloudinaryFile } from '@shared/models/cloudinary-file';
 export const linkSettingFormSchema = {
   name: new FormControl('', [Validators.required, Validators.minLength(2)]),
   description: new FormControl(''),
-  additionalFile: new FormControl([] as CloudinaryFile[],[Validators.required]),
+  additionalFile: new FormControl([] as CloudinaryFile[]),
 };
 
 export const linkGeneralSettingFormControls: FormControlField[] = [
   {
     id: 'name',
-    label: 'File name',
+    label: 'Link name',
     type: 'text',
     componentType: 'input',
-    placeholder: 'Enter file name',
+    placeholder: 'Enter link name',
     validationMessages: {
-      required: 'File name is required',
-      minlength: 'File name must be at least 2 characters',
+      required: 'Link name is required',
+      minlength: 'Link name must be at least 2 characters',
     },
   },
   {
@@ -33,8 +33,6 @@ export const linkGeneralSettingFormControls: FormControlField[] = [
     type: '',
     componentType: 'file-upload',
     placeholder: '',
-    validationMessages: {
-        required: 'File is required',
-    },
+    validationMessages: {},
   },
 ];

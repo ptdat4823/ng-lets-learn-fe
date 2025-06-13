@@ -6,8 +6,7 @@
       <app-collapsible-section [sectionId]="sectionIds[0]" [hasBorder]="false">
         <!-- Section dynamic title -->
         <span class="title" title>General</span>
-        <!-- Section dynamic content -->
-        <div class="content" content>
+        <!-- Section dynamic content -->        <div class="content" content>
           @for(control of generalFormControls; track control.id) {
           <setting-row [label]="control.label" [id]="control.id">
             <app-form-field
@@ -15,7 +14,6 @@
               [controlName]="control.id"
               [form]="form"
               [showLabel]="false"
-              (fileUploaded)="onFileUpload($event)"
             />
           </setting-row>
           }

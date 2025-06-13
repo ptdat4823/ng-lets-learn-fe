@@ -1,9 +1,15 @@
 <div class="file-container">
   <card>
     <div class="file-message">
-      <p>Click on <a [href]="uploadedFileUrl ? uploadedFileUrl : '#'" class="file-link">
-          {{ uploadedFileName ? uploadedFileName : 'File.txt' }}
-        </a> to test the file uploaded.</p>
+      @if (hasLink) {
+        <p>Click on <a href="#" 
+                       (click)="onLinkClick()"
+                       class="file-link">
+            Link
+          </a> to open the resource</p>
+      } @else {
+        <p class="no-file-message">No file has been uploaded yet. Please upload a file in the Settings tab.</p>
+      }
     </div>
   </card>
 </div>
