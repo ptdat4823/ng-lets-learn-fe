@@ -30,7 +30,6 @@ export class BarChartComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('chartCanvas') chartCanvas!: ElementRef<HTMLCanvasElement>;
   @Input() segments: BarChartSegment[] = [];
   @Input() title: string = '';
-  @Input() centerText: string = '';
   @Input() maxValue?: number;
 
   chart: Chart | null = null;

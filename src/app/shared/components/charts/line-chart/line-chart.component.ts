@@ -12,7 +12,7 @@ import { Chart, ChartConfiguration, ChartData, registerables } from 'chart.js';
 
 Chart.register(...registerables);
 
-export interface LineChartItem {
+export interface LineChartSegment  {
   label: string;
   data: number[];
   color: string;
@@ -27,11 +27,9 @@ export interface LineChartItem {
 export class LineChartComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('chartCanvas') chartCanvas!: ElementRef<HTMLCanvasElement>;
 
-  @Input() chartData: LineChartItem[] = [];
+  @Input() chartData: LineChartSegment[] = [];
   @Input() labels: string[] = [];
   @Input() title: string = '';
-  @Input() centerText: string = '';
-  @Input() centerSubtext: string = '';
 
   chart: Chart | null = null;
 
@@ -118,6 +116,8 @@ export class LineChartComponent implements OnInit, AfterViewInit, OnChanges {
               color: '#888',
               font: { size: 13 },
             },
+            min: 0,
+            max: 100,
           },
         },
       },

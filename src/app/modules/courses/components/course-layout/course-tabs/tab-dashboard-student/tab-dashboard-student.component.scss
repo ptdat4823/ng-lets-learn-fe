@@ -5,7 +5,7 @@
   background-color: $background-color;
   border-radius: 12px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  padding: 0px;
 }
 
 // Main container
@@ -13,6 +13,7 @@
   width: 100%;
   height: 100%;
   padding: 16px 0px;
+  background-color: #dbeafe;
 }
 
 .dashboard-paper {
@@ -28,7 +29,13 @@
   gap: 20px;
   margin-bottom: 20px;
 }
-
+.bar-chart-card {
+  @include card;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
 .chart-card {
   @include card;
   display: flex;
@@ -52,31 +59,53 @@
   }
 }
 
-.filter-button {
-  background: none;
-  border: none;
-  cursor: pointer;
+// Dashboard layout
+.dashboard-row {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
-  border-radius: 4px;
-
-  &:hover {
-    background-color: $background-color;
-  }
+  flex-direction: row;
+  gap: 16px;
+  margin-bottom: 16px;
 }
 
-.grade-rows {
+.dashboard-col {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  flex: 1;
+}
+
+.chart-col {
+  min-width: 0;
+  flex: 2;
+  justify-content: center;
+}
+
+.stats-col {
+  min-width: 0;
+  flex: 1;
+  justify-content: center;
+}
+
+.stat-cards-col {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  justify-content: center;
 }
 
 // Responsive styles
 @media (max-width: 992px) {
   .charts-container {
     grid-template-columns: 1fr;
+  }
+
+  .dashboard-row {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .chart-col,
+  .stats-col {
+    flex: unset;
+    min-width: 0;
   }
 }
 
@@ -121,4 +150,3 @@
     grid-template-columns: 1fr;
   }
 }
-

@@ -9,6 +9,7 @@ import { DashboardStat } from '@shared/models/dashboard-stats';
 })
 export class StatCardComponent implements OnInit {
   @Input({ required: true }) stat!: DashboardStat;
+  @Input() size!: 'small' | 'medium';
   increase: boolean = false;
 
   ngOnInit(): void {

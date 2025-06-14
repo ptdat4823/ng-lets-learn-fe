@@ -1,6 +1,7 @@
 @use "styles/theme/theme.variables" as *;
 
 :host {
+  height: 312px;
   width: 100%;
 }
 
@@ -15,7 +16,7 @@
 .chart-title {
   font-weight: 600;
   color: $tint-third-color;
-  margin-bottom: 16px;
+  margin: 20px 20px 12px 20px;
   text-align: center;
 }
 
@@ -25,35 +26,6 @@
   width: 100%;
 }
 
-.chart-center {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  pointer-events: none;
-  box-shadow: $box-shadow;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.center-text {
-  font-size: 28px;
-  font-weight: 600;
-  color: #333;
-}
-
-.center-subtext {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 4px;
-}
-
 .chart-legend {
   width: 100%;
   display: flex;
@@ -61,7 +33,7 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 16px;
-  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .legend-item {

@@ -24,6 +24,12 @@
   align-items: flex-start;
   min-width: 0;
   padding: 16px;
+  height: 76px;
+
+  // If size is small, set height to 60px
+  &.small {
+    height: 60px;
+  }
 
   .stat-value {
     font-size: 20px;
