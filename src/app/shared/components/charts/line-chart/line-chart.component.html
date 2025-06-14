@@ -1,0 +1,14 @@
+<div class="line-chart-container">
+  <h3 class="chart-title" *ngIf="title">{{ title }}</h3>
+
+  <div class="chart-wrapper">
+    <canvas #chartCanvas></canvas>
+  </div>
+
+  <div class="chart-legend">
+    <div class="legend-item" *ngFor="let item of chartData">
+      <div class="legend-color" [style.background-color]="item.color"></div>
+      <div class="legend-label">{{ item.label }}</div>
+    </div>
+  </div>
+</div>

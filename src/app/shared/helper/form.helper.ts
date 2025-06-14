@@ -6,7 +6,8 @@ type ComponentType =
   | 'select'
   | 'datetime'
   | 'checkbox'
-  | 'file-upload';
+  | 'file-upload'
+  | 'button';
 
 export interface FormControlField {
   id: string;
@@ -19,4 +20,8 @@ export interface FormControlField {
   description?: string;
   icon?: string;
   validationMessages: { [key: string]: string } | null;
+  onClick?: () => void;
+  note?: string;
+  buttonText?: string;
+  buttonColor?: string;
 }

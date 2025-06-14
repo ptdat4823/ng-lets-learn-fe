@@ -84,6 +84,7 @@ const getTimeStringByDuration = (duration: number, fixed: number = 6) => {
 
   return time;
 };
+
 const getShortTimeStringByDuration = (duration: number, fixed: number = 6) => {
   const years = Math.floor(duration / 31536000);
   duration -= years * 31536000;
@@ -139,6 +140,28 @@ const compareTime = (date1: Date, date2: Date): number => {
   return 0;
 };
 
+
+const getMonthName = (month: number): string => {
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+  if (month < 0) month = 11;
+  return months[month] || '';
+};
+
+const generateMonthOptions = (count: number = 12): { label: string; value: string }[] => {
+  const now = new Date();
+  const options: { label: string; value: string }[] = [];
+  for (let i = 0; i < count; i++) {
+    const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const label = `${date.toLocaleString('default', { month: 'short' })} ${date.getFullYear()}`;
+    const value = `${date.getFullYear()}-${date.getMonth()}`; // e.g., "2024-6"
+    options.push({ label, value });
+  }
+  return options;
+};
+
 export {
   getDurationText,
   getTimeStringByDuration,
@@ -151,4 +174,6 @@ export {
   getTimeBySeconds,
   removeMilliseconds,
   compareTime,
+  getMonthName,
+  generateMonthOptions
 };

@@ -1,0 +1,94 @@
+@use "styles/theme/theme.variables" as *;
+@use "styles/material-ui/material-ui.style" as *;
+
+.activity {
+  span.material-symbols-outlined {
+    color: $tint-color;
+    &.link {
+      color: $link-color;
+    }
+    &.assignment {
+      color: $assignment-color;
+    }
+    &.quiz {
+      color: $quiz-color;
+    }
+    &.file {
+      color: $file-color;
+    }
+    &.page {
+      color: $page-color;
+    }
+    &.meeting {
+      color: $meeting-color;
+    }
+  }
+
+  .activity-header {
+    padding: 24px;
+    margin-top: 16px;
+    font-weight: 500;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    color: #46494F;
+    letter-spacing: 0.1px;
+  }
+
+  .section-menu-icon {
+    margin-left: auto;
+    font-size: 1.5rem;
+    color: black !important;
+    font-variation-settings: 'wght' 700;
+    font-weight: bold;
+  }
+
+  .activity-topics {
+    .activity-topic-row {
+      display: flex;
+      align-items: center;
+      padding: 16px 24px;
+      border-top: 0.5px solid #9ca3af;
+
+      .material-symbols-outlined {
+        margin-right: 16px;
+
+        &.more {
+          cursor: pointer;
+          margin-right: 0;
+        }
+      }
+
+      .topic-title {
+        flex: 1;
+        font-size: 16px;
+        font-weight: 600;
+        color: #05a4bf;
+        cursor: pointer;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      .due-text {
+        margin-right: 16px;
+        color: #6b7280;
+        font-size: 14px;
+      }
+
+      // Move the icon hover effect to only this row
+      &:hover {
+        .material-symbols-outlined {
+          font-variation-settings: $google-icon-hover-setting;
+        }
+        &:active {
+          .material-symbols-outlined {
+            font-variation-settings: $google-icon-active-setting;
+          }
+        }
+      }
+    }
+  }
+}

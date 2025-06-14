@@ -5,15 +5,14 @@ import { Topic } from '@shared/models/topic';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'tab-course',
+  selector: 'tab-course-student',
   standalone: false,
-  templateUrl: './tab-course.component.html',
-  styleUrl: './tab-course.component.scss',
+  templateUrl: './tab-course-student.component.html',
+  styleUrl: './tab-course-student.component.scss',
   providers: [CollapsibleListService],
 })
-export class TabCourseComponent implements OnInit {
+export class TabCourseStudentComponent implements OnInit {
   @Input({ required: true }) course!: Course;
-  @Input() canEdit = true;
   edittingSectionIds: string[] = [];
 
   constructor(
@@ -22,8 +21,8 @@ export class TabCourseComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.collapsibleListService.setCanEdit(this.canEdit);
     const ids = this.course.sections.map((s) => s.id);
+    this.collapsibleListService.setCanEdit(false);
     this.collapsibleListService.setSectionIds(ids);
     this.collapsibleListService.editingSectionIds$.subscribe((ids) => {
       this.edittingSectionIds = ids;
@@ -34,25 +33,5 @@ export class TabCourseComponent implements OnInit {
     navigator.clipboard.writeText(this.course.id).then(() => {
       this.toastr.success('Copied to clipboard');
     });
-  }
-
-  isEditingSection(id: string): boolean {
-    return this.edittingSectionIds.includes(id);
-  }
-
-  addTopic(sectionId: string, topic: Topic) {
-    const currentSection = this.course.sections.find(
-      (section) => section.id === sectionId
-    );
-    if (!currentSection) return;
-
-    const updatedSection: Section = {
-      ...currentSection,
-      topics: [...currentSection.topics, topic],
-    };
-
-    this.course.sections = this.course.sections.map((section) =>
-      section.id === updatedSection.id ? updatedSection : section
-    );
   }
 }

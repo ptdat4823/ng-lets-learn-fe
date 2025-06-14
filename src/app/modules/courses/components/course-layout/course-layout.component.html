@@ -1,16 +1,24 @@
 <app-tab-list />
 @if(course) {
 <main>
-  @if(selectedTab === tabs.COURSE) {
+  @if(selectedTab === tabs.COURSE) { @if(!isStudent){
   <tab-course [course]="course" />
-  } @else if(selectedTab === tabs.ACTIVITIES) {
-  <p>ACTIVITIES</p>
+  } @else {
+  <tab-course-student [course]="course" />
+  } } @else if(selectedTab === tabs.ACTIVITIES) {
+  <tab-activities
+    [course]="course"
+    [isStudent]="isStudent"
+    [user]="user ? user : null"
+  />
   } @else if(selectedTab === tabs.PEOPLE) {
-  <p>PEOPLE</p>
-  } @else if(selectedTab === tabs.DASHBOARD) {
-  <p>DASHBOARD</p>
-  } @else if(selectedTab === tabs.SETTINGS) {
-  <p>SETTINGS</p>
+  <tab-people [course]="course" />
+  } @else if(selectedTab === tabs.DASHBOARD) { @if(!isStudent){
+  <tab-dashboard [course]="course" />
+  } @else {
+  <tab-dashboard-student [course]="course" />
+  } } @else if(selectedTab === tabs.SETTINGS) {
+  <tab-setting [course]="course" />
   }
 </main>
 } @else {

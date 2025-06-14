@@ -2,6 +2,7 @@ import { Course } from '@shared/models/course';
 import { Role } from '@shared/models/user';
 import { mockSections } from './section';
 import { mockCategories } from './category';
+import { mockUsers } from './user';
 
 export const mockCourses: Course[] = [
   {
@@ -15,12 +16,12 @@ export const mockCourses: Course[] = [
       'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YWNjb3VudGluZ3xlbnwwfDB8MHx8fDI%3D',
     price: 79.99,
     level: 'Beginner',
-    students: [],
+    students: [mockUsers[1], mockUsers[2]],
     creator: {
       id: '1',
       username: 'John Doe',
       email: '',
-      avatar: '',
+      avatar: 'https://www.law.columbia.edu/sites/default/files/2020-05/20200402_gillianmetzger_001_profile.jpg',
       password: '',
       role: Role.TEACHER,
       courses: [],
@@ -43,7 +44,7 @@ export const mockCourses: Course[] = [
       id: '1',
       username: 'John Doe',
       email: '',
-      avatar: '',
+      avatar: 'https://www.law.columbia.edu/sites/default/files/2020-05/20200402_gillianmetzger_001_profile.jpg',
       password: '',
       role: Role.TEACHER,
       courses: [],
@@ -66,7 +67,7 @@ export const mockCourses: Course[] = [
       id: '1',
       username: 'John Doe',
       email: '',
-      avatar: '',
+      avatar: 'https://www.law.columbia.edu/sites/default/files/2020-05/20200402_gillianmetzger_001_profile.jpg',
       password: '',
       role: Role.TEACHER,
       courses: [],
@@ -89,7 +90,7 @@ export const mockCourses: Course[] = [
       id: '1',
       username: 'John Doe',
       email: '',
-      avatar: '',
+      avatar: 'https://www.law.columbia.edu/sites/default/files/2020-05/20200402_gillianmetzger_001_profile.jpg',
       password: '',
       role: Role.TEACHER,
       courses: [],
@@ -111,7 +112,7 @@ export const mockCourses: Course[] = [
       id: '1',
       username: 'John Doe',
       email: '',
-      avatar: '',
+      avatar: 'https://www.law.columbia.edu/sites/default/files/2020-05/20200402_gillianmetzger_001_profile.jpg',
       password: '',
       role: Role.TEACHER,
       courses: [],
