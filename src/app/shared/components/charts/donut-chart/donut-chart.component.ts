@@ -9,12 +9,12 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Chart, ChartConfiguration, ChartData, registerables } from 'chart.js';
-import { shadowPlugin } from './donut-chart.plugin';
+import { DonutChartshadowPlugin } from './donut-chart.plugin';
 
 // Register all Chart.js components
 Chart.register(...registerables);
 
-export interface ChartItem {
+export interface DonutChartSegment {
   label: string;
   value: number;
   color: string;
@@ -29,7 +29,7 @@ export interface ChartItem {
 export class DonutChartComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild('chartCanvas') chartCanvas!: ElementRef<HTMLCanvasElement>;
 
-  @Input() chartData: ChartItem[] = [];
+  @Input() chartData: DonutChartSegment[] = [];
   @Input() title: string = '';
   @Input() centerText: string = '';
   @Input() centerSubtext: string = '';
@@ -119,7 +119,7 @@ export class DonutChartComponent implements OnInit, AfterViewInit, OnChanges {
           },
         },
       },
-      plugins: [shadowPlugin],
+      plugins: [DonutChartshadowPlugin],
     };
 
     this.chart = new Chart(ctx, config);

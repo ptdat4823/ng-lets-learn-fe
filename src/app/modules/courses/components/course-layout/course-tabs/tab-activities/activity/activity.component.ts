@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Section } from '@shared/models/course';
 import {
   AssignmentTopic,
@@ -20,6 +21,7 @@ import { format, differenceInCalendarDays, isAfter } from 'date-fns';
 export class ActivityComponent implements OnInit {
   @Input({ required: true }) section!: Section;
   @Input({ required: false }) user!: User | null;
+  router = inject(Router);
   dueText: string | null = null;
   iconMap = iconMap;
   constructor() {}
@@ -58,5 +60,11 @@ export class ActivityComponent implements OnInit {
   setUnderline(event: Event, underline: boolean) {
     const target = event.target as HTMLElement;
     target.style.textDecoration = underline ? 'underline' : 'none';
+  }
+
+  onTopicClick(topic: Topic): void {
+    this.router.navigate([
+      `${this.router.url}/${topic.type}/${topic.id}`,
+    ]);
   }
 }

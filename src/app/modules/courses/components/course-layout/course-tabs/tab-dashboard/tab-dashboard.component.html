@@ -1,4 +1,9 @@
-<div class="dashboard-container" [ngStyle]="{ 'background-color': selectedTab === 'quiz' ? '#FDF2F8' : '#FAF5FF' }">
+<div
+  class="dashboard-container"
+  [ngStyle]="{
+    'background-color': selectedTab === 'quiz' ? '#FDF2F8' : '#FAF5FF'
+  }"
+>
   <div class="dashboard-paper">
     <div class="dashboard-header">
       <div class="header-spacer"></div>
@@ -56,6 +61,24 @@
           ></app-donut-chart>
         </div>
       </div>
+      <div class="charts-container">
+        <div class="chart-card">
+          <app-bar-chart
+            [segments]="assignmentsAvgMarkSegments"
+            [maxValue]="10"
+            title="Average Mark"
+            centerText="--"
+          ></app-bar-chart>
+        </div>
+        <div class="chart-card">
+          <app-bar-chart
+            [segments]="assignmentsCompletionRateSegments"
+            [maxValue]="100"
+            title="Completion Rate"
+            centerText="--"
+          ></app-bar-chart>
+        </div>
+      </div>
     </ng-container>
 
     <ng-container *ngIf="selectedTab === 'quiz'">
@@ -80,28 +103,29 @@
           ></app-donut-chart>
         </div>
       </div>
+      <div class="charts-container">
+        <div class="chart-card">
+          <app-bar-chart
+            [segments]="quizAvgMarkSegments"
+            [maxValue]="10"
+            title="Average Mark"
+            centerText="--"
+          ></app-bar-chart>
+        </div>
+        <div class="chart-card">
+          <app-bar-chart
+            [segments]="quizCompletionRateSegments"
+            [maxValue]="100"
+            title="Completion Rate"
+            centerText="--"
+          ></app-bar-chart>
+        </div>
+      </div>
     </ng-container>
 
     <div class="grading-section">
       <div class="grading-header">
-        <h3 class="grading-title">Grading</h3>
-        <button class="filter-button">
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M5 10H15M2.5 5H17.5M7.5 15H12.5"
-              stroke="#666"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </button>
+        <h3 class="grading-title">Student rank</h3>
       </div>
 
       <div class="grade-rows">

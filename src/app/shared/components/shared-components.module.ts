@@ -36,7 +36,7 @@ import { CommentInputComponent } from './comment-list/comment-input/comment-inpu
 import { CommentListComponent } from './comment-list/comment-list.component';
 import { CommentComponent } from './comment-list/comment/comment.component';
 import { ConfirmMessageContentComponent } from './confirm-message/confirm-message-content/confirm-message-content.component';
-import { DonutChartComponent } from './donut-chart/donut-chart.component';
+import { DonutChartComponent } from './charts/donut-chart/donut-chart.component';
 import { DropdownComponent } from './dropdown/dropdown.component';
 import { FormFieldComponent } from './form-field/form-field.component';
 import { SettingRowComponent } from './setting-row/setting-row.component';
@@ -54,6 +54,10 @@ import { RankCComponent } from './ranking/rank-logo/rank-c.component';
 import { RankSComponent } from './ranking/rank-logo/rank-s.component';
 import { RankItemComponent } from './ranking/rank-item/rank-item.component';
 import { ColorItemComponent } from './ranking/color-item/color-item.component';
+import { StatCardComponent } from './stat-card/stat-card.component';
+import { MatIconModule } from '@angular/material/icon';
+import { LineChartComponent } from './charts/line-chart/line-chart.component';
+import { BarChartComponent } from './charts/bar-chart/bar-chart.component';
 
 @NgModule({
   declarations: [
@@ -86,6 +90,8 @@ import { ColorItemComponent } from './ranking/color-item/color-item.component';
     CommentComponent,
     DropdownComponent,
     DonutChartComponent,
+    LineChartComponent,
+    BarChartComponent,    
     BreadcrumbComponent,
     FileUploadComponent,
     RankLogoComponent,
@@ -95,6 +101,7 @@ import { ColorItemComponent } from './ranking/color-item/color-item.component';
     RankSComponent,
     RankItemComponent,
     ColorItemComponent,
+    StatCardComponent,
   ],
   imports: [
     CommonModule,
@@ -110,6 +117,7 @@ import { ColorItemComponent } from './ranking/color-item/color-item.component';
     MatExpansionModule,
     MatCheckboxModule,
     FormsModule,
+    MatIconModule,
   ],
   exports: [
     FormWarningComponent,
@@ -138,6 +146,8 @@ import { ColorItemComponent } from './ranking/color-item/color-item.component';
     CommentInputComponent,
     DropdownComponent,
     DonutChartComponent,
+    BarChartComponent,    
+    LineChartComponent,
     FileUploadComponent,
     RankLogoComponent,
     RankAComponent,
@@ -146,6 +156,7 @@ import { ColorItemComponent } from './ranking/color-item/color-item.component';
     RankSComponent,
     RankItemComponent,
     ColorItemComponent,
+    StatCardComponent,
   ],
 })
 export class SharedComponentsModule {}

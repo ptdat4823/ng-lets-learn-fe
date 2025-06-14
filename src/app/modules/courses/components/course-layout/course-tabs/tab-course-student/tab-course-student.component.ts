@@ -22,6 +22,7 @@ export class TabCourseStudentComponent implements OnInit {
 
   ngOnInit(): void {
     const ids = this.course.sections.map((s) => s.id);
+    this.collapsibleListService.setCanEdit(false);
     this.collapsibleListService.setSectionIds(ids);
     this.collapsibleListService.editingSectionIds$.subscribe((ids) => {
       this.edittingSectionIds = ids;

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ChartItem } from '@shared/components/donut-chart/donut-chart.component';
+import { DonutChartSegment } from '@shared/components/charts/donut-chart/donut-chart.component';
 import { DashboardStat } from '@shared/models/dashboard-stats';
 
 @Component({
@@ -11,8 +11,8 @@ import { DashboardStat } from '@shared/models/dashboard-stats';
 export class DashboardComponent implements OnInit {
   studentCount = 40;
   stats: DashboardStat[] = [];
-  fileTypeSegments: ChartItem[] = [];
-  gradedAssignmentsSegments: ChartItem[] = [];
+  fileTypeSegments: DonutChartSegment[] = [];
+  gradedAssignmentsSegments: DonutChartSegment[] = [];
 
   ngOnInit(): void {
     this.stats = [

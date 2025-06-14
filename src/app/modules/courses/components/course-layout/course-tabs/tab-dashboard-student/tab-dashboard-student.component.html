@@ -1,1 +1,35 @@
-<p>tab-dashboard-student works!</p>
+<div class="dashboard-container">
+  <div class="dashboard-paper">
+    <ng-container>
+      <div class="stat-cards-row">
+        <stat-card *ngFor="let stat of quizStats" [stat]="stat"></stat-card>
+      </div>
+      <div class="charts-container">
+        <div class="chart-card">
+          <app-line-chart
+            [chartData]="[
+              { label: 'Math', data: [10, 20, 30], color: '#6366f1' },
+              { label: 'Science', data: [15, 25, 35], color: '#f59e42' }
+            ]"
+            [labels]="['Jan', 'Feb', 'Mar']"
+            title="Performance Over Time"
+            centerText="75"
+            centerSubtext="Average"
+          ></app-line-chart>
+        </div>
+        <div class="chart-card">
+          <app-line-chart
+            [chartData]="[
+              { label: 'Math', data: [10, 20, 30], color: '#6366f1' },
+              { label: 'Science', data: [15, 25, 35], color: '#f59e42' }
+            ]"
+            [labels]="['Jan', 'Feb', 'Mar']"
+            title="Performance Over Time"
+            centerText="75"
+            centerSubtext="Average"
+          ></app-line-chart>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

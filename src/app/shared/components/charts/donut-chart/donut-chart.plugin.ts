@@ -1,7 +1,7 @@
 import { hexToRgba } from '@shared/helper/chart.helper';
 import { Plugin } from 'chart.js';
 
-export const shadowPlugin: Plugin = {
+export const DonutChartshadowPlugin: Plugin = {
   id: 'segmentShadow',
   beforeDatasetDraw(chart: any, args: any, options: any) {
     const { ctx } = chart;

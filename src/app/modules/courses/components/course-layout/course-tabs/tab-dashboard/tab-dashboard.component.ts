@@ -1,10 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Course } from '@shared/models/course';
-import { ChartItem } from '@shared/components/donut-chart/donut-chart.component';
+import { DonutChartSegment } from '@shared/components/charts/donut-chart/donut-chart.component';
 import { DashboardStat } from '@shared/models/dashboard-stats';
 import { getMonthName } from '@shared/helper/date.helper';
 import { generateMonthOptions } from '@shared/helper/date.helper';
 import { ComboboxService } from '@shared/components/combobox/combobox.service';
+import { BarChartSegment } from '@shared/components/charts/bar-chart/bar-chart.component';
 
 @Component({
   selector: 'tab-dashboard',
@@ -25,11 +26,17 @@ export class TabDashboardComponent implements OnInit {
   assignmentsStats: DashboardStat[] = [];
   quizStats: DashboardStat[] = [];
 
-  fileTypeSegments: ChartItem[] = [];
-  gradedSegments: ChartItem[] = [];
+  //assignments chart data
+  fileTypeSegments: DonutChartSegment[] = [];
+  gradedSegments: DonutChartSegment[] = [];
+  assignmentsAvgMarkSegments: BarChartSegment[] = [];
+  assignmentsCompletionRateSegments: BarChartSegment[] = [];
 
-  questionTypeSegments: ChartItem[] = [];
-  studentMarkSegments: ChartItem[] = [];
+  //quiz chart data
+  questionTypeSegments: DonutChartSegment[] = [];
+  studentMarkSegments: DonutChartSegment[] = [];
+  quizAvgMarkSegments: BarChartSegment[] = [];
+  quizCompletionRateSegments: BarChartSegment[] = [];
 
   ngOnInit(): void {
     this.monthOptions = generateMonthOptions();
@@ -73,6 +80,16 @@ export class TabDashboardComponent implements OnInit {
       { value: 60, color: '#FFC107', label: '20 - 49 points' },
       { value: 30, color: '#FF5252', label: '0 - 19 points' },
     ];
+    this.assignmentsAvgMarkSegments = [
+      { value: 8.2, color: '#06B6D4', label: 'First exam' },
+      { value: 8.2, color: '#06B6D4', label: 'Introduction to Astronogy' },
+      { value: 6.6, color: '#06B6D4', label: 'Final test' },
+    ];
+    this.assignmentsCompletionRateSegments = [
+      { value: 82, color: '#8B5CF6', label: 'First exam' },
+      { value: 82, color: '#8B5CF6', label: 'Introduction to Astronogy' },
+      { value: 66, color: '#8B5CF6', label: 'Final test' },
+    ];
     this.questionTypeSegments = [
       { value: 300, color: '#EC4899', label: 'Multiple choice' },
       { value: 75, color: '#8B5CF6', label: 'True/false' },
@@ -84,6 +101,16 @@ export class TabDashboardComponent implements OnInit {
       { value: 10, color: '#4CAF50', label: '20 - 49%' },
       { value: 5, color: '#FFC107', label: '0 - 19%' },
       { value: 5, color: '#9E9E9E', label: 'Not attempted' },
+    ];
+    this.quizAvgMarkSegments = [
+      { value: 8.2, color: '#06B6D4', label: 'First exam' },
+      { value: 8.2, color: '#06B6D4', label: 'Introduction to Astronogy' },
+      { value: 6.6, color: '#06B6D4', label: 'Final test' },
+    ];
+    this.quizCompletionRateSegments = [
+      { value: 82, color: '#8B5CF6', label: 'First exam' },
+      { value: 82, color: '#8B5CF6', label: 'Introduction to Astronogy' },
+      { value: 66, color: '#8B5CF6', label: 'Final test' },
     ];
   }
 

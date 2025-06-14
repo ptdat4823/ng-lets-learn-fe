@@ -53,6 +53,8 @@ export class CourseLayoutComponent implements OnInit {
         this.tabService.setTabs(COURSE_STUDENT_TABS);
         this.isStudent = true;
       }
+      // this.tabService.setTabs(COURSE_STUDENT_TABS);
+      // this.isStudent = true;
     });
   }
 
