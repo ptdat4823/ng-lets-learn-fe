@@ -44,11 +44,20 @@ export class QuizPageComponent implements OnInit {
       this.updateBreadcrumb(this.course as Course, this.topic);
     }
   }
-
   ngOnInit(): void {
     this.topicIcon = iconMap[this.topic.type];
     this.tabService.selectTab(this.selectedTab);
-    this.tabService.setTabs(QUIZ_STUDENT_TABS);
+    
+    // Check current user first
+    const currentUser = this.userService.getUser();
+    if (currentUser?.role === Role.TEACHER) {
+      this.tabService.setTabs(QUIZ_TEACHER_TABS);
+      this.isStudent = false;
+    } else {
+      this.tabService.setTabs(QUIZ_STUDENT_TABS);
+      this.isStudent = true;
+    }
+    
     this.tabService.selectedTab$.subscribe((tab) => {
       if (tab) this.selectedTab = tab;
     });

@@ -31,13 +31,6 @@ import { StatusColumnComponent } from './components/quiz-page/quiz-tabs/tab-ques
 import { ActionColumnComponent } from './components/quiz-page/quiz-tabs/tab-question-bank/question-bank-table/table-columns/action-column/action-column.component';
 import { TabDashboardComponent } from './components/quiz-page/quiz-tabs/tab-dashboard/tab-dashboard.component';
 import { DashboardComponent } from './components/quiz-page/quiz-tabs/tab-dashboard/dashboard/dashboard.component';
-import { RankAComponent } from './components/quiz-page/quiz-tabs/tab-dashboard/rank-logo/rank-a.component';
-import { RankBComponent } from './components/quiz-page/quiz-tabs/tab-dashboard/rank-logo/rank-b.component';
-import { RankCComponent } from './components/quiz-page/quiz-tabs/tab-dashboard/rank-logo/rank-c.component';
-import { RankSComponent } from './components/quiz-page/quiz-tabs/tab-dashboard/rank-logo/rank-s.component';
-import { RankItemComponent } from './components/quiz-page/quiz-tabs/tab-dashboard/rank-item/rank-item.component';
-import { RankLogoComponent } from './components/quiz-page/quiz-tabs/tab-dashboard/rank-logo/rank-logo.component';
-import { ColorItemComponent } from './components/quiz-page/quiz-tabs/tab-dashboard/color-item/color-item.component';
 @NgModule({
   declarations: [
     QuizResultTableComponent,
@@ -64,14 +57,7 @@ import { ColorItemComponent } from './components/quiz-page/quiz-tabs/tab-dashboa
     StatusColumnComponent,
     ActionColumnComponent,
     TabDashboardComponent,
-    DashboardComponent,
-    RankAComponent,
-    RankBComponent,
-    RankCComponent,
-    RankSComponent,
-    RankItemComponent,
-    RankLogoComponent,
-    ColorItemComponent
+    DashboardComponent
   ],
   imports: [
     SharedModule,
