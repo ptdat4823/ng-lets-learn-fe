@@ -12,7 +12,13 @@
   red: variant.includes('red'),
 }"
   (click)="handleClick()"
+  [disabled]="loading"
 >
+  @if(loading) {
+  <!-- Go to https://loading.io/ for more loading style-->
+  <img src="svgs/loading-24px.svg" alt="Loading..." />
+  } @else {
   <ng-content select="[icon]"></ng-content>
   {{ label }}
+  }
 </button>
