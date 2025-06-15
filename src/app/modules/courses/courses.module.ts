@@ -20,6 +20,8 @@ import { TabDashboardComponent } from './components/course-layout/course-tabs/ta
 import { TabSettingComponent } from './components/course-layout/course-tabs/tab-setting/tab-setting.component';
 import { TabCourseStudentComponent } from './components/course-layout/course-tabs/tab-course-student/tab-course-student.component';
 import { TabDashboardStudentComponent } from './components/course-layout/course-tabs/tab-dashboard-student/tab-dashboard-student.component';
+import { AddTopicDialogComponent } from './components/add-topic-dialog/add-topic-dialog.component';
+import { UpdateCourseImageDialogComponent } from './components/update-course-image-dialog/update-course-image-dialog.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +40,8 @@ import { TabDashboardStudentComponent } from './components/course-layout/course-
     TabSettingComponent,
     TabCourseStudentComponent,
     TabDashboardStudentComponent,
+    AddTopicDialogComponent,
+    UpdateCourseImageDialogComponent,
   ],
   imports: [
     SharedModule,

@@ -8,8 +8,7 @@
       <p>cPquskdja</p>
       <span class="material-symbols-outlined"> content_copy </span>
     </div>
-  </div>
-  <button class="customize-btn">
+  </div>  <button class="customize-btn" (click)="onCustomizeCourse()">
     <span class="material-symbols-outlined"> stylus </span> Customize
   </button>
   <img [src]="course.imageUrl" />
@@ -44,8 +43,10 @@
         </div>
         } @if(canEdit) {
 
-        <div class="topic-action-buttons">
-          <app-button label="Add new topic">
+          <div class="topic-action-buttons">
+          <app-button 
+            label="Add new topic"
+            (onClick)="openAddTopicDialog(section.id)">
             <span class="material-symbols-outlined" icon> add_circle </span>
           </app-button>
         </div>
@@ -55,15 +56,38 @@
     }
   </app-collapsible-list>
 
-  @if(canEdit) {
-  <div class="action-buttons">
-    <app-button label="Cancel changes" variant="secondary" />
-    <app-button label="Add new section">
+  @if(canEdit) {  
+    <div class="action-buttons">
+    <app-button 
+      label="Cancel changes" 
+      variant="secondary"
+      (onClick)="cancelChanges()" />
+    <app-button 
+      label="Add new section"
+      (onClick)="addNewSection()">
       <span class="material-symbols-outlined" icon> add_circle </span>
     </app-button>
-    <app-button label="Save">
+    <app-button 
+      label="Save"
+      (onClick)="saveCourse()">
       <span class="material-symbols-outlined" icon> save </span>
-    </app-button>
-  </div>
+    </app-button>  </div>
   }
 </div>
+
+<!-- Add Topic Dialog Component -->
+<app-add-topic-dialog 
+  [show]="showAddTopicDialog"
+  [sectionId]="selectedSectionId"
+  (closeDialog)="closeAddTopicDialog()"
+  (addTopic)="onAddTopic($event)">
+</app-add-topic-dialog>
+
+<!-- Update Course Image Dialog Component -->
+<app-update-course-image-dialog 
+  [show]="showUpdateImageDialog"
+  [course]="course"
+  (closeDialog)="closeUpdateImageDialog()"
+  (updateImage)="onUpdateImage($event)">
+</app-update-course-image-dialog>
+
