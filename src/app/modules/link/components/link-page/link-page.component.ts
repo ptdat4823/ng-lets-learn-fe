@@ -23,7 +23,7 @@ import { UserService } from '@shared/services/user.service';
 export class LinkPageComponent implements OnInit{
 
   course: Course | null = null;
-  topic: LinkTopic = mockTopics[5] as LinkTopic;
+  topic: LinkTopic = mockTopics[3] as LinkTopic;
   tabs = LinkTab;
   user: User | null = null;
   isStudent = true;
@@ -65,9 +65,8 @@ export class LinkPageComponent implements OnInit{
         this.isStudent = true;
       }
     });
-  }
-  fetchTopicData(topicId: string) {
-    this.topic = mockTopics.find(t => t.id === topicId) as LinkTopic || mockTopics[5] as LinkTopic;
+  }  fetchTopicData(topicId: string) {
+    this.topic = mockTopics.find(t => t.id === topicId) as LinkTopic || mockTopics[3] as LinkTopic;
   }
 
   fetchCourseData(courseId: string) {
