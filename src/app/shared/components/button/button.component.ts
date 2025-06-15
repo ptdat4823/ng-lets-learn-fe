@@ -20,6 +20,7 @@ export class ButtonComponent {
   @Input() label: string = 'Button';
   @Input() type: 'button' | 'submit' = 'button';
   @Input() variant: ButtonVariant = 'primary';
+  @Input() loading: boolean = false;
   @Output() onClick = new EventEmitter<void>();
 
   handleClick() {

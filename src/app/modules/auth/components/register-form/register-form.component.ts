@@ -2,6 +2,10 @@ import { Component, inject, type OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { registerFormConfig } from './register-form.config';
 import { confirmPasswordMatchValidator } from '@shared/validation/confirm-password-match.validator';
+import { ToastrService } from 'ngx-toastr';
+import { SignUp } from '@modules/auth/api/auth.api';
+import { Role } from '@shared/models/user';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'register-form',
@@ -10,11 +14,16 @@ import { confirmPasswordMatchValidator } from '@shared/validation/confirm-passwo
   styleUrl: './register-form.component.scss',
 })
 export class RegisterFormComponent implements OnInit {
-  private fb: FormBuilder = inject(FormBuilder);
-
   showPassword = false;
   form!: FormGroup;
   formConfig = registerFormConfig;
+  loading = false;
+
+  constructor(
+    private fb: FormBuilder,
+    private toastService: ToastrService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.form = this.fb.group(this.formConfig.schema, {
@@ -26,7 +35,7 @@ export class RegisterFormComponent implements OnInit {
     this.showPassword = !this.showPassword;
   }
 
-  onSubmit(e: Event): void {
+  async onSubmit(e: Event): Promise<void> {
     e.preventDefault(); // Prevent default form submission
     // Stop here if form is invalid
     if (this.form.invalid) {
@@ -34,10 +43,24 @@ export class RegisterFormComponent implements OnInit {
       return;
     }
 
-    // Here you would typically call your authentication service
+    this.loading = true;
+    const { email, password, username, isTeacher } = this.form.value;
+    await SignUp(
+      username,
+      email,
+      password,
+      isTeacher ? Role.TEACHER : Role.STUDENT
+    )
+      .then((res) => {
+        this.toastService.success(res.message);
+        this.router.navigate(['/login']);
+      })
+      .catch((error) => {
+        this.toastService.error(error.message);
+      })
+      .finally(() => {
+        this.loading = false;
+      });
     console.log('Register:', this.form.value);
-
-    // Navigate to dashboard or home page after successful login
-    // this.router.navigate(['/dashboard']);
   }
 }
