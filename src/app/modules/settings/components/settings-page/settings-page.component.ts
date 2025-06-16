@@ -36,11 +36,13 @@ export class SettingsPageComponent implements OnInit {
     this.tabService.setTabs(this.tabs);
     this.tabService.selectTab(this.selectedTab);
   }
-
   ngOnInit(): void {
+    this.user = this.userService.getUser();
+    
     this.tabService.selectedTab$.subscribe((tab) => {
       if (tab) this.selectedTab = tab;
     });
+    
     this.userService.user$.subscribe((user) => {
       this.user = user;
     });

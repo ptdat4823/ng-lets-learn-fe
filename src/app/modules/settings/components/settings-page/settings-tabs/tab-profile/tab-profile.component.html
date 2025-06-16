@@ -1,35 +1,41 @@
 <div class="profile-section">
-  <div class="form-section">
-    <div class="form-group">
-      <label>Username</label>
-      <form-input
-        placeholder="ptdat4823"
-        [readonly]="true"
-      />
-    </div>
+  <form [formGroup]="profileForm" (ngSubmit)="saveProfile($event)" class="profile-form">
+    <div class="form-section">      
+      <div class="form-controls">
+        <app-form-field
+          [control]="usernameControl"
+          [controlName]="'username'"
+          [form]="profileForm"
+          [showLabel]="true"
+        />        
+        <app-form-field
+          [control]="emailControl"
+          [controlName]="'email'"
+          [form]="profileForm"
+          [showLabel]="true"
+        />
+      </div>
 
-    <div class="form-group">
-      <label>Email</label>
-      <form-input
-        placeholder="phamtiendat4823@gmail.com"
-        [readonly]="true"
-      />
+      <div class="submit-container">
+        <div class="submit-button">
+          <app-button type="submit" label="Save Profile" variant="primary" />
+        </div>
+      </div>
     </div>
-  </div>
-
+  </form>
   <div class="image-section">
-    <div class="profile-image">
-      <img [src]="user?.avatar || 'assets/images/default-avatar.png'" [alt]="user?.username + ' profile picture'" />
+    <div class="profile-image-container">
+      <div class="profile-image">
+        <img [src]="user?.avatar || 'public/images/mock-user-image.jpg'" [alt]="user?.username + ' profile picture'" />
+      </div>
     </div>
-    
     <div class="image-requirements">
       <h3>Image requirement</h3>
+      <p>Your image needs to have:</p>
       <ul>
-        <li>Max size of 2MB</li>
-        <li>Only .jpg, .jpeg, .png or .webp</li>
+        <li><span class="material-symbols-outlined check-icon">check_circle</span>Max size of 2MB</li>
+        <li><span class="material-symbols-outlined check-icon">check_circle</span>Only .jpg, .jpeg, .png or .webp</li>
       </ul>
     </div>
   </div>  
 </div>
-
-<app-button type="submit" label="Save Profile" class="submit-button" variant="primary" />
