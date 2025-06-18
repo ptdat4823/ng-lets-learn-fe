@@ -1,21 +1,32 @@
 <div class="profile-section">
   <form [formGroup]="profileForm" (ngSubmit)="saveProfile($event)" class="profile-form">
-    <div class="form-section">      
+    <div class="form-section">
       <div class="form-controls">
-        <app-form-field
-          [control]="usernameControl"
-          [controlName]="'username'"
+        <form-input
+          id="username"
           [form]="profileForm"
-          [showLabel]="true"
-        />        
-        <app-form-field
-          [control]="emailControl"
-          [controlName]="'email'"
+          type="text"
+          controlName="username"
+          placeholder="Enter username"
+          [validationMessages]="formConfig.validationMessages.username"
+        >
+          <label for="username" icon>
+            <span class="material-symbols-outlined"> person </span>
+          </label>
+        </form-input>
+        <form-input
+          id="email"
           [form]="profileForm"
-          [showLabel]="true"
-        />
+          type="email"
+          controlName="email"
+          placeholder="Enter email"
+          [validationMessages]="formConfig.validationMessages.email"
+        >
+          <label for="email" icon>
+            <span class="material-symbols-outlined"> mail </span>
+          </label>
+        </form-input>
       </div>
-
       <div class="submit-container">
         <div class="submit-button">
           <app-button type="submit" label="Save Profile" variant="primary" />
@@ -37,5 +48,5 @@
         <li><span class="material-symbols-outlined check-icon">check_circle</span>Only .jpg, .jpeg, .png or .webp</li>
       </ul>
     </div>
-  </div>  
+  </div>
 </div>

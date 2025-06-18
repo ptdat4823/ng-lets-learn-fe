@@ -1,43 +1,36 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { passwordFormSchema, passwordFormControls } from '../settings-form.config';
-import { FormControlField } from '@shared/helper/form.helper';
+import { passwordFormConfig } from '../settings-form.config';
+import { scrollToFirstInvalidField } from '@shared/helper/common.helper';
+import { confirmPasswordMatchValidator } from '@shared/validation/confirm-password-match.validator';
 
 @Component({
   selector: 'tab-password',
   standalone: false,
   templateUrl: './tab-password.component.html',
-  styleUrl: './tab-password.component.scss'
+  styleUrl: './tab-password.component.scss',
 })
 export class TabPasswordComponent {
-  passwordForm: FormGroup;
-  passwordFormControls: FormControlField[] = passwordFormControls;
+  passwordForm!: FormGroup;
+  formConfig = passwordFormConfig;
+  loading = false;
 
   constructor(private fb: FormBuilder) {
-    this.passwordForm = this.fb.group(passwordFormSchema);
+    this.passwordForm = this.fb.group(this.formConfig.schema, {
+      validators: confirmPasswordMatchValidator,
+    });
   }
 
   changePassword(e: Event): void {
-    e.preventDefault(); 
-    
-    if (this.passwordForm.valid) {
-      console.log('Password change attempt with:', this.passwordForm.value);
+    e.preventDefault();
+    if (this.passwordForm.invalid) {
+      this.passwordForm.markAllAsTouched();
+      scrollToFirstInvalidField();
       return;
     }
-
-    this.passwordForm.markAllAsTouched();
-    this.scrollToFirstInvalidField();
-  }
-
-  private scrollToFirstInvalidField(): void {
-    const firstInvalidControl = document.querySelector('form .ng-invalid') as HTMLElement;
+    this.loading = true;
     
-    if (!firstInvalidControl) return;
-    
-    firstInvalidControl.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center',
-    });
-    firstInvalidControl.focus();
+    console.log('Password change attempt with:', this.passwordForm.value);
+    this.loading = false;
   }
 }
