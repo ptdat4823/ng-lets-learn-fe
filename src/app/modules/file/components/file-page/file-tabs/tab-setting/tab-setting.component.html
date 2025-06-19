@@ -1,12 +1,13 @@
 <div class="settings-container">
   <card>
-    <h3 class="card-title">Edit setting</h3>
+    <h3 class="card-title">Edit Setting</h3>
   <form [formGroup]="form" (submit)="onSubmit($event)">
     <app-collapsible-list>
       <app-collapsible-section [sectionId]="sectionIds[0]" [hasBorder]="false">
         <!-- Section dynamic title -->
         <span class="title" title>General</span>
-        <!-- Section dynamic content -->        <div class="content" content>
+        <!-- Section dynamic content -->        
+         <div class="content" content>
           @for(control of generalFormControls; track control.id) {
           <setting-row [label]="control.label" [id]="control.id">
             <app-form-field
