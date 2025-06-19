@@ -1,22 +1,33 @@
 import { FormControl, Validators } from '@angular/forms';
 import { FormControlField } from '@shared/helper/form.helper';
-import { CloudinaryFile } from '@shared/models/cloudinary-file';
+
 export const linkSettingFormSchema = {
   name: new FormControl('', [Validators.required, Validators.minLength(2)]),
+  externalUrl: new FormControl('', [Validators.required, Validators.pattern(/^https?:\/\//)]),
   description: new FormControl(''),
-  additionalFile: new FormControl([] as CloudinaryFile[]),
 };
 
 export const linkGeneralSettingFormControls: FormControlField[] = [
   {
     id: 'name',
-    label: 'Link name',
+    label: 'Name',
     type: 'text',
     componentType: 'input',
-    placeholder: 'Enter link name',
+    placeholder: 'Astronomy conception',
     validationMessages: {
-      required: 'Link name is required',
-      minlength: 'Link name must be at least 2 characters',
+      required: 'Name is required',
+      minlength: 'Name must be at least 2 characters',
+    },
+  },
+  {
+    id: 'externalUrl',
+    label: 'External URL',
+    type: 'url',
+    componentType: 'input',
+    placeholder: 'URL here',
+    validationMessages: {
+      required: 'External URL is required',
+      pattern: 'Please enter a valid URL starting with http:// or https://',
     },
   },
   {
@@ -24,15 +35,19 @@ export const linkGeneralSettingFormControls: FormControlField[] = [
     label: 'Description',
     type: 'text',
     componentType: 'input',
-    placeholder: 'Description for file here',
-    validationMessages: {},
-  },
-  {
-    id: 'additionalFile',
-    label: 'File upload',
-    type: '',
-    componentType: 'file-upload',
-    placeholder: '',
+    placeholder: 'Description for URL here',
     validationMessages: {},
   },
 ];
+
+export const linkValidationMessages = {
+  name: {
+    required: 'Name is required',
+    minlength: 'Name must be at least 2 characters',
+  },
+  externalUrl: {
+    required: 'External URL is required',
+    pattern: 'Please enter a valid URL starting with http:// or https://',
+  },
+  description: {},
+};
