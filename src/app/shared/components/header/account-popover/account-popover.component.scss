@@ -1,0 +1,51 @@
+@use "styles/theme/theme.variables" as *;
+@use "styles/material-ui/material-ui.style" as *;
+
+.container {
+  min-width: 150px;
+  font-family: Nunito;
+
+  .material-symbols-outlined {
+    font-size: 20px;
+  }
+
+  .avatar {
+    width: 24px;
+    height: 24px;
+    ::ng-deep .image-container {
+      --icon-size: 28px;
+    }
+  }
+
+  .option {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    padding: 4px;
+    border-radius: 4px;
+    & + .option {
+      margin-top: 4px;
+    }
+    &:hover {
+      background-color: $background-hover-color;
+      .material-symbols-outlined {
+        font-variation-settings: $google-icon-hover-setting;
+      }
+    }
+    &.red {
+      color: $error-color;
+      &:hover {
+        background-color: $error-hover-color;
+      }
+    }
+  }
+
+  .divider {
+    height: 1px;
+    background-color: $border-color;
+    margin: 6px 0;
+  }
+}

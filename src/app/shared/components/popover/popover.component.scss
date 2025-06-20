@@ -1,0 +1,10 @@
+@use "styles/theme/theme.variables" as *;
+
+.popover {
+  margin-top: 4px;
+  background-color: $background-color;
+  color: $text-color;
+  padding: 8px;
+  border-radius: 6px;
+  box-shadow: $box-shadow;
+}

@@ -58,6 +58,9 @@ import { StatCardComponent } from './stat-card/stat-card.component';
 import { MatIconModule } from '@angular/material/icon';
 import { LineChartComponent } from './charts/line-chart/line-chart.component';
 import { BarChartComponent } from './charts/bar-chart/bar-chart.component';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { PopoverComponent } from './popover/popover.component';
+import { AccountPopoverComponent } from './header/account-popover/account-popover.component';
 
 @NgModule({
   declarations: [
@@ -91,7 +94,7 @@ import { BarChartComponent } from './charts/bar-chart/bar-chart.component';
     DropdownComponent,
     DonutChartComponent,
     LineChartComponent,
-    BarChartComponent,    
+    BarChartComponent,
     BreadcrumbComponent,
     FileUploadComponent,
     RankLogoComponent,
@@ -102,6 +105,8 @@ import { BarChartComponent } from './charts/bar-chart/bar-chart.component';
     RankItemComponent,
     ColorItemComponent,
     StatCardComponent,
+    PopoverComponent,
+    AccountPopoverComponent,
   ],
   imports: [
     CommonModule,
@@ -118,6 +123,7 @@ import { BarChartComponent } from './charts/bar-chart/bar-chart.component';
     MatCheckboxModule,
     FormsModule,
     MatIconModule,
+    OverlayModule,
   ],
   exports: [
     FormWarningComponent,
@@ -146,7 +152,7 @@ import { BarChartComponent } from './charts/bar-chart/bar-chart.component';
     CommentInputComponent,
     DropdownComponent,
     DonutChartComponent,
-    BarChartComponent,    
+    BarChartComponent,
     LineChartComponent,
     FileUploadComponent,
     RankLogoComponent,
@@ -157,6 +163,8 @@ import { BarChartComponent } from './charts/bar-chart/bar-chart.component';
     RankItemComponent,
     ColorItemComponent,
     StatCardComponent,
+    PopoverComponent,
+    AccountPopoverComponent,
   ],
 })
 export class SharedComponentsModule {}

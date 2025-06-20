@@ -13,10 +13,10 @@ span.material-symbols-outlined {
   color: $icon-color;
 }
 
-::ng-deep .avatar {
-  width: 36px !important;
-  height: 36px !important;
-  span.material-symbols-outlined {
+.avatar {
+  width: 36px;
+  height: 36px;
+  ::ng-deep .image-container {
     --icon-size: 40px;
   }
 }
