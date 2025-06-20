@@ -13,6 +13,7 @@ import { BreadcrumbItem } from '../breadcrumb/breadcrumb.component';
 export class HeaderComponent implements OnInit {
   router = inject(Router);
   breadcrumbItems: BreadcrumbItem[] = [];
+  showAccountPopover = false;
 
   constructor(
     private layoutService: LayoutService,
@@ -30,5 +31,8 @@ export class HeaderComponent implements OnInit {
   }
   onCreateCourse() {
     this.router.navigate(['/courses/new-course']);
+  }
+  onAccoutPopoverVisibleChange(isVisible: boolean) {
+    this.showAccountPopover = isVisible;
   }
 }

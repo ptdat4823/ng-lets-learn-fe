@@ -8,12 +8,15 @@
   </span>
   <span class="material-symbols-outlined"> chat_bubble </span>
   <!-- <circle-image src="images/mock-user-image.jpg"></circle-image> -->
-  <app-popover>
+  <app-popover
+    [isOpen]="showAccountPopover"
+    (openChange)="onAccoutPopoverVisibleChange($event)"
+  >
     <circle-image
       class="avatar"
       defaultImage="account_circle"
       trigger
     ></circle-image>
-    <account-popover content />
+    <account-popover content (close)="onAccoutPopoverVisibleChange(false)" />
   </app-popover>
 </div>
