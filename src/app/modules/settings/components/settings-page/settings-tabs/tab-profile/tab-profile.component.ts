@@ -32,11 +32,14 @@ export class TabProfileComponent implements OnChanges {
 
   saveProfile(e: Event): void {
     e.preventDefault();
-    if (this.profileForm.valid) {
-      console.log('Profile save attempt with:', this.profileForm.value);
+    if (this.profileForm.invalid) {
+      this.profileForm.markAllAsTouched();
+      scrollToFirstInvalidField();
       return;
     }
-    this.profileForm.markAllAsTouched();
-    scrollToFirstInvalidField();
+    this.loading = true;
+    
+    console.log('Profile save attempt with:', this.profileForm.value);
+    this.loading = false;
   }
 }

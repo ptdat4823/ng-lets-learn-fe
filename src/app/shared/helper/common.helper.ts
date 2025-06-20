@@ -3,12 +3,22 @@ export const scrollToComponentWithId = (id: string) => {
   if (element) element.scrollIntoView({ behavior: 'smooth' });
 };
 
+export const scrollTo = (selector: string, options?: { shouldFocus?: boolean; block?: ScrollLogicalPosition; behavior?: ScrollBehavior }) => {
+  const element = document.querySelector(selector) as HTMLElement;
+  if (!element) return;
+  
+  const scrollOptions = {
+    behavior: options?.behavior || 'smooth' as ScrollBehavior,
+    block: options?.block || 'center' as ScrollLogicalPosition,
+  };
+  
+  element.scrollIntoView(scrollOptions);
+  
+  if (options?.shouldFocus !== false) {
+    element.focus();
+  }
+};
+
 export const scrollToFirstInvalidField = () => {
-  const firstInvalidControl = document.querySelector('form .ng-invalid') as HTMLElement;
-  if (!firstInvalidControl) return;
-  firstInvalidControl.scrollIntoView({
-    behavior: 'smooth',
-    block: 'center',
-  });
-  firstInvalidControl.focus();
+  scrollTo('form .ng-invalid');
 };
