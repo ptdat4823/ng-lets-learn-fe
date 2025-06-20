@@ -7,10 +7,13 @@
     add_circle
   </span>
   <span class="material-symbols-outlined"> chat_bubble </span>
-  <!-- <circle-image src="images/mock-user-image.jpg" icon></circle-image> -->
-  <circle-image
-    class="avatar"
-    defaultImage="account_circle"
-    icon
-  ></circle-image>
+  <!-- <circle-image src="images/mock-user-image.jpg"></circle-image> -->
+  <app-popover>
+    <circle-image
+      class="avatar"
+      defaultImage="account_circle"
+      trigger
+    ></circle-image>
+    <account-popover content />
+  </app-popover>
 </div>
