@@ -1,6 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, inject, OnInit } from '@angular/core';
-import { mockUsers } from '@shared/mocks/user';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { ROUTES } from '@shared/constants/routes';
 import { UserService } from '@shared/services/user.service';
 import { LayoutService } from './layout.service';
 
@@ -11,9 +12,10 @@ import { LayoutService } from './layout.service';
   styleUrl: './layout.component.scss',
 })
 export class LayoutComponent implements OnInit {
-  private responsive = inject(BreakpointObserver);
-  private layoutService = inject(LayoutService);
-  private userService = inject(UserService);
+  constructor(
+    private responsive: BreakpointObserver,
+    private layoutService: LayoutService
+  ) {}
 
   // XSmall (max-width: 599.98px)
   // Small (min-width: 600px) and (max-width: 959.98px)
@@ -22,7 +24,6 @@ export class LayoutComponent implements OnInit {
   // XLarge (min-width: 1920px)
 
   ngOnInit() {
-    this.userService.setUser(mockUsers[0]);
     this.responsive
       .observe([Breakpoints.XSmall, Breakpoints.Small])
       .subscribe((state) => {

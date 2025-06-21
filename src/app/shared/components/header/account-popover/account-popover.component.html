@@ -1,13 +1,13 @@
 <div class="container">
   <div class="option" (click)="onProfileClick()">
-    <circle-image class="avatar" defaultImage="account_circle"></circle-image>
-    <span>John Doe</span>
+    <circle-image
+      class="avatar"
+      [src]="currentUser?.avatar || null"
+      defaultImage="account_circle"
+    ></circle-image>
+    <span>{{ currentUser?.username }}</span>
   </div>
   <div class="divider"></div>
-  <div class="option" (click)="onSettingsClick()">
-    <span class="material-symbols-outlined"> settings </span>
-    <span>Settings</span>
-  </div>
   <div class="option red" (click)="onLogoutClick()">
     <span class="material-symbols-outlined"> logout </span>
     <span>Logout</span>
