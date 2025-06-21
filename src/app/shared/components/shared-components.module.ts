@@ -23,6 +23,7 @@ import { ComboboxComponent } from './combobox/combobox.component';
 import { ConfirmMessageComponent } from './confirm-message/confirm-message.component';
 import { DateTimePickerComponent } from './date-time-picker/date-time-picker.component';
 import { FormInputComponent } from './form-input/form-input.component';
+import { FormButtonComponent } from './form-button/form-button.component';
 import { FormWarningComponent } from './form-warning/form-warning.component';
 import { HeaderComponent } from './header/header.component';
 import { LayoutComponent } from './layout/layout.component';
@@ -75,6 +76,7 @@ import { AccountPopoverComponent } from './header/account-popover/account-popove
     ConfirmMessageContentComponent,
     DateTimePickerComponent,
     FormInputComponent,
+    FormButtonComponent,
     HeaderComponent,
     LayoutComponent,
     SidebarComponent,
@@ -128,6 +130,7 @@ import { AccountPopoverComponent } from './header/account-popover/account-popove
   exports: [
     FormWarningComponent,
     FormInputComponent,
+    FormButtonComponent,
     CardComponent,
     MatCheckboxModule,
     HeaderComponent,
