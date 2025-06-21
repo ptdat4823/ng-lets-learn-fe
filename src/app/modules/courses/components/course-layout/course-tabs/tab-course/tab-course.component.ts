@@ -1,7 +1,7 @@
-import { Component, Input, inject, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CollapsibleListService } from '@shared/components/collapsible-list/collapsible-list.service';
 import { Course, Section } from '@shared/models/course';
-import { Topic, TopicType } from '@shared/models/topic';
+import { Topic } from '@shared/models/topic';
 import { ToastrService } from 'ngx-toastr';
 import { TopicService, CreateTopicRequest } from '@shared/services/topic.service';
 import { CourseService, CreateSectionRequest } from '@shared/services/course.service';
@@ -118,11 +118,11 @@ export class TabCourseComponent implements OnInit {
       next: (response) => {
         if (response.success) {
           this.course.sections.push(response.section);
-          
+
           // Update collapsible list service with new section
           const ids = this.course.sections.map((s) => s.id);
           this.collapsibleListService.setSectionIds(ids);
-          
+
           this.toastr.success(response.message);
         } else {
           this.toastr.error('Failed to create section');

@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CollapsibleListService } from '@shared/components/collapsible-list/collapsible-list.service';
-import { Course, Section } from '@shared/models/course';
-import { Topic } from '@shared/models/topic';
+import { Course } from '@shared/models/course';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({

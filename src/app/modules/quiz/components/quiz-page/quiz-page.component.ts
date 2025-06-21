@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   QUIZ_STUDENT_TABS,
@@ -27,14 +27,14 @@ export class QuizPageComponent implements OnInit {
   tabs = QuizTab;
   user: User | null = null;
   isStudent = true;
-  topicIcon = '';
   selectedTab = QuizTab.QUIZ;
 
   constructor(
     private breadcrumbService: BreadcrumbService,
     private tabService: TabService<QuizTab>,
     private userService: UserService,
-    private activedRoute: ActivatedRoute
+    private activedRoute: ActivatedRoute,
+    private cdr: ChangeDetectorRef
   ) {
     const topicId = this.activedRoute.snapshot.paramMap.get('topicId');
     const courseId = this.activedRoute.snapshot.paramMap.get('courseId');
@@ -45,22 +45,14 @@ export class QuizPageComponent implements OnInit {
     }
   }
   ngOnInit(): void {
-    this.topicIcon = iconMap[this.topic.type];
-    this.tabService.selectTab(this.selectedTab);
-    
-    // Check current user first
-    const currentUser = this.userService.getUser();
-    if (currentUser?.role === Role.TEACHER) {
-      this.tabService.setTabs(QUIZ_TEACHER_TABS);
-      this.isStudent = false;
-    } else {
-      this.tabService.setTabs(QUIZ_STUDENT_TABS);
-      this.isStudent = true;
-    }
-    
+    this.tabService.setTabs(QUIZ_STUDENT_TABS);
     this.tabService.selectedTab$.subscribe((tab) => {
-      if (tab) this.selectedTab = tab;
+      if (tab) {
+        this.selectedTab = tab;
+        this.cdr.detectChanges();
+      }
     });
+
     this.userService.user$.subscribe((user) => {
       this.user = user;
       if (user?.role === Role.TEACHER) {
