@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { LayoutService } from '../layout/layout.service';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 import { BreadcrumbItem } from '../breadcrumb/breadcrumb.component';
+import { User } from '@shared/models/user';
+import { UserService } from '@shared/services/user.service';
 
 @Component({
   selector: 'app-header',
@@ -14,13 +16,18 @@ export class HeaderComponent implements OnInit {
   router = inject(Router);
   breadcrumbItems: BreadcrumbItem[] = [];
   showAccountPopover = false;
+  currentUser: User | null = null;
 
   constructor(
     private layoutService: LayoutService,
-    private breadcrumbService: BreadcrumbService
+    private breadcrumbService: BreadcrumbService,
+    private userService: UserService
   ) {
     this.breadcrumbService.breadcrumbs$.subscribe((items) => {
       this.breadcrumbItems = items;
+    });
+    this.userService.user$.subscribe((user) => {
+      this.currentUser = user;
     });
   }
 

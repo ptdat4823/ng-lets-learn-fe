@@ -1,5 +1,5 @@
 import { CloudinaryFile } from '@shared/models/cloudinary-file';
-import crypto from 'crypto';
+import { sha1 } from 'js-sha1';
 
 export const convertCloudinaryFileToRequestData = (file: CloudinaryFile) => {
   const { id, name, displayUrl, downloadUrl } = file;
@@ -26,9 +26,9 @@ export const getPublicIdFromCloudinaryUrl = (url: string) => {
 };
 
 export const generateSHA1 = (data: any) => {
-  const hash = crypto.createHash('sha1');
+  var hash = sha1.create();
   hash.update(data);
-  return hash.digest('hex');
+  return hash.hex();
 };
 
 export const generateSignature = (publicId: string, apiSecret: string) => {
