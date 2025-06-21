@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   QUIZ_STUDENT_TABS,
@@ -9,7 +9,7 @@ import { TabService } from '@shared/components/tab-list/tab-list.service';
 import { mockCourses } from '@shared/mocks/course';
 import { mockTopics } from '@shared/mocks/topic';
 import { Course } from '@shared/models/course';
-import { iconMap, QuizTopic } from '@shared/models/topic';
+import { QuizTopic } from '@shared/models/topic';
 import { Role, User } from '@shared/models/user';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 import { UserService } from '@shared/services/user.service';
@@ -27,14 +27,14 @@ export class QuizPageComponent implements OnInit {
   tabs = QuizTab;
   user: User | null = null;
   isStudent = true;
-  topicIcon = '';
   selectedTab = QuizTab.QUIZ;
 
   constructor(
     private breadcrumbService: BreadcrumbService,
     private tabService: TabService<QuizTab>,
     private userService: UserService,
-    private activedRoute: ActivatedRoute
+    private activedRoute: ActivatedRoute,
+    private cdr: ChangeDetectorRef
   ) {
     const topicId = this.activedRoute.snapshot.paramMap.get('topicId');
     const courseId = this.activedRoute.snapshot.paramMap.get('courseId');
@@ -45,22 +45,14 @@ export class QuizPageComponent implements OnInit {
     }
   }
   ngOnInit(): void {
-    this.topicIcon = iconMap[this.topic.type];
-    this.tabService.selectTab(this.selectedTab);
-    
-    // Check current user first
-    const currentUser = this.userService.getUser();
-    if (currentUser?.role === Role.TEACHER) {
-      this.tabService.setTabs(QUIZ_TEACHER_TABS);
-      this.isStudent = false;
-    } else {
-      this.tabService.setTabs(QUIZ_STUDENT_TABS);
-      this.isStudent = true;
-    }
-    
+    this.tabService.setTabs(QUIZ_STUDENT_TABS);
     this.tabService.selectedTab$.subscribe((tab) => {
-      if (tab) this.selectedTab = tab;
+      if (tab) {
+        this.selectedTab = tab;
+        this.cdr.detectChanges();
+      }
     });
+
     this.userService.user$.subscribe((user) => {
       this.user = user;
       if (user?.role === Role.TEACHER) {

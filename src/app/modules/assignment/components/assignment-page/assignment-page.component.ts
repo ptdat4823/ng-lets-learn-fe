@@ -9,7 +9,7 @@ import { TabService } from '@shared/components/tab-list/tab-list.service';
 import { mockCourses } from '@shared/mocks/course';
 import { mockTopics } from '@shared/mocks/topic';
 import { Course } from '@shared/models/course';
-import { AssignmentTopic, iconMap } from '@shared/models/topic';
+import { AssignmentTopic } from '@shared/models/topic';
 import { Role, User } from '@shared/models/user';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 import { UserService } from '@shared/services/user.service';
@@ -27,7 +27,6 @@ export class AssignmentPageComponent implements OnInit {
   tabs = AssignmentTab;
   user: User | null = null;
   isStudent = true;
-  topicIcon = '';
   selectedTab = AssignmentTab.ASSIGNMENT;
 
   constructor(
@@ -47,7 +46,6 @@ export class AssignmentPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.topicIcon = iconMap[this.topic.type];
     this.tabService.setTabs(ASSIGNMENT_STUDENT_TABS);
     this.tabService.selectedTab$.subscribe((tab) => {
       if (tab) {

@@ -44,28 +44,14 @@
     [validationMessages]="control.validationMessages"
   />
   } @else if(control.componentType === 'button') {
-  <div class="form-button-row">
-    <div class="form-button-label-note">
-      <label [for]="control.id" class="form-button-label">{{
-        control.label
-      }}</label>
-      <div *ngIf="control.note" class="form-button-note">
-        {{ control.note }}
-      </div>
-    </div>
-    <button
-      type="button"
-      class="form-button"
-      (click)="control.onClick && control.onClick()"
-      [id]="control.id"
-      [ngStyle]="{
-        'background-color': '#F3F4F6',
-        color: control.buttonColor || '#22223b'
-      }"
-    >
-      {{ control.buttonText || control.label }}
-    </button>
-  </div>
+  <form-button
+    [id]="control.id"
+    [label]="control.label"
+    [note]="control.note"
+    [buttonText]="control.buttonText"
+    [buttonColor]="control.buttonColor"
+    [onClick]="control.onClick"
+  ></form-button>
   <span class="description">{{ control.description }}</span>
   }
 </div>
