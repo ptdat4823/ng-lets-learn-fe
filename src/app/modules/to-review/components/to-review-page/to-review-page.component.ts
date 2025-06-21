@@ -4,7 +4,8 @@ import { ComboboxService } from '@shared/components/combobox/combobox.service';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 import { CollapsibleListService } from '@shared/components/collapsible-list/collapsible-list.service';
 import { mockCourses } from '@shared/mocks/course';
-import { ToReviewService, ReviewItem, ReviewItemsCategories } from './to-review.service';
+import { ToReviewService } from './to-review.service';
+import { ReviewItem, ReviewItemsCategories } from '../../constants/to-review.constants';
 import { Router } from '@angular/router';
 
 @Component({

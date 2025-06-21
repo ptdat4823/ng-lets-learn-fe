@@ -4,7 +4,8 @@ import { ComboboxService } from '@shared/components/combobox/combobox.service';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 import { TabService } from '@shared/components/tab-list/tab-list.service';
 import { mockCourses } from '@shared/mocks/course';
-import { ToDoService, ToDoItem, ToDoItemsCategories, ToDoItemsByDueDate } from './to-do.service';
+import { ToDoService } from './to-do.service';
+import { ToDoItem, ToDoItemsCategories, ToDoItemsByDueDate } from '../../constants/to-do.constants';
 
 @Component({
   selector: 'to-do-page',

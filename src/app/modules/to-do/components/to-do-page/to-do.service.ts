@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+// TODO: BACKEND INTEGRATION - Replace these mock imports with actual API service imports
 import { mockTopics } from '@shared/mocks/topic';
 import { mockCourses } from '@shared/mocks/course';
 import { mockSections } from '@shared/mocks/section';
@@ -7,63 +8,71 @@ import { AssignmentTopic, QuizTopic, Topic, TopicType } from '@shared/models/top
 import { StudentResponse, AssignmentResponseData, QuizResponseData, QuizStatus } from '@shared/models/student-response';
 import { Course } from '@shared/models/course';
 
-export interface ToDoItem {
-  id: string;
-  title: string;
-  course: string;
-  type: string;
-  status: 'assigned' | 'overdue' | 'done';
-  dueDate: string | null;
-  submitted: boolean;
-  graded: boolean;
-  icon: string;
-  topic: Topic;
-  dueDateFormatted?: string;
-  dueStatus?: string;
-}
+import { 
+  ToDoItem, 
+  ToDoItemsCategories, 
+  ToDoItemsByDueDate, 
+  DoneItemsByCompletion,
+  OverdueItemsByTime 
+} from '../../constants/to-do.constants';
 
-export interface ToDoItemsCategories {
-  assigned: ToDoItem[];
-  overdue: ToDoItem[];
-  done: ToDoItem[];
-}
 
-export interface ToDoItemsByDueDate {
-  noDueDate: ToDoItem[];
-  thisWeek: ToDoItem[];
-  nextWeek: ToDoItem[];
-  later: ToDoItem[];
-}
 
 @Injectable()
 export class ToDoService {
-
+  // TODO: BACKEND INTEGRATION - Remove static user ID
+  private static readonly CURRENT_USER_ID = '2';
+    // TODO: BACKEND INTEGRATION - NEEDS Promise.all() for data conversion:
+  // Promise.all([
+  //   fetch('/user/work' + (courseId ? `?courseId=${courseId}` : '')), // Raw backend data
+  //   // Additional calls if /user/work lacks course info or submission details
+  // ]) - Convert raw backend data to ToDoItem[] format
   getToDoItems(courseId?: string): ToDoItem[] {
+    const currentUserId = ToDoService.CURRENT_USER_ID;
+
     const filteredTopics = courseId && courseId !== 'all' 
-      ? this.getTopicsForCourse(courseId)
-      : mockTopics.filter(topic => 
-          topic.type === TopicType.ASSIGNMENT || topic.type === TopicType.QUIZ
-        );
+      ? this.getTopicsForCourse(courseId, currentUserId)
+      : this.getTopicsForEnrolledCourses(currentUserId);
 
-    return filteredTopics.map(topic => this.convertTopicToToDoItem(topic));
-  }
+    return filteredTopics.map(topic => this.convertTopicToToDoItem(topic));  }  
+  
+    private getTopicsForEnrolledCourses(currentUserId: string): Topic[] {
+    const enrolledCourses = mockCourses.filter(course => 
+      course.students.some(student => student.id === currentUserId)
+    );
+      const enrolledCourseSections = mockSections.filter(section => 
+      enrolledCourses.some(course => course.id === section.courseId)
+    );
+    
+    const sectionIds = enrolledCourseSections.map(section => section.id);
+    
+    return mockTopics.filter(topic => 
+      sectionIds.includes(topic.sectionId) && 
+      (topic.type === TopicType.ASSIGNMENT || topic.type === TopicType.QUIZ)
+    );  }
 
-  private getTopicsForCourse(courseId: string): Topic[] {
+  // TODO: BACKEND INTEGRATION - Replace with API call: GET /course/{courseId}/work
+  private getTopicsForCourse(courseId: string, currentUserId: string): Topic[] {
+    const course = mockCourses.find(c => c.id === courseId);
+    if (!course || !course.students.some(student => student.id === currentUserId)) {
+      return []; 
+    }
+    
     const courseSections = mockSections.filter(section => section.courseId === courseId);
     const sectionIds = courseSections.map(section => section.id);
     
     return mockTopics.filter(topic => 
       sectionIds.includes(topic.sectionId) && 
       (topic.type === TopicType.ASSIGNMENT || topic.type === TopicType.QUIZ)
-    );
-  }
+    );  }
 
   private getCourseForTopic(topic: Topic): Course | null {
     const section = mockSections.find(section => section.id === topic.sectionId);
     if (!section) return null;
     
-    return mockCourses.find(course => course.id === section.courseId) || null;
-  }
+    return mockCourses.find(course => course.id === section.courseId) || null;  }
+  
+  // TODO: BACKEND INTEGRATION - CRITICAL: Main conversion function needed
 
   private convertTopicToToDoItem(topic: Topic): ToDoItem {
     const course = this.getCourseForTopic(topic);
@@ -86,11 +95,11 @@ export class ToDoService {
       graded: false,
       icon: 'assignment',
       topic: topic
-    };
-  }  
+    };  
+  }
+
   private convertAssignmentToToDoItem(topic: AssignmentTopic, courseTitle: string): ToDoItem {
-    // Check if current user has submitted this assignment
-    const userResponse = mockAssignmentResponses.find(r => r.topicId === topic.id && r.student.id === 'current-user');
+    const userResponse = mockAssignmentResponses.find(r => r.topicId === topic.id && r.student.id === '2');
     const isSubmitted = !!userResponse;
     const isGraded = userResponse && (userResponse.data as AssignmentResponseData).mark !== undefined;
     
@@ -110,12 +119,11 @@ export class ToDoService {
       topic: topic,
       dueDateFormatted,
       dueStatus
-    };
+    };  
   }
-
+  
   private convertQuizToToDoItem(topic: QuizTopic, courseTitle: string): ToDoItem {
-    // Check if current user has completed this quiz
-    const userResponse = mockStudentResponses.find(r => r.topicId === topic.id && r.student.id === 'current-user');
+    const userResponse = mockStudentResponses.find(r => r.topicId === topic.id && r.student.id === '2');
     const isCompleted = userResponse && (userResponse.data as QuizResponseData).status === QuizStatus.FINISHED;
     
     const status = this.getToDoStatus(topic.data.close, !!isCompleted);
@@ -129,12 +137,12 @@ export class ToDoService {
       status: status,
       dueDate: topic.data.close,
       submitted: !!isCompleted,
-      graded: !!isCompleted, // Quizzes are auto-graded
+      graded: !!isCompleted, 
       icon: 'quiz',
       topic: topic,
       dueDateFormatted,
       dueStatus
-    };
+    };  
   }
 
   private getToDoStatus(dueDate: string | null, isCompleted: boolean): 'assigned' | 'overdue' | 'done' {
@@ -144,8 +152,8 @@ export class ToDoService {
     const now = new Date();
     const due = new Date(dueDate);
     
-    return now > due ? 'overdue' : 'assigned';
-  }
+    return now > due ? 'overdue' : 'assigned';  }
+
   private formatDueDate(dueDate: string | null): { dueDateFormatted: string; dueStatus: string } {
     if (!dueDate) {
       return { dueDateFormatted: '', dueStatus: '' };
@@ -172,8 +180,7 @@ export class ToDoService {
     } else if (daysDiff === 1) {
       dueStatus = '(1 day left)';
     } else {
-      dueStatus = `(${daysDiff} days left)`;
-    }
+      dueStatus = `(${daysDiff} days left)`;    }
 
     return { dueDateFormatted, dueStatus };
   }
@@ -181,12 +188,14 @@ export class ToDoService {
   categorizeToDoItems(items: ToDoItem[]): ToDoItemsCategories {
     return {
       assigned: items.filter(item => item.status === 'assigned'),
-      overdue: items.filter(item => item.status === 'overdue'),
-      done: items.filter(item => item.status === 'done')
+      overdue: items.filter(item => item.status === 'overdue'),      done: items.filter(item => item.status === 'done')
     };
   }
 
   categorizeByDueDate(items: ToDoItem[]): ToDoItemsByDueDate {
+    // Filter only assigned items (not done or overdue)
+    const assignedItems = items.filter(item => item.status === 'assigned');
+    
     const now = new Date();
     const startOfWeek = new Date(now);
     startOfWeek.setDate(now.getDate() - now.getDay()); // Start of this week (Sunday)
@@ -198,18 +207,17 @@ export class ToDoService {
     endOfNextWeek.setDate(endOfThisWeek.getDate() + 7); // End of next week
 
     return {
-      noDueDate: items.filter(item => !item.dueDate),
-      thisWeek: items.filter(item => {
+      noDueDate: assignedItems.filter(item => !item.dueDate),
+      thisWeek: assignedItems.filter(item => {
         if (!item.dueDate) return false;
         const dueDate = new Date(item.dueDate);
         return dueDate >= now && dueDate <= endOfThisWeek;
       }),
-      nextWeek: items.filter(item => {
+      nextWeek: assignedItems.filter(item => {
         if (!item.dueDate) return false;
         const dueDate = new Date(item.dueDate);
         return dueDate > endOfThisWeek && dueDate <= endOfNextWeek;
-      }),
-      later: items.filter(item => {
+      }),      later: assignedItems.filter(item => {
         if (!item.dueDate) return false;
         const dueDate = new Date(item.dueDate);
         return dueDate > endOfNextWeek;
@@ -222,11 +230,10 @@ export class ToDoService {
       if (!a.dueDate && !b.dueDate) return 0;
       if (!a.dueDate) return 1;
       if (!b.dueDate) return -1;
-      
-      return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
+        return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
     });
   }
-
+  
   getOverallStats(items: ToDoItem[]) {
     const total = items.length;
     const assigned = items.filter(item => item.status === 'assigned').length;
@@ -237,8 +244,88 @@ export class ToDoService {
       total,
       assigned,
       overdue,
-      done,
+      done,      
       completionRate: total > 0 ? (done / total) * 100 : 0
+    };
+  }
+
+  categorizeDoneItems(items: ToDoItem[]): DoneItemsByCompletion {
+    // Filter only done items
+    const doneItems = items.filter(item => item.status === 'done');
+    
+    const now = new Date();
+    const startOfThisWeek = new Date(now);
+    startOfThisWeek.setDate(now.getDate() - now.getDay()); // Start of this week (Sunday)
+    
+    const startOfLastWeek = new Date(startOfThisWeek);
+    startOfLastWeek.setDate(startOfThisWeek.getDate() - 7); // Start of last week
+    
+    const endOfLastWeek = new Date(startOfThisWeek);
+    endOfLastWeek.setDate(startOfThisWeek.getDate() - 1); // End of last week (Saturday)
+    
+    const endOfThisWeek = new Date(startOfThisWeek);
+    endOfThisWeek.setDate(startOfThisWeek.getDate() + 6); // End of this week (Saturday)
+
+    return {
+      noDueDate: doneItems.filter(item => !item.dueDate),
+      completeEarly: doneItems.filter(item => {
+        if (!item.dueDate) return false;
+        const dueDate = new Date(item.dueDate);
+        // Completed early means the due date is in the future
+        return dueDate > now;
+      }),
+      thisWeek: doneItems.filter(item => {
+        if (!item.dueDate) return false;
+        const dueDate = new Date(item.dueDate);
+        // Due this week but completed
+        return dueDate >= startOfThisWeek && dueDate <= endOfThisWeek;
+      }),
+      lastWeek: doneItems.filter(item => {
+        if (!item.dueDate) return false;
+        const dueDate = new Date(item.dueDate);
+        // Due last week but completed
+        return dueDate >= startOfLastWeek && dueDate <= endOfLastWeek;
+      }),      sooner: doneItems.filter(item => {
+        if (!item.dueDate) return false;
+        const dueDate = new Date(item.dueDate);
+        // Due before last week but completed
+        return dueDate < startOfLastWeek;
+      })
+    };
+  }
+
+  categorizeOverdueItems(items: ToDoItem[]): OverdueItemsByTime {
+    // Filter only overdue items
+    const overdueItems = items.filter(item => item.status === 'overdue');
+    
+    const now = new Date();
+    const startOfThisWeek = new Date(now);
+    startOfThisWeek.setDate(now.getDate() - now.getDay()); // Start of this week (Sunday)
+    
+    const startOfLastWeek = new Date(startOfThisWeek);
+    startOfLastWeek.setDate(startOfThisWeek.getDate() - 7); // Start of last week
+    
+    const endOfThisWeek = new Date(startOfThisWeek);
+    endOfThisWeek.setDate(startOfThisWeek.getDate() + 6); // End of this week (Saturday)
+
+    return {
+      thisWeek: overdueItems.filter(item => {
+        if (!item.dueDate) return false;
+        const dueDate = new Date(item.dueDate);
+        return dueDate >= startOfThisWeek && dueDate <= endOfThisWeek;
+      }),
+      lastWeek: overdueItems.filter(item => {
+        if (!item.dueDate) return false;
+        const dueDate = new Date(item.dueDate);
+        const endOfLastWeek = new Date(startOfThisWeek);
+        endOfLastWeek.setDate(startOfThisWeek.getDate() - 1); // End of last week (Saturday)
+        return dueDate >= startOfLastWeek && dueDate <= endOfLastWeek;
+      }),
+      sooner: overdueItems.filter(item => {
+        if (!item.dueDate) return false;
+        const dueDate = new Date(item.dueDate);
+        return dueDate < startOfLastWeek;
+      })
     };
   }
 }
