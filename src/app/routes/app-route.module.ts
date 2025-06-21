@@ -9,13 +9,26 @@ import { SettingsPageComponent } from '@modules/settings/components/settings-pag
 const routes: Routes = [
   { path: 'auth/login', component: LoginPageComponent },
   { path: 'auth/signup', component: RegisterPageComponent },
-  { path: 'home', redirectTo: 'courses' },
-  {
+  { path: 'home', redirectTo: 'courses' },    {
     path: '',
     component: LayoutComponent,
     children: [
       { path: 'calendar', component: CalendarPageComponent },
       { path: 'settings', component: SettingsPageComponent },
+      {
+        path: 'to-review',
+        loadChildren: () =>
+          import('@modules/to-review/to-review.module').then(
+            (m) => m.ToReviewModule
+          ),
+      },
+      {
+        path: 'to-do',
+        loadChildren: () =>
+          import('@modules/to-do/to-do.module').then(
+            (m) => m.ToDoModule
+          ),
+      },
       {
         path: 'courses',
         loadChildren: () =>

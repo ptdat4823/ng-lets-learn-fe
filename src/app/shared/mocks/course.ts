@@ -16,7 +16,7 @@ export const mockCourses: Course[] = [
       'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YWNjb3VudGluZ3xlbnwwfDB8MHx8fDI%3D',
     price: 79.99,
     level: 'Beginner',
-    students: [mockUsers[1], mockUsers[2]],
+    students: [mockUsers[1], mockUsers[2]], // Nguyen Van A (user '2') is enrolled
     creator: {
       id: '1',
       username: 'John Doe',
@@ -36,10 +36,9 @@ export const mockCourses: Course[] = [
     description:
       'This is a course that introduces you to the basics of computer science.',
     imageUrl:
-      'https://images.unsplash.com/photo-1675495666895-9091741bfd78?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGNvbXB1dGVyJTIwc2NpZW5jZXxlbnwwfDB8MHx8fDI%3D',
-    price: 59.99,
+      'https://images.unsplash.com/photo-1675495666895-9091741bfd78?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGNvbXB1dGVyJTIwc2NpZW5jZXxlbnwwfDB8MHx8fDI%3D',    price: 59.99,
     level: 'Beginner',
-    students: [],
+    students: [mockUsers[1]], // Nguyen Van A (user '2') is enrolled in Computer Science
     creator: {
       id: '1',
       username: 'John Doe',
@@ -104,10 +103,9 @@ export const mockCourses: Course[] = [
     sections: mockSections.filter((section) => section.courseId === '5'),
     description: 'This is a course that introduces you to the basics of music.',
     imageUrl:
-      'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bXVzaWN8ZW58MHwwfDB8fHwy',
-    price: 29.99,
+      'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bXVzaWN8ZW58MHwwfDB8fHwy',    price: 29.99,
     level: 'Beginner',
-    students: [],
+    students: [mockUsers[1]], // Nguyen Van A (user '2') is enrolled in Music
     creator: {
       id: '1',
       username: 'John Doe',

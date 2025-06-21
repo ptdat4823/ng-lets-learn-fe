@@ -9,13 +9,18 @@
     <sidebar-item [label]="'Settings'" href="/settings">
       <span class="material-symbols-outlined" icon> settings </span>
     </sidebar-item>
-  </sidebar-group>
-  <sidebar-item-collapse [label]="'Teaching'">
-    <span class="material-symbols-outlined" icon> group </span>
-
-    <ul items>
-      <sidebar-item [label]="'To review'" type="list-item" href="/to-review">
-        <span class="material-symbols-outlined" icon> checkbook </span>
+  </sidebar-group>  
+  <sidebar-item-collapse [label]="currentUser?.role === Role.STUDENT ? 'Enrolled' : 'Teaching'">
+    <span class="material-symbols-outlined" icon> 
+      {{ currentUser?.role === Role.STUDENT ? 'group' : 'group' }}
+    </span><ul items>
+      <sidebar-item 
+        [label]="currentUser?.role === Role.STUDENT ? 'To do' : 'To review'" 
+        type="list-item" 
+        [href]="currentUser?.role === Role.STUDENT ? '/to-do' : '/to-review'">
+        <span class="material-symbols-outlined" icon> 
+          {{ currentUser?.role === Role.STUDENT ? 'task_alt' : 'checkbook' }}
+        </span>
       </sidebar-item>
       @for(course of courses; track course.id) {
       <sidebar-item
