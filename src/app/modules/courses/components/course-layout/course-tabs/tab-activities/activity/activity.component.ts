@@ -9,7 +9,6 @@ import {
   iconMap,
 } from '@shared/models/topic';
 import { User } from '@shared/models/user';
-import { UserService } from '@shared/services/user.service';
 import { format, differenceInCalendarDays, isAfter } from 'date-fns';
 
 @Component({
