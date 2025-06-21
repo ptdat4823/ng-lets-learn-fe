@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   QUIZ_STUDENT_TABS,
@@ -9,7 +9,7 @@ import { TabService } from '@shared/components/tab-list/tab-list.service';
 import { mockCourses } from '@shared/mocks/course';
 import { mockTopics } from '@shared/mocks/topic';
 import { Course } from '@shared/models/course';
-import { iconMap, QuizTopic } from '@shared/models/topic';
+import { QuizTopic } from '@shared/models/topic';
 import { Role, User } from '@shared/models/user';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 import { UserService } from '@shared/services/user.service';
