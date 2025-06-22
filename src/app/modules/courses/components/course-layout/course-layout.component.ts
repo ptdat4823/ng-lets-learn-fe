@@ -40,7 +40,7 @@ export class CourseLayoutComponent implements OnInit {
       if (courseId) {
         this.fetchCourseData(courseId);
 
-        const courseKey = `selectedTab_course_${courseId}`;
+        const courseKey = `selected-tab-course-${courseId}`;
         const savedTab = localStorage.getItem(courseKey);
         this.selectedTab = savedTab ? savedTab : CourseTab.COURSE;
 
