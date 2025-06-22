@@ -3,16 +3,18 @@ import { convertSectionFromResponseData } from './section.api.helper';
 import { Topic, TopicType } from '@shared/models/topic';
 import { convertAssignmentFromResponseData } from '@modules/assignment/helper/assignment.api.helper';
 import { convertQuizFromResponseData } from '@modules/quiz/helper/quiz.api.helper';
+import { INewCourseFormData } from '../components/new-course/new-course-form/new-course-form.config';
+import { GetRandomCourseBackground } from '@shared/helper/image.helpter';
 
-export const convertCourseToCreateRequestData = (course: Course) => {
+export const convertCourseToCreateRequestData = (data: INewCourseFormData) => {
   return {
-    title: course.title,
+    title: data.title,
     description: '',
-    imageUrl: '',
-    price: course.price > 0 ? course.price : null,
-    category: course.category,
-    level: course.level,
-    isPublished: course.isPublished,
+    imageUrl: GetRandomCourseBackground(),
+    price: null,
+    category: data.category,
+    level: data.level,
+    isPublished: data.visibility === '1',
   };
 };
 

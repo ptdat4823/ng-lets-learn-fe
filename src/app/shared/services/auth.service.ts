@@ -52,9 +52,13 @@ export class AuthService {
   }
 
   logout() {
-    return Logout().then(() => {
-      this.userService.clearUser();
-      this.toastService.success('Logged out successfully');
-    });
+    return Logout()
+      .then(() => {
+        this.userService.clearUser();
+        this.toastService.success('Logged out successfully');
+      })
+      .catch((error) => {
+        this.toastService.error(error.message);
+      });
   }
 }

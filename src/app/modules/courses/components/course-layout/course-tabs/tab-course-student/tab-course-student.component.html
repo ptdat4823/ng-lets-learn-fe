@@ -2,7 +2,7 @@
   <div class="course-info">
     <div>
       <h1 class="course-title">{{ course.title }}</h1>
-      <p>{{ course.category.name }}</p>
+      <p>{{ course.category }}</p>
     </div>
     <div class="course-code" (click)="onCopyCourseId()">
       <p>cPquskdja</p>
@@ -25,7 +25,8 @@
         <div class="section-description">
           {{ section.description }}
         </div>
-        } @if(section.topics.length > 0) { @for(topic of section.topics; track topic.id) {
+        } @if(section.topics.length > 0) { @for(topic of section.topics; track
+        topic.id) {
         <app-topic [topic]="topic" />
         } } @else {
         <div class="no-topics">

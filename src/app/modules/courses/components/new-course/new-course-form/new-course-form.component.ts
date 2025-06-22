@@ -1,10 +1,15 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
+import { CreateCourse } from '@modules/courses/api/courses.api';
+import { ComboboxService } from '@shared/components/combobox/combobox.service';
+import { ToastrService } from 'ngx-toastr';
 import {
+  INewCourseFormData,
+  INewCourseFormSchema,
   newCourseFormControls,
   newCourseFormSchema,
 } from './new-course-form.config';
-import { ComboboxService } from '@shared/components/combobox/combobox.service';
 
 @Component({
   selector: 'new-course-form',
@@ -14,14 +19,19 @@ import { ComboboxService } from '@shared/components/combobox/combobox.service';
   providers: [ComboboxService],
 })
 export class NewCourseFormComponent implements OnInit {
-  private fb: FormBuilder = inject(FormBuilder);
-  private comboboxService = inject(ComboboxService);
-
   showPassword = false;
-  form!: FormGroup;
+  form!: FormGroup<INewCourseFormSchema>;
   formControls = newCourseFormControls;
 
   visibilityValue = '0';
+  loading = false;
+
+  constructor(
+    private fb: FormBuilder,
+    private comboboxService: ComboboxService,
+    private toastService: ToastrService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.form = this.fb.group(newCourseFormSchema);
@@ -34,18 +44,25 @@ export class NewCourseFormComponent implements OnInit {
     this.showPassword = !this.showPassword;
   }
 
-  onSubmit(e: Event): void {
+  async onSubmit(e: Event) {
     e.preventDefault(); // Prevent default form submission
-    // Stop here if form is invalid
     if (this.form.invalid) {
-      this.form.markAllAsTouched(); // Mark all controls as touched to show validation errors
+      this.form.markAllAsTouched();
       return;
     }
 
-    // Here you would typically call your authentication service
-    console.log('submit attempt with:', this.form.value);
-
-    // Navigate to dashboard or home page after successful login
-    // this.router.navigate(['/dashboard']);
+    const data: INewCourseFormData = this.form.getRawValue();
+    this.loading = true;
+    await CreateCourse(data)
+      .then((course) => {
+        this.toastService.success(`Course created successfully!`);
+        this.router.navigate(['/courses', course.id]);
+      })
+      .catch((error) => {
+        this.toastService.error(error.message);
+      })
+      .finally(() => {
+        this.loading = false;
+      });
   }
 }

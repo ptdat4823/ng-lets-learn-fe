@@ -1,5 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import {
+  GetPublicCourses,
+  GetTeacherCourses,
+} from '@modules/courses/api/courses.api';
 import { mockCourses } from '@shared/mocks/course';
+import { Course } from '@shared/models/course';
 import { Role, User } from '@shared/models/user';
 import { UserService } from '@shared/services/user.service';
 
@@ -9,8 +14,8 @@ import { UserService } from '@shared/services/user.service';
   templateUrl: './course-list.component.html',
   styleUrl: './course-list.component.scss',
 })
-export class CourseListComponent {
-  courses = mockCourses;
+export class CourseListComponent implements OnInit {
+  courses: Course[] = [];
   isStudent = true;
 
   constructor(private userService: UserService) {
@@ -21,5 +26,18 @@ export class CourseListComponent {
         this.isStudent = true;
       }
     });
+  }
+
+  ngOnInit(): void {
+    this.updateCourses();
+  }
+
+  async updateCourses() {
+    const user = this.userService.getUser();
+    if (!user) return;
+    let res: Course[] = [];
+    if (user.role === Role.TEACHER) res = await GetTeacherCourses(user.id);
+    else res = await GetPublicCourses();
+    this.courses = res;
   }
 }

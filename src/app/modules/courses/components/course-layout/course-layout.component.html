@@ -2,7 +2,11 @@
 @if(course) {
 <main>
   @if(selectedTab === tabs.COURSE) { @if(!isStudent){
-  <tab-course [course]="course" />
+  <tab-course
+    [course]="course"
+    (updateSectionList)="onSectionListChange($event)"
+    (cancelChange)="onCancelChange()"
+  />
   } @else {
   <tab-course-student [course]="course" />
   } } @else if(selectedTab === tabs.ACTIVITIES) {

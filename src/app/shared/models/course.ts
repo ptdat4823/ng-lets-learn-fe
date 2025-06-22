@@ -1,10 +1,10 @@
 import { Topic } from './topic';
 import { User } from './user';
 
-export type Category = {
-  id: string;
-  name: string;
-};
+// export type Category = {
+//   id: string;
+//   name: string;
+// };
 
 export type Course = {
   id: string;
@@ -12,7 +12,7 @@ export type Course = {
   description: string | null;
   imageUrl: string | null;
   price: number;
-  category: Category;
+  category: string;
   level: string;
   students: User[];
   creator: User;
