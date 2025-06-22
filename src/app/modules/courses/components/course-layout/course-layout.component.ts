@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   COURSE_STUDENT_TABS,
@@ -30,28 +30,41 @@ export class CourseLayoutComponent implements OnInit {
     private route: ActivatedRoute,
     private userService: UserService,
     private tabService: TabService<string>,
-    private breadcrumbService: BreadcrumbService
+    private breadcrumbService: BreadcrumbService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.tabService.setTabs(COURSE_STUDENT_TABS);
-    this.tabService.selectTab(this.selectedTab);
-
-    this.tabService.selectedTab$.subscribe((tab) => {
-      if (tab) this.selectedTab = tab;
-    });
     this.route.paramMap.subscribe((params) => {
-      const id = params.get('courseId');
-      if (id) this.fetchCourseData(id);
-    });
-    this.userService.user$.subscribe((user) => {
-      this.user = user;
-      if (user?.role === Role.TEACHER) { 
-        this.tabService.setTabs(COURSE_TEACHER_TABS);
-        this.isStudent = false;
-      } else {
+      const courseId = params.get('courseId');
+      if (courseId) {
+        this.fetchCourseData(courseId);
+
+        const courseKey = `selected-tab-course-${courseId}`;
+        const savedTab = localStorage.getItem(courseKey);
+        this.selectedTab = savedTab ? savedTab : CourseTab.COURSE;
+
         this.tabService.setTabs(COURSE_STUDENT_TABS);
-        this.isStudent = true;
+        this.tabService.selectTab(this.selectedTab);
+
+        this.tabService.selectedTab$.subscribe((tab) => {
+          if (tab) {
+            this.selectedTab = tab;
+            this.cdr.detectChanges();
+            localStorage.setItem(courseKey, tab);
+          }
+        });
+
+        this.userService.user$.subscribe((user) => {
+          this.user = user;
+          if (user?.role === Role.TEACHER) {
+            this.tabService.setTabs(COURSE_TEACHER_TABS);
+            this.isStudent = false;
+          } else {
+            this.tabService.setTabs(COURSE_STUDENT_TABS);
+            this.isStudent = true;
+          }
+        });
       }
     });
   }

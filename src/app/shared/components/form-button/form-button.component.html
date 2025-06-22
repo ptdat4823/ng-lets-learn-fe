@@ -1,0 +1,16 @@
+<div class="form-button-row">
+  <div class="form-button-label-note">
+    <label *ngIf="label" [for]="id" class="form-button-label">{{ label }}</label>
+    <div *ngIf="note" class="form-button-note">{{ note }}</div>
+  </div>
+  <button
+    type="button"
+    class="form-button"
+    [id]="id"
+    [disabled]="disabled"
+    [class.custom-color]="buttonColor && !disabled"
+    (click)="onClick && onClick()"
+  >
+    {{ buttonText || label }}
+  </button>
+</div>

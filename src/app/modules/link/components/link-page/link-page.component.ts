@@ -9,7 +9,7 @@ import { TabService } from '@shared/components/tab-list/tab-list.service';
 import { mockCourses } from '@shared/mocks/course';
 import { mockTopics } from '@shared/mocks/topic';
 import { Course } from '@shared/models/course';
-import { LinkTopic, PageTopic, iconMap } from '@shared/models/topic';
+import { LinkTopic } from '@shared/models/topic';
 import { Role, User } from '@shared/models/user';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 import { UserService } from '@shared/services/user.service';
@@ -20,14 +20,12 @@ import { UserService } from '@shared/services/user.service';
   styleUrls: ['./link-page.component.scss'],
   providers: [TabService],
 })
-export class LinkPageComponent implements OnInit{
-
+export class LinkPageComponent implements OnInit {
   course: Course | null = null;
   topic: LinkTopic = mockTopics[3] as LinkTopic;
   tabs = LinkTab;
   user: User | null = null;
   isStudent = true;
-  topicIcon = '';
   selectedTab = LinkTab.FILE;
 
   constructor(
@@ -46,16 +44,15 @@ export class LinkPageComponent implements OnInit{
     }
   }
   ngOnInit(): void {
-    this.tabService.setTabs(this.isStudent ? LINK_STUDENT_TABS : LINK_TEACHER_TABS);
-    
-    this.tabService.selectedTab$.subscribe(tab => {
+    this.tabService.setTabs(LINK_STUDENT_TABS);
+    this.tabService.selectedTab$.subscribe((tab) => {
       if (tab) {
         this.selectedTab = tab;
         this.cdr.detectChanges();
       }
     });
-    
-    this.userService.user$.subscribe(user => {
+
+    this.userService.user$.subscribe((user) => {
       this.user = user;
       if (user?.role === Role.TEACHER) {
         this.tabService.setTabs(LINK_TEACHER_TABS);
@@ -65,12 +62,16 @@ export class LinkPageComponent implements OnInit{
         this.isStudent = true;
       }
     });
-  }  fetchTopicData(topicId: string) {
-    this.topic = mockTopics.find(t => t.id === topicId) as LinkTopic || mockTopics[3] as LinkTopic;
+  }
+
+  fetchTopicData(topicId: string) {
+    this.topic =
+      (mockTopics.find((t) => t.id === topicId) as LinkTopic) ||
+      (mockTopics[3] as LinkTopic);
   }
 
   fetchCourseData(courseId: string) {
-    this.course = mockCourses.find(c => c.id === courseId) || null;
+    this.course = mockCourses.find((c) => c.id === courseId) || null;
   }
 
   updateBreadcrumb(course: Course, topic: LinkTopic) {
