@@ -10,9 +10,11 @@ h3,
 h4,
 h5,
 h6,
-p {
+p,
+input {
   margin: 0;
   font-family: Nunito;
+  box-sizing: border-box;
 }
 
 // Hide the default spinner on number inputs

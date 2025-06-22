@@ -50,6 +50,8 @@ const iconKeys = [
   'cloud_upload',
   'attach_file',
   'logout',
+  'hide',
+  'open_in_full',
 ];
 const baseGoogleIconLink =
   'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200';
