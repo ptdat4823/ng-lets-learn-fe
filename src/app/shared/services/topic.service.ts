@@ -1,12 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { Topic, TopicType, TopicTypeOption, getTopicTypeOptions } from '@shared/models/topic';
+import {
+  Topic,
+  TopicType,
+  TopicTypeOption,
+  getTopicTypeOptions,
+} from '@shared/models/topic';
 import { AssignmentData, FileSizeOption } from '@shared/models/assignment';
 import { QuizData, TimeLimitType, GradingMethod } from '@shared/models/quiz';
 import { LinkData } from '@shared/models/link';
 import { PageData } from '@shared/models/page';
 import { FileTopicData } from '@shared/models/file-topic';
 import { MeetingData } from '@shared/models/meeting';
+import { generateId } from '@shared/helper/string.helper';
 
 export interface CreateTopicRequest {
   sectionId: string;
@@ -22,38 +28,32 @@ export interface CreateTopicResponse {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TopicService {
-
-  constructor() { }
+  constructor() {}
 
   getTopicTypeOptions(): TopicTypeOption[] {
     return getTopicTypeOptions();
   }
 
-  createTopic(request: CreateTopicRequest): Observable<CreateTopicResponse> {
-    const topic = this.createTopicWithDefaultData(request);
-
-    return of({
-      topic,
-      success: true,
-      message: 'Topic created successfully'
-    });
-  }
-
-  updateTopic(topicId: string, updates: Partial<Topic>): Observable<CreateTopicResponse> {
+  updateTopic(
+    topicId: string,
+    updates: Partial<Topic>
+  ): Observable<CreateTopicResponse> {
     return of({
       topic: { ...updates } as Topic,
       success: true,
-      message: 'Topic updated successfully'
+      message: 'Topic updated successfully',
     });
   }
 
-  deleteTopic(topicId: string): Observable<{ success: boolean; message: string }> {
+  deleteTopic(
+    topicId: string
+  ): Observable<{ success: boolean; message: string }> {
     return of({
       success: true,
-      message: 'Topic deleted successfully'
+      message: 'Topic deleted successfully',
     });
   }
 
@@ -61,10 +61,10 @@ export class TopicService {
     return of([]);
   }
 
-  private createTopicWithDefaultData(request: CreateTopicRequest): Topic {
+  getNewTopic(request: CreateTopicRequest): Topic {
     const { sectionId, type, title } = request;
     let topicData: any;
-    
+
     switch (type) {
       case TopicType.ASSIGNMENT:
         topicData = {
@@ -73,10 +73,10 @@ export class TopicService {
           close: null,
           remindToGrade: null,
           maximumFile: 1,
-          maximumFileSize: FileSizeOption['5MB']
+          maximumFileSize: FileSizeOption['5MB'],
         } as AssignmentData;
         break;
-        
+
       case TopicType.QUIZ:
         topicData = {
           description: '',
@@ -87,59 +87,51 @@ export class TopicService {
           gradeToPass: 0,
           gradingMethod: GradingMethod.LAST_GRADE,
           attemptAllowed: 'Unlimited',
-          questions: []
+          questions: [],
         } as QuizData;
         break;
-        
+
       case TopicType.LINK:
         topicData = {
           url: null,
-          description: ''
+          description: '',
         } as LinkData;
         break;
-        
+
       case TopicType.PAGE:
         topicData = {
           description: '',
-          content: ''
+          content: '',
         } as PageData;
         break;
-        
+
       case TopicType.FILE:
         topicData = {
           file: null,
-          description: ''
+          description: '',
         } as FileTopicData;
         break;
-        
+
       case TopicType.MEETING:
         topicData = {
           description: '',
-          open: new Date().toISOString()
+          open: new Date().toISOString(),
         } as MeetingData;
         break;
-        
+
       default:
         topicData = {
-          description: ''
+          description: '',
         };
         break;
     }
 
     return {
-      id: Date.now().toString(),
+      id: generateId(4),
       title: title || `New ${type}`,
       sectionId: sectionId,
       type: type,
-      data: topicData
+      data: topicData,
     } as Topic;
-  }
-
-  getDefaultTopicData(type: TopicType): any {
-    const mockRequest: CreateTopicRequest = {
-      sectionId: 'temp',
-      type: type
-    };
-    return this.createTopicWithDefaultData(mockRequest).data;
   }
 }

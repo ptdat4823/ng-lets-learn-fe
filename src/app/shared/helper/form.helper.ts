@@ -1,5 +1,9 @@
+import { FormControl } from '@angular/forms';
 import { ComboboxOption } from '@shared/components/combobox/combobox.type';
 
+export type UnpackedFormGroup<T> = {
+  [K in keyof T]: T[K] extends FormControl<infer V> ? V : never;
+};
 export type UpdateOnType = 'change' | 'blur' | 'submit';
 type ComponentType =
   | 'input'

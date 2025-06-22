@@ -1,14 +1,35 @@
-import { FormControl, Validators } from '@angular/forms';
-import { FormControlField } from '@shared/helper/form.helper';
+import { FormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  FormControlField,
+  UnpackedFormGroup,
+} from '@shared/helper/form.helper';
 
-export const newCourseFormSchema = {
-  title: new FormControl('', [Validators.required, Validators.minLength(3)]),
-  category: new FormControl('Academic', [
-    Validators.required,
-    Validators.minLength(3),
-  ]),
-  level: new FormControl('Beginner', [Validators.required]),
-  visibility: new FormControl(null, [Validators.required]),
+export interface INewCourseFormSchema {
+  title: FormControl<string>;
+  category: FormControl<string>;
+  level: FormControl<string>;
+  visibility: FormControl<'0' | '1' | null>;
+}
+
+export type INewCourseFormData = UnpackedFormGroup<INewCourseFormSchema>;
+
+export const newCourseFormSchema: INewCourseFormSchema = {
+  title: new FormControl('', {
+    validators: [Validators.required, Validators.minLength(3)],
+    nonNullable: true,
+  }),
+  category: new FormControl('Academic', {
+    validators: [Validators.required, Validators.minLength(3)],
+    nonNullable: true,
+  }),
+  level: new FormControl('Beginner', {
+    validators: [Validators.required],
+    nonNullable: true,
+  }),
+  visibility: new FormControl(null, {
+    validators: [Validators.required],
+    nonNullable: true,
+  }),
 };
 
 export const newCourseFormControls: FormControlField[] = [

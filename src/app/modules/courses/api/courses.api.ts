@@ -6,14 +6,19 @@ import {
   convertCourseToUpdateRequestData,
   convertCourseWorkFromResponseData,
 } from '../helper/courses.api.helper';
+import { INewCourseFormData } from '../components/new-course/new-course-form/new-course-form.config';
 
-export const CreateCourse = (course: Course) => {
-  let data = convertCourseToCreateRequestData(course);
+export const CreateCourse = (newCourseFormData: INewCourseFormData) => {
+  let data = convertCourseToCreateRequestData(newCourseFormData);
   return POST('/course', data).then(convertCourseFromResponseData);
 };
 
-export const GetPublicCourses = () => {
-  return GET('/course').then(convertCourseFromResponseData);
+export const GetCourseById = (courseId: string): Promise<Course> => {
+  return GET(`/course/${courseId}`).then(convertCourseFromResponseData);
+};
+
+export const GetPublicCourses = (): Promise<Course[]> => {
+  return GET('/course').then((res) => res.map(convertCourseFromResponseData));
 };
 
 export const GetTeacherCourses = (userId: string): Promise<Course[]> => {

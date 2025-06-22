@@ -29,8 +29,8 @@ export class AccountPopoverComponent {
     this.router.navigate([ROUTES.SETTINGS]);
     this.close.emit();
   }
-  onLogoutClick() {
-    this.authService.logout();
+  async onLogoutClick() {
+    await this.authService.logout();
     this.close.emit();
   }
 }

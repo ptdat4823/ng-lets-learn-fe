@@ -28,17 +28,13 @@ function addRefreshSubscriber(callback: () => void) {
 }
 
 // No request interceptor needed — cookies are sent automatically
-
 Axios.interceptors.response.use(
-  function (response) {
-    return response;
-  },
-  async function (error) {
+  (response) => response,
+  async (error) => {
     const originalRequest = error.config;
 
-    // If token is expired and not retrying the refresh endpoint itself
     if (
-      error.response?.status === 401 &&
+      (error.response?.status === 401 || error.response?.status === 403) &&
       !originalRequest._retry &&
       !originalRequest.url.includes('/auth/refresh') &&
       !originalRequest.url.includes('/auth/login') &&
@@ -46,29 +42,27 @@ Axios.interceptors.response.use(
     ) {
       originalRequest._retry = true;
 
-      if (!isRefreshing) {
-        isRefreshing = true;
-
-        try {
-          // This call should refresh tokens and set new cookies
-          await GET(`${backendUrl}/auth/refresh`);
-
-          isRefreshing = false;
-          onRefreshed();
-        } catch (refreshError) {
-          isRefreshing = false;
-          return Promise.reject({
-            status: 401,
-            message: HTTP_ERRORS[401] || 'Unauthorized',
-          });
-        }
-      }
-
-      // Queue other requests while refreshing
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         addRefreshSubscriber(() => {
-          resolve(Axios(originalRequest));
+          Axios(originalRequest).then(resolve).catch(reject);
         });
+
+        if (!isRefreshing) {
+          isRefreshing = true;
+          GET(`${backendUrl}/auth/refresh`)
+            .then(() => {
+              isRefreshing = false;
+              onRefreshed();
+            })
+            .catch((refreshError) => {
+              isRefreshing = false;
+              console.error('Token refresh failed:', refreshError);
+              reject({
+                status: 401,
+                message: HTTP_ERRORS[401] || 'Unauthorized',
+              });
+            });
+        }
       });
     }
 
