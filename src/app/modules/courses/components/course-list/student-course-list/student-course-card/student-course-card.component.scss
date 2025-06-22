@@ -3,8 +3,6 @@
 .course-card {
   display: flex;
   flex-direction: column;
-  min-width: 200px;
-  height: fit-content;
   border-radius: 0.5rem;
   overflow: hidden;
   color: $text-color;
@@ -17,7 +15,7 @@
   &:hover {
     box-shadow: $box-shadow;
   }
-  &:active {
+  &.scale-on-click:active {
     transform: scale(0.98);
     transform-origin: center !important;
   }
@@ -38,5 +36,9 @@ img {
   p {
     font-size: 0.875rem;
     color: #6b7280; // Tailwind's gray-500
+  }
+
+  button {
+    width: 20px;
   }
 }

@@ -68,6 +68,18 @@ button {
       );
     }
   }
+  &.outline {
+    &.blue {
+      border: 1px solid $outline-blue;
+      color: $outline-blue;
+      background-color: transparent;
+
+      &:hover {
+        background-color: $outline-blue-hover;
+        transform: scale(1);
+      }
+    }
+  }
 
   &:hover {
     transform: scale(1.02);
