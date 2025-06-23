@@ -14,17 +14,39 @@
         <span class="material-symbols-outlined"> keyboard_arrow_down </span>
       </div>
       <div class="title-content" (click)="toggleExpand()">
+        @if(isEditingTitle) {
+        <input class="title-input" #titleInput [defaultValue]="title" />
+        } @else {
         <ng-content select="[title]"></ng-content>
+        }
       </div>
 
-      @if(isEditing) {
-      <span class="material-symbols-outlined"> stylus </span>
-      }
+      @if(isEditing) { @if(isEditingTitle) {
+      <div class="actions">
+        <span
+          class="material-symbols-outlined cancel"
+          (click)="onCancelTitleChange()"
+        >
+          cancel
+        </span>
+        <span class="material-symbols-outlined check" (click)="onSaveTitle()">
+          check_circle
+        </span>
+      </div>
+      } @else {
+      <span class="material-symbols-outlined" (click)="toggleEditingTitle()">
+        stylus </span
+      >} }
     </div>
     @if(canEdit) { @if(isEditing) {
-    <span class="material-symbols-outlined check" (click)="toggleEdit($event)">
-      check_circle
-    </span>
+    <div class="actions">
+      <span class="material-symbols-outlined cancel" (click)="onCancel()">
+        cancel
+      </span>
+      <span class="material-symbols-outlined check" (click)="onSave()">
+        check_circle
+      </span>
+    </div>
     } @else {
     <span class="material-symbols-outlined" (click)="toggleEdit($event)">
       stylus

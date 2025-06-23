@@ -68,7 +68,8 @@ export class TopicService {
     switch (type) {
       case TopicType.ASSIGNMENT:
         topicData = {
-          description: '',
+          description:
+            'Complete tasks or projects and submit your work for grading. ',
           open: null,
           close: null,
           remindToGrade: null,
@@ -79,7 +80,8 @@ export class TopicService {
 
       case TopicType.QUIZ:
         topicData = {
-          description: '',
+          description:
+            'Test your knowledge with multiple-choice or short-answer questions.',
           open: null,
           close: null,
           timeLimit: null,
@@ -94,13 +96,15 @@ export class TopicService {
       case TopicType.LINK:
         topicData = {
           url: null,
-          description: '',
+          description:
+            'Access external websites or resources related to the course.',
         } as LinkData;
         break;
 
       case TopicType.PAGE:
         topicData = {
-          description: '',
+          description:
+            'Read course content or instructions right on this website.',
           content: '',
         } as PageData;
         break;
@@ -108,10 +112,10 @@ export class TopicService {
       case TopicType.FILE:
         topicData = {
           file: null,
-          description: '',
+          description:
+            'Download documents like PDFs, slides, or readings shared by your teacher.',
         } as FileTopicData;
         break;
-
       case TopicType.MEETING:
         topicData = {
           description: '',

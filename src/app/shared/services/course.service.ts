@@ -41,7 +41,10 @@ export interface UpdateCourseImageResponse {
 export class CourseService {
   constructor() {}
 
-  updateCourseByUpdatingSection(course: Course, section: Section): Section[] {
+  updateSectionListByUpdatingSection(
+    course: Course,
+    section: Section
+  ): Section[] {
     const updatedSections = course.sections.map((s) =>
       s.id === section.id ? section : s
     );
@@ -126,13 +129,6 @@ export class CourseService {
     return of({
       success: true,
       message: 'Section deleted successfully',
-    });
-  }
-  saveCourse(course: Course): Observable<UpdateCourseResponse> {
-    return of({
-      course,
-      success: true,
-      message: 'Course saved successfully',
     });
   }
 

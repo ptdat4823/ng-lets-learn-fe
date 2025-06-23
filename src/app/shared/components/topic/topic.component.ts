@@ -1,4 +1,11 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { iconMap, Topic } from '@shared/models/topic';
 
@@ -11,6 +18,8 @@ import { iconMap, Topic } from '@shared/models/topic';
 export class TopicComponent implements OnInit {
   @Input({ required: true }) topic!: Topic;
   @Input() isEditing = false;
+  @Output() delete = new EventEmitter<string>();
+
   topicIcon = '';
   router = inject(Router);
 
@@ -19,8 +28,14 @@ export class TopicComponent implements OnInit {
   }
 
   onTopicClick(): void {
-    this.router.navigate([
-      `${this.router.url}/${this.topic.type}/${this.topic.id}`,
-    ]);
+    console.log(`Navigating to topic: ${this.topic.id}`);
+    console.log(`Current URL: ${this.router.url}`);
+    console.log(`Topic Type: ${this.topic.type}`);
+    console.log(`Topic ID: ${this.topic.id}`);
+    this.router.navigate([this.router.url, this.topic.type, this.topic.id]);
+  }
+
+  onDelete(): void {
+    this.delete.emit(this.topic.id);
   }
 }

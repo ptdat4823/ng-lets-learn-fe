@@ -55,6 +55,22 @@ export class CollapsibleListService {
     }
   }
 
+  addEditingSectionId(id: string): void {
+    const current = this.editingSectionIds.value;
+    if (!current.includes(id)) {
+      this.editingSectionIds.next([...current, id]);
+    }
+  }
+
+  removeEditingSectionId(id: string): void {
+    const current = this.editingSectionIds.value;
+    if (current.includes(id)) {
+      this.editingSectionIds.next(
+        current.filter((sectionId) => sectionId !== id)
+      );
+    }
+  }
+
   setSectionIds(ids: string[]): void {
     this.sectionIds.next([...ids]);
   }
@@ -89,5 +105,19 @@ export class CollapsibleListService {
   getSectionEditingState(sectionId: string) {
     const current = this.editingSectionIds.value;
     return current.includes(sectionId);
+  }
+
+  getAllStates() {
+    return {
+      sectionIds: this.sectionIds.value,
+      canEdit: this.canEdit.value,
+      editingSectionIds: this.editingSectionIds.value,
+      expandedSectionIds: this.expandedSectionIds.value,
+    };
+  }
+
+  isEditingSection(id: string): boolean {
+    const current = this.editingSectionIds.value;
+    return current.includes(id);
   }
 }

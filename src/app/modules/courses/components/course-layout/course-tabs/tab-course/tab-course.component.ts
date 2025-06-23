@@ -1,4 +1,19 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
+import {
+  CreateSection,
+  GetSection,
+  UpdateSection,
+} from '@modules/courses/api/section.api';
 import { CollapsibleListService } from '@shared/components/collapsible-list/collapsible-list.service';
 import { Course, Section } from '@shared/models/course';
 import { CourseService } from '@shared/services/course.service';
@@ -17,17 +32,19 @@ import { UpdateCourseImageResult } from '../../../update-course-image-dialog/upd
   styleUrl: './tab-course.component.scss',
   providers: [CollapsibleListService],
 })
-export class TabCourseComponent implements OnInit {
+export class TabCourseComponent implements OnInit, OnChanges {
   @Input({ required: true }) course!: Course;
   @Input() canEdit = true;
   @Output() updateSectionList = new EventEmitter<Section[]>();
   @Output() cancelChange = new EventEmitter();
 
-  edittingSectionIds: string[] = [];
-
   showAddTopicDialog = false;
   selectedSectionId = '';
   showUpdateImageDialog = false;
+  loadingToUpdateSection = false;
+  loadingToAddSection = false;
+  sections: Section[] = [];
+
   constructor(
     private collapsibleListService: CollapsibleListService,
     private toastr: ToastrService,
@@ -36,13 +53,26 @@ export class TabCourseComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.InitData();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['course'] && changes['course'].currentValue) {
+      this.course = changes['course'].currentValue;
+      this.InitData();
+    }
+  }
+
+  InitData() {
     this.collapsibleListService.setCanEdit(this.canEdit);
     const ids = this.course.sections.map((s) => s.id);
     this.collapsibleListService.setSectionIds(ids);
-    this.collapsibleListService.editingSectionIds$.subscribe((ids) => {
-      this.edittingSectionIds = ids;
-    });
+    this.sections = this.course.sections
+      .map((s) => s)
+      .sort((a, b) => a.position - b.position);
+    console.log('Initialized sections: ', this.sections);
   }
+
   onCopyCourseId() {
     navigator.clipboard.writeText(this.course.id).then(() => {
       this.toastr.success('Copied to clipboard');
@@ -53,7 +83,7 @@ export class TabCourseComponent implements OnInit {
   }
 
   isEditingSection(id: string): boolean {
-    return this.edittingSectionIds.includes(id);
+    return this.collapsibleListService.isEditingSection(id);
   }
 
   // Dialog methods
@@ -94,35 +124,92 @@ export class TabCourseComponent implements OnInit {
       section,
       newTopic
     );
-    const updatedSections = this.courseService.updateCourseByUpdatingSection(
-      this.course,
-      updatedSection
-    );
+    const updatedSections =
+      this.courseService.updateSectionListByUpdatingSection(
+        this.course,
+        updatedSection
+      );
     this.updateSectionList.emit(updatedSections);
   }
 
-  onAddNewSection() {
+  async onAddNewSection() {
     const newSection = this.courseService.getNewSection(this.course);
-    this.updateSectionList.emit([...this.course.sections, newSection]);
+    this.loadingToAddSection = true;
+    await CreateSection(newSection)
+      .then((res) => {
+        this.updateSectionList.emit([...this.course.sections, res]);
+        this.toastr.success('New section added successfully');
+      })
+      .catch((error) => {
+        this.toastr.error(error.message);
+      })
+      .finally(() => {
+        this.loadingToAddSection = false;
+      });
   }
 
-  saveCourse() {
-    this.courseService.saveCourse(this.course).subscribe({
-      next: (response) => {
-        if (response.success) {
-          this.toastr.success(response.message);
-        } else {
-          this.toastr.error('Failed to save course');
-        }
-      },
-      error: (error) => {
-        console.error('Error saving course:', error);
-        this.toastr.error('Failed to save course');
-      },
-    });
+  async handleUpdateSectionSuccess(sectionId: string) {
+    await GetSection(sectionId)
+      .then((section) => {
+        const updatedSections =
+          this.courseService.updateSectionListByUpdatingSection(
+            this.course,
+            section
+          );
+        this.updateSectionList.emit(updatedSections);
+        this.toastr.success('Section updated successfully');
+      })
+      .finally(() => {
+        console.log(this.collapsibleListService.getAllStates());
+      });
   }
 
-  cancelChanges() {
+  async updateSection(sectionId: string) {
+    const section = this.course.sections.find((s) => s.id === sectionId);
+    if (!section) {
+      this.toastr.error('Section not found');
+      return;
+    }
+    this.loadingToUpdateSection = true;
+    await UpdateSection(section)
+      .then((updatedSection) => {
+        this.handleUpdateSectionSuccess(updatedSection.id);
+      })
+      .catch((error) => {
+        this.toastr.error(error.message);
+      })
+      .finally(() => {
+        this.loadingToUpdateSection = false;
+      });
+  }
+
+  onCancelChange() {
     this.cancelChange.emit();
+  }
+
+  onUpdateSectionTitle(sectionId: string, newTitle: string) {
+    const updatedSection = this.sections.map((section) => {
+      if (section.id === sectionId) {
+        return { ...section, title: newTitle };
+      }
+      return section;
+    });
+    this.updateSectionList.emit(updatedSection);
+  }
+
+  onDeleteTopic(topicId: string, sectionId: string) {
+    const section = this.course.sections.find((s) => s.id === sectionId);
+    if (!section) return;
+
+    const updatedSection = this.courseService.updateSectionByDeletingTopic(
+      section,
+      topicId
+    );
+    const updatedSections =
+      this.courseService.updateSectionListByUpdatingSection(
+        this.course,
+        updatedSection
+      );
+    this.updateSectionList.emit(updatedSections);
   }
 }
