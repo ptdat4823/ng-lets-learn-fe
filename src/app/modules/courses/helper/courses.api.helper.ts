@@ -1,5 +1,8 @@
 import { Course } from '@shared/models/course';
-import { convertSectionFromResponseData } from './section.api.helper';
+import {
+  convertSectionFromResponseData,
+  convertSectionToUpdateRequestData,
+} from './section.api.helper';
 import { Topic, TopicType } from '@shared/models/topic';
 import { convertAssignmentFromResponseData } from '@modules/assignment/helper/assignment.api.helper';
 import { convertQuizFromResponseData } from '@modules/quiz/helper/quiz.api.helper';
@@ -26,6 +29,7 @@ export const convertCourseToUpdateRequestData = (course: Course) => {
     level: course.level,
     isPublished: course.isPublished,
     imageUrl: course.imageUrl,
+    sections: course.sections.map(convertSectionToUpdateRequestData),
   };
 };
 

@@ -24,6 +24,9 @@
       &.check {
         color: $success-color;
       }
+      &.cancel {
+        color: $error-color;
+      }
     }
 
     .section-title {
@@ -58,7 +61,26 @@
 
       .title-content {
         cursor: pointer;
+
+        .title-input {
+          all: unset;
+          border-bottom: 1px solid $border-color;
+          transition: border 0.2s ease-in-out;
+          font-weight: 600;
+          cursor: text;
+
+          &:focus-within {
+            border-color: $tint-color;
+          }
+        }
       }
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.5rem;
     }
   }
 

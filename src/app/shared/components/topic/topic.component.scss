@@ -31,11 +31,11 @@
   }
 
   &:hover {
-    span.material-symbols-outlined {
+    span.material-symbols-outlined.change-on-hover {
       font-variation-settings: $google-icon-hover-setting;
     }
     &:active {
-      span.material-symbols-outlined {
+      span.material-symbols-outlined.change-on-hover {
         font-variation-settings: $google-icon-active-setting;
       }
     }
@@ -46,8 +46,17 @@
 
     .topic-name {
       width: fit-content;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: start;
+      gap: 0.5rem;
       cursor: pointer;
-      &:hover {
+
+      span.material-symbols-outlined {
+        font-size: 20px;
+      }
+      &-text:hover {
         text-decoration: underline;
         text-decoration-color: $tint-secondary-color;
         text-decoration-thickness: 1px;
@@ -55,7 +64,6 @@
       }
     }
 
-    .topic-name,
     .topic-description {
       display: flex;
       flex-direction: row;

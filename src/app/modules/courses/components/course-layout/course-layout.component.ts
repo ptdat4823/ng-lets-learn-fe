@@ -75,7 +75,10 @@ export class CourseLayoutComponent implements OnInit {
 
   onSectionListChange(sections: Section[]) {
     if (!this.course) return;
-    this.course.sections = sections;
+    this.course = {
+      ...this.course,
+      sections: sections,
+    };
   }
 
   onCancelChange() {
