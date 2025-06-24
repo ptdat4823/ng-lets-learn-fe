@@ -3,7 +3,7 @@
     <h3 class="card-title">Edit Setting</h3>
   <form [formGroup]="form" (submit)="onSubmit($event)">
     <app-collapsible-list>
-      <app-collapsible-section [sectionId]="sectionIds[0]" [hasBorder]="false">
+      <app-collapsible-section [sectionId]="sectionIds[0]" [hasBorder]="false" title="General">
         <!-- Section dynamic title -->
         <span class="title" title>General</span>
         <!-- Section dynamic content -->        

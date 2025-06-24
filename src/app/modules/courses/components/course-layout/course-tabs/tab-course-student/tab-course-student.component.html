@@ -15,7 +15,7 @@
 <div class="course-content">
   <app-collapsible-list>
     @for(section of course.sections; track section.id) {
-    <app-collapsible-section [sectionId]="section.id">
+    <app-collapsible-section [sectionId]="section.id" [title]="section.title">
       <!-- Section dynamic title -->
       <span class="title" title>{{ section.title }}</span>
 
