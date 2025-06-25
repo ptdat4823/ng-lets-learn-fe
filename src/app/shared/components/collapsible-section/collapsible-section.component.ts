@@ -21,7 +21,7 @@ import { CollapsibleSectionService } from './collapsible-section.service';
 })
 export class CollapsibleSectionComponent implements OnInit, AfterViewInit {
   @Input({ required: true }) sectionId!: string;
-  @Input({ required: true }) title!: string;
+  @Input() title: string = '';
   @Input() hasBorder: boolean = true;
   @Output() save = new EventEmitter<string>();
   @Output() cancel = new EventEmitter<string>();
