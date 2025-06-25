@@ -16,6 +16,7 @@ import { LinkModule } from '@modules/link/link.module';
 import { PageModule } from '@modules/page/page.module';
 import { SettingsModule } from '@modules/settings/settings.module';
 import { FileModule } from '@modules/file/file.module';
+import { ToReviewModule } from '@modules/to-review/to-review.module';
 @NgModule({
   imports: [
     BrowserModule,
@@ -32,6 +33,7 @@ import { FileModule } from '@modules/file/file.module';
     LinkModule,
     SettingsModule,
     FileModule,
+    ToReviewModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
