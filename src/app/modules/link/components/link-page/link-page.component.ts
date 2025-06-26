@@ -6,13 +6,13 @@ import {
   LinkTab,
 } from '@modules/link/constants/link.constant';
 import { TabService } from '@shared/components/tab-list/tab-list.service';
-import { mockCourses } from '@shared/mocks/course';
-import { mockTopics } from '@shared/mocks/topic';
 import { Course } from '@shared/models/course';
 import { LinkTopic } from '@shared/models/topic';
 import { Role, User } from '@shared/models/user';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 import { UserService } from '@shared/services/user.service';
+import { GetTopic } from '@modules/courses/api/topic.api';
+import { GetCourseById } from '@modules/courses/api/courses.api';
 @Component({
   selector: 'app-link-page',
   standalone: false,
@@ -22,11 +22,13 @@ import { UserService } from '@shared/services/user.service';
 })
 export class LinkPageComponent implements OnInit {
   course: Course | null = null;
-  topic: LinkTopic = mockTopics[3] as LinkTopic;
+  topic: LinkTopic | null = null;
   tabs = LinkTab;
   user: User | null = null;
   isStudent = true;
   selectedTab = LinkTab.FILE;
+  courseId: string | null = null;
+  topicId: string | null = null;
 
   constructor(
     private tabService: TabService<LinkTab>,
@@ -35,13 +37,11 @@ export class LinkPageComponent implements OnInit {
     private activedRoute: ActivatedRoute,
     private cdr: ChangeDetectorRef
   ) {
-    const topicId = this.activedRoute.snapshot.paramMap.get('topicId');
-    const courseId = this.activedRoute.snapshot.paramMap.get('courseId');
-    if (courseId) this.fetchCourseData(courseId);
-    if (topicId) this.fetchTopicData(topicId);
-    if (courseId && topicId && this.course && this.topic) {
-      this.updateBreadcrumb(this.course, this.topic);
-    }
+    this.topicId = this.activedRoute.snapshot.paramMap.get('topicId');
+    this.courseId = this.activedRoute.snapshot.paramMap.get('courseId');
+    
+    if (this.courseId) this.fetchCourseData(this.courseId);
+    if (this.topicId && this.courseId) this.fetchTopicData(this.topicId, this.courseId);
   }
   ngOnInit(): void {
     this.tabService.setTabs(LINK_STUDENT_TABS);
@@ -64,14 +64,30 @@ export class LinkPageComponent implements OnInit {
     });
   }
 
-  fetchTopicData(topicId: string) {
-    this.topic =
-      (mockTopics.find((t) => t.id === topicId) as LinkTopic) ||
-      (mockTopics[3] as LinkTopic);
+  async fetchTopicData(topicId: string, courseId: string) {
+    try {
+      this.topic = await GetTopic(topicId, courseId) as LinkTopic;
+      // Update breadcrumb after both course and topic are loaded
+      if (this.course && this.topic) {
+        this.updateBreadcrumb(this.course, this.topic);
+      }
+    } catch (error) {
+      console.error('Error fetching topic data:', error);
+      this.topic = null;
+    }
   }
 
-  fetchCourseData(courseId: string) {
-    this.course = mockCourses.find((c) => c.id === courseId) || null;
+  async fetchCourseData(courseId: string) {
+    try {
+      this.course = await GetCourseById(courseId);
+      // Update breadcrumb after both course and topic are loaded
+      if (this.course && this.topic) {
+        this.updateBreadcrumb(this.course, this.topic);
+      }
+    } catch (error) {
+      console.error('Error fetching course data:', error);
+      this.course = null;
+    }
   }
 
   updateBreadcrumb(course: Course, topic: LinkTopic) {
