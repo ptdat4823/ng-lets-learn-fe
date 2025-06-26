@@ -1,9 +1,7 @@
 import { Component, Input, OnInit, OnDestroy, OnChanges } from '@angular/core';
-import { Router } from '@angular/router';
 import { ToDoService } from '../../to-do.service';
 import { ToDoItem, DoneItemsByCompletion } from '../../../../constants/to-do.constants';
 import { CollapsibleListService } from '@shared/components/collapsible-list/collapsible-list.service';
-import { mockCourses } from '@shared/mocks/course';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -27,7 +25,6 @@ export class TabDoneComponent implements OnInit, OnDestroy, OnChanges {
   
   private destroy$ = new Subject<void>();
   constructor(
-    private router: Router,
     private toDoService: ToDoService,
     public collapsibleListService: CollapsibleListService
   ) {}
@@ -77,15 +74,6 @@ export class TabDoneComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   navigateToItem(item: ToDoItem): void {
-    if (item.type === 'assignment') {
-      this.router.navigate(['/courses', this.getCourseIdFromItem(item), 'assignment', item.id]);
-    } else if (item.type === 'quiz') {
-      this.router.navigate(['/courses', this.getCourseIdFromItem(item), 'quiz', item.id]);
-    }
-  }
-
-  private getCourseIdFromItem(item: ToDoItem): string {
-    const course = mockCourses.find(c => c.title === item.course);
-    return course?.id || '1'; 
+    this.toDoService.navigateToItem(item);
   }
 }

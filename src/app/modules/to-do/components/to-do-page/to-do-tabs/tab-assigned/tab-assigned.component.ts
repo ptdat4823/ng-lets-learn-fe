@@ -1,8 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { ToDoService } from '../../to-do.service';
 import { ToDoItem, ToDoItemsByDueDate } from '../../../../constants/to-do.constants';
-import { mockCourses } from '@shared/mocks/course';
 import { CollapsibleListService } from '@shared/components/collapsible-list/collapsible-list.service';
 
 @Component({
@@ -26,29 +24,33 @@ export class TabAssignedComponent implements OnInit {
   };
 
   constructor(
-    private router: Router,
     private collapsibleListService: CollapsibleListService,
     private toDoService: ToDoService
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.collapsibleListService.setSectionIds(this.sectionIds);
     this.collapsibleListService.setCanEdit(false);
     this.collapsibleListService.expandAll();
     
-    this.loadToDoItems();
+    await this.loadToDoItems();
   }
 
-  private loadToDoItems(): void {
-    const allItems = this.toDoService.getToDoItems();
-    
-    const assignedItems = allItems.filter(item => item.status === 'assigned');
-    
-    this.itemsByDueDate = this.toDoService.categorizeByDueDate(assignedItems);
-    
-    this.itemsByDueDate.thisWeek = this.toDoService.sortItemsByDueDate(this.itemsByDueDate.thisWeek);
-    this.itemsByDueDate.nextWeek = this.toDoService.sortItemsByDueDate(this.itemsByDueDate.nextWeek);
-    this.itemsByDueDate.later = this.toDoService.sortItemsByDueDate(this.itemsByDueDate.later);
+  private async loadToDoItems(): Promise<void> {
+    try {
+      const allItems = await this.toDoService.getToDoItems();
+      
+      const assignedItems = allItems.filter(item => item.status === 'assigned');
+      
+      this.itemsByDueDate = this.toDoService.categorizeByDueDate(assignedItems);
+      
+      this.itemsByDueDate.thisWeek = this.toDoService.sortItemsByDueDate(this.itemsByDueDate.thisWeek);
+      this.itemsByDueDate.nextWeek = this.toDoService.sortItemsByDueDate(this.itemsByDueDate.nextWeek);
+      this.itemsByDueDate.later = this.toDoService.sortItemsByDueDate(this.itemsByDueDate.later);
+    } catch (error) {
+      console.error('Error loading to-do items:', error);
+      this.itemsByDueDate = { noDueDate: [], thisWeek: [], nextWeek: [], later: [] };
+    }
   }
 
   toggleSection(sectionKey: string): void {
@@ -60,15 +62,6 @@ export class TabAssignedComponent implements OnInit {
   }
 
   navigateToItem(item: ToDoItem): void {
-    if (item.type === 'assignment') {
-      this.router.navigate(['/courses', this.getCourseIdFromItem(item), 'assignment', item.id]);
-    } else if (item.type === 'quiz') {
-      this.router.navigate(['/courses', this.getCourseIdFromItem(item), 'quiz', item.id]);
-    }
-  }
-
-  private getCourseIdFromItem(item: ToDoItem): string {
-    const course = mockCourses.find(c => c.title === item.course);
-    return course?.id || '1'; 
+    this.toDoService.navigateToItem(item);
   }
 }

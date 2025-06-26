@@ -1,8 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { ToDoService } from '../../to-do.service';
 import { ToDoItem, OverdueItemsByTime } from '../../../../constants/to-do.constants';
-import { mockCourses } from '@shared/mocks/course';
 import { CollapsibleListService } from '@shared/components/collapsible-list/collapsible-list.service';
 
 @Component({
@@ -25,29 +23,33 @@ export class TabOverdueComponent implements OnInit {
   };
 
   constructor(
-    private router: Router,
     private collapsibleListService: CollapsibleListService,
     private toDoService: ToDoService
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.collapsibleListService.setSectionIds(this.sectionIds);
     this.collapsibleListService.setCanEdit(false);
     this.collapsibleListService.expandAll();
     
-    this.loadOverdueItems();
+    await this.loadOverdueItems();
   }
 
-  private loadOverdueItems(): void {
-    const allItems = this.toDoService.getToDoItems();
-    
-    const overdueItems = allItems.filter(item => item.status === 'overdue');
-    
-    this.itemsByTime = this.toDoService.categorizeOverdueItems(overdueItems);
-    
-    this.itemsByTime.thisWeek = this.toDoService.sortItemsByDueDate(this.itemsByTime.thisWeek);
-    this.itemsByTime.lastWeek = this.toDoService.sortItemsByDueDate(this.itemsByTime.lastWeek);
-    this.itemsByTime.sooner = this.toDoService.sortItemsByDueDate(this.itemsByTime.sooner);
+  private async loadOverdueItems(): Promise<void> {
+    try {
+      const allItems = await this.toDoService.getToDoItems();
+      
+      const overdueItems = allItems.filter(item => item.status === 'overdue');
+      
+      this.itemsByTime = this.toDoService.categorizeOverdueItems(overdueItems);
+      
+      this.itemsByTime.thisWeek = this.toDoService.sortItemsByDueDate(this.itemsByTime.thisWeek);
+      this.itemsByTime.lastWeek = this.toDoService.sortItemsByDueDate(this.itemsByTime.lastWeek);
+      this.itemsByTime.sooner = this.toDoService.sortItemsByDueDate(this.itemsByTime.sooner);
+    } catch (error) {
+      console.error('Error loading overdue items:', error);
+      this.itemsByTime = { thisWeek: [], lastWeek: [], sooner: [] };
+    }
   }
 
   getSectionCount(section: string): number {
@@ -77,15 +79,6 @@ export class TabOverdueComponent implements OnInit {
   }
 
   navigateToItem(item: ToDoItem): void {
-    if (item.type === 'assignment') {
-      this.router.navigate(['/courses', this.getCourseIdFromItem(item), 'assignment', item.id]);
-    } else if (item.type === 'quiz') {
-      this.router.navigate(['/courses', this.getCourseIdFromItem(item), 'quiz', item.id]);
-    }
-  }
-
-  private getCourseIdFromItem(item: ToDoItem): string {
-    const course = mockCourses.find(c => c.title === item.course);
-    return course?.id || '1'; 
+    this.toDoService.navigateToItem(item);
   }
 }
