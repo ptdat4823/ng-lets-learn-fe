@@ -1,10 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CollapsibleListService } from '@shared/components/collapsible-list/collapsible-list.service';
-import { scrollToFirstInvalidField } from '@shared/helper/common.helper';
-import { fileGeneralSettingFormControls, fileSettingFormSchema } from './file-setting-form.config';
+import { fileGeneralSettingFormControls, fileSettingFormSchema, fileValidationMessages } from './file-setting-form.config';
 import { FileTopic } from '@shared/models/topic';
-
+import { UpdateTopic } from '@modules/courses/api/topic.api';
+import { ToastrService } from 'ngx-toastr';
+import { scrollToFirstInvalidField } from '@shared/helper/common.helper';
 @Component({
   selector: 'tab-setting',
   templateUrl: './tab-setting.component.html',
@@ -17,10 +19,14 @@ export class TabSettingComponent implements OnInit {
   form!: FormGroup;
   sectionIds: string[] = ['general'];
   generalFormControls = fileGeneralSettingFormControls;
+  validationMessages = fileValidationMessages;
 
   constructor(
     private fb: FormBuilder,
-    private collapsibleListService: CollapsibleListService
+    private collapsibleListService: CollapsibleListService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private toastrService: ToastrService
   ) {}
   ngOnInit(): void {
     this.form = this.fb.group(fileSettingFormSchema, { updateOn: 'submit' });
@@ -32,7 +38,8 @@ export class TabSettingComponent implements OnInit {
     if (this.topic) {
       this.form.patchValue({
         name: this.topic.title || '',
-        description: this.topic.data?.description || ''
+        description: this.topic.data?.description || '',
+        additionalFile: this.topic.data?.file ? [this.topic.data.file] : []
       });
     }
   }
@@ -53,11 +60,17 @@ export class TabSettingComponent implements OnInit {
 
     if (!this.topic) {
       return;
-    }    const formValues = this.form.value;
+    }
+    
+    const formValues = this.form.value;
+    
+    // Update topic title with name field
+    this.topic.title = formValues.name;
+    
     // Ensure topic data exists
     this.topic.data = this.topic.data || { file: null, description: '' };
     
-    // Update topic data
+    // Update topic data with form values
     this.topic.data.description = formValues.description;
     
     // Extract file from uploaded files and store in topic data
@@ -66,7 +79,30 @@ export class TabSettingComponent implements OnInit {
       this.topic.data.file = uploadedFile;
     }
     
-    console.log('Submit attempt with:', this.form.value);
-    console.log('Saving topic:', this.topic);
+    const courseId = this.activatedRoute.snapshot.paramMap.get('courseId');
+    
+    if (courseId) {
+      // Call the API to update the topic
+      UpdateTopic(this.topic, courseId)
+        .then((updatedTopic) => {
+          this.topic = updatedTopic as FileTopic;
+          
+          // Show success message
+          this.toastrService.success('File updated successfully!', 'Success');
+          
+          const topicId = this.activatedRoute.snapshot.paramMap.get('topicId');
+          if (topicId) {
+            this.router.navigate([`/courses/${courseId}/file/${topicId}`], {
+              queryParams: { tab: 'file' }
+            });
+          }
+        })
+        .catch((error) => {
+          console.error('Error updating topic:', error);
+          this.toastrService.error('Failed to update file. Please try again.', 'Error');
+        });
+    } else {
+      console.error('Course ID not found in route parameters');
+    }
   }
 }

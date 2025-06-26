@@ -36,3 +36,12 @@ export const fileGeneralSettingFormControls: FormControlField[] = [
     validationMessages: {},
   },
 ];
+
+export const fileValidationMessages = {
+  name: {
+    required: 'File name is required',
+    minlength: 'File name must be at least 2 characters',
+  },
+  description: {},
+  additionalFile: {},
+};
