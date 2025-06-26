@@ -5,6 +5,7 @@ import {
   PAGE_TEACHER_TABS,
   PageTab,
 } from '@modules/page/constants/page.constant';
+import { GetCourseById } from '@modules/courses/api/courses.api';
 import { TabService } from '@shared/components/tab-list/tab-list.service';
 import { mockCourses } from '@shared/mocks/course';
 import { mockTopics } from '@shared/mocks/topic';
@@ -13,6 +14,8 @@ import { PageTopic } from '@shared/models/topic';
 import { Role, User } from '@shared/models/user';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 import { UserService } from '@shared/services/user.service';
+import { GetTopic } from '@modules/courses/api/topic.api';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'page-page',
@@ -34,18 +37,12 @@ export class PagePageComponent implements OnInit {
     private userService: UserService,
     private breadcrumbService: BreadcrumbService,
     private activedRoute: ActivatedRoute,
-    private cdr: ChangeDetectorRef
-  ) {
-    const topicId = this.activedRoute.snapshot.paramMap.get('topicId');
-    const courseId = this.activedRoute.snapshot.paramMap.get('courseId');
-    if (courseId) this.fetchCourseData(courseId);
-    if (topicId) this.fetchTopicData(topicId);
-    if (courseId && topicId) {
-      this.updateBreadcrumb(this.course as Course, this.topic);
-    }
-  }
+    private cdr: ChangeDetectorRef,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
+    this.InitData();
     this.tabService.setTabs(PAGE_STUDENT_TABS);
     this.tabService.selectedTab$.subscribe((tab) => {
       if (tab) {
@@ -65,14 +62,36 @@ export class PagePageComponent implements OnInit {
     });
   }
 
-  fetchTopicData(topicId: string) {
-    const res = mockTopics.find((topic) => topic.id === topicId);
-    if (res) this.topic = res as PageTopic;
+  InitData() {
+    const topicId = this.activedRoute.snapshot.paramMap.get('topicId');
+    const courseId = this.activedRoute.snapshot.paramMap.get('courseId');
+    if (courseId) this.fetchCourseData(courseId);
+    if (topicId && courseId) this.fetchTopicData(topicId, courseId);
+    if (this.course && this.topic) {
+      this.updateBreadcrumb(this.course, this.topic);
+    }
   }
 
-  fetchCourseData(courseId: string) {
-    const res = mockCourses.find((course) => course.id === courseId);
-    if (res) this.course = res;
+  async fetchTopicData(topicId: string, courseId: string) {
+    try {
+      const topic = await GetTopic(topicId, courseId);
+      if (topic) {
+        this.topic = topic as PageTopic;
+      }
+    } catch (error) {
+      this.toastr.error('Failed to fetch topic', 'Error');
+    }
+  }
+
+  async fetchCourseData(courseId: string) {
+    try {
+      const course = await GetCourseById(courseId);
+      if (course) {
+        this.course = course;
+      }
+    } catch (error) {
+      this.toastr.error('Failed to fetch course', 'Error');
+    }
   }
 
   updateBreadcrumb(course: Course, topic: PageTopic) {
