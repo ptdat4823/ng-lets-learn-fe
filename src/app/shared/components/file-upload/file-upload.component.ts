@@ -146,7 +146,7 @@ export class FileUploadComponent {
         this.isUploading = false;
 
         const uploadedFiles: CloudinaryFile[] = this.files.map((file) => ({
-          id: `${Date.now()}_${file.name}`,
+          id: crypto.randomUUID(),
           name: file.name,
           displayUrl: URL.createObjectURL(file),
           downloadUrl: URL.createObjectURL(file),

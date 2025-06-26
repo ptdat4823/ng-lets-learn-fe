@@ -14,6 +14,10 @@ import {
   convertQuizFromResponseData,
   convertQuizToRequestData,
 } from '@modules/quiz/helper/quiz.api.helper';
+import{
+  convertFileFromResponseData,
+  convertFileToRequestData
+} from '@modules/file/helper/file.api.helper';
 import {
   AssignmentTopic,
   LinkTopic,
@@ -21,7 +25,9 @@ import {
   QuizTopic,
   Topic,
   TopicType,
+  FileTopic
 } from '@shared/models/topic';
+import { from } from 'rxjs';
 
 export const convertTopicToRequestData = (topic: Topic) => {
   const { type } = topic;
@@ -31,9 +37,9 @@ export const convertTopicToRequestData = (topic: Topic) => {
   } else if (type === TopicType.ASSIGNMENT) {
     reqData = convertAssignmentToRequestData(topic as AssignmentTopic);
   }
-  //   else if (type === TopicType.FILE) {
-  //     reqData = convertCloudinaryFileToRequestData(topic as FileTopic);
-  //   }
+  else if (type === TopicType.FILE) {
+    reqData = convertFileToRequestData(topic as FileTopic);
+  }
   else if (type === TopicType.LINK) {
     reqData = convertLinkToRequestData(topic as LinkTopic);
   } else if (type === TopicType.PAGE) {
@@ -50,9 +56,9 @@ export const convertTopicFromResponseData = (topic: any): Topic | undefined => {
   } else if (type === TopicType.ASSIGNMENT) {
     res = convertAssignmentFromResponseData(topic);
   }
-  //   else if (type === TopicType.FILE) {
-  //     res = convertFileFromResponseData(topic);
-  //   }
+  else if (type === TopicType.FILE) {
+    res = convertFileFromResponseData(topic);
+  }
   else if (type === TopicType.LINK) {
     res = convertLinkFromResponseData(topic);
   } else if (type === TopicType.PAGE) {
