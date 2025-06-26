@@ -3,10 +3,11 @@ import { ComboboxOption } from '@shared/components/combobox/combobox.type';
 import { ComboboxService } from '@shared/components/combobox/combobox.service';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 import { CollapsibleListService } from '@shared/components/collapsible-list/collapsible-list.service';
-import { mockCourses } from '@shared/mocks/course';
 import { ToReviewService } from './to-review.service';
 import { ReviewItem, ReviewItemsCategories } from '../../constants/to-review.constants';
 import { Router } from '@angular/router';
+import { UserService } from '@shared/services/user.service';
+import { GetTeacherCourses } from '@modules/courses/api/courses.api';
 
 @Component({
   selector: 'to-review-page',
@@ -16,12 +17,8 @@ import { Router } from '@angular/router';
   providers: [ComboboxService, CollapsibleListService],
 })
 export class ToReviewPageComponent implements OnInit {  
-    courseOptions: ComboboxOption[] = [
-    { value: 'all', label: 'All courses' },
-    ...mockCourses.map((course) => ({
-      value: course.id,
-      label: course.title,
-    })),
+  courseOptions: ComboboxOption[] = [
+    { value: 'all', label: 'All courses' }
   ];
   
   selectedCourse = signal<string>('all');
@@ -32,13 +29,17 @@ export class ToReviewPageComponent implements OnInit {
   noDueDateItems: ReviewItem[] = [];
 
   allItems: ReviewItem[] = [];
-  overallStats: any = {};
-  isLoading = false;  constructor(
+  overallStats: any = {}; 
+  isLoading = false;
+  courses: any[] = [];
+
+  constructor(
     private breadcrumbService: BreadcrumbService,
     private collapsibleListService: CollapsibleListService,
     private comboboxService: ComboboxService,
     private toReviewService: ToReviewService,
-    private router: Router
+    private router: Router,
+    private userService: UserService
   ) {
     this.breadcrumbService.setBreadcrumbs([
       {
@@ -48,30 +49,52 @@ export class ToReviewPageComponent implements OnInit {
       },
     ]);
   }
-  ngOnInit(): void {
+
+  async ngOnInit(): Promise<void> {
     this.collapsibleListService.setSectionIds(this.sectionIds);
     this.collapsibleListService.setCanEdit(false);
     this.collapsibleListService.expandAll();
+    
+    await this.loadCourses();
     
     const defaultOption = this.courseOptions.find(option => option.value === 'all');
     if (defaultOption) {
       this.comboboxService.selectOption(defaultOption);
     }
     
-    this.loadReviewItems();
+    await this.loadReviewItems();
   }
 
-  onSelectOption(option: ComboboxOption): void {
+  private async loadCourses(): Promise<void> {
+    try {
+      const user = this.userService.getUser();
+      if (user) {
+        this.courses = await GetTeacherCourses(user.id);
+        this.courseOptions = [
+          { value: 'all', label: 'All courses' },
+          ...this.courses.map((course: any) => ({
+            value: course.id,
+            label: course.title,
+          }))
+        ];
+      }
+    } catch (error) {
+      console.error('Error loading courses:', error);
+      // Keep default options if error occurs
+    }
+  }
+
+  async onSelectOption(option: ComboboxOption): Promise<void> {
     this.selectedCourse.set(option.value);
-    this.loadReviewItems();
+    await this.loadReviewItems();
   }  
   
-  private loadReviewItems(): void {
+  private async loadReviewItems(): Promise<void> {
     this.isLoading = true;
     
     try {
       const selectedCourseId = this.selectedCourse();
-      const reviewItems = this.toReviewService.getReviewItems(selectedCourseId);
+      const reviewItems = await this.toReviewService.getReviewItems(selectedCourseId);
       
       const sortedItems = this.toReviewService.sortItemsByDueDate(reviewItems);
       
@@ -85,6 +108,7 @@ export class ToReviewPageComponent implements OnInit {
       this.overallStats = this.toReviewService.getOverallStats(reviewItems);
       
     } catch (error) {
+      console.error('Error loading review items:', error);
       this.workInProgressItems = [];
       this.closedItems = [];
       this.noDueDateItems = [];
@@ -104,10 +128,10 @@ export class ToReviewPageComponent implements OnInit {
   }
 
   private getCourseIdFromItem(item: ReviewItem): string {
-    const course = mockCourses.find(c => c.title === item.course);
+    const course = this.courses.find((c: any) => c.title === item.course);
     return course?.id || '1'; 
   }
-  refreshData(): void {
-    this.loadReviewItems();
+  async refreshData(): Promise<void> {
+    await this.loadReviewItems();
   }
 }

@@ -49,3 +49,24 @@ export const GetStudentReport = (
   const url = `/user/me/report?courseId=${courseId}&start=${startTime}&end=${endTime}`;
   return GET(url);
 };
+
+// Course-level reports (without time range)
+export const GetCourseAssignmentReport = (courseId: string) => {
+  return GET(`/course/${courseId}/assignment-report`);
+};
+
+export const GetCourseQuizReport = (courseId: string) => {
+  return GET(`/course/${courseId}/quiz-report`);
+};
+
+export const GetCourseReports = async (courseId: string) => {
+  const [assignmentReport, quizReport] = await Promise.all([
+    GetCourseAssignmentReport(courseId),
+    GetCourseQuizReport(courseId),
+  ]);
+
+  return {
+    assignmentReport,
+    quizReport,
+  };
+};

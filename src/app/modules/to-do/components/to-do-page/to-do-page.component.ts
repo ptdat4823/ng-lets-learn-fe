@@ -3,9 +3,10 @@ import { ComboboxOption } from '@shared/components/combobox/combobox.type';
 import { ComboboxService } from '@shared/components/combobox/combobox.service';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 import { TabService } from '@shared/components/tab-list/tab-list.service';
-import { mockCourses } from '@shared/mocks/course';
 import { ToDoService } from './to-do.service';
 import { ToDoItem, ToDoItemsCategories, ToDoItemsByDueDate } from '../../constants/to-do.constants';
+import { UserService } from '@shared/services/user.service';
+import { GetPublicCourses } from '@modules/courses/api/courses.api';
 
 @Component({
   selector: 'to-do-page',
@@ -16,11 +17,7 @@ import { ToDoItem, ToDoItemsCategories, ToDoItemsByDueDate } from '../../constan
 })
 export class ToDoPageComponent implements OnInit {
   courseOptions: ComboboxOption[] = [
-    { value: 'all', label: 'All courses' },
-    ...mockCourses.map((course) => ({
-      value: course.id,
-      label: course.title,
-    })),
+    { value: 'all', label: 'All courses' }
   ];
   
   selectedCourse = signal<string>('all');
@@ -31,12 +28,16 @@ export class ToDoPageComponent implements OnInit {
   // Tab configuration
   tabs = ['Assigned', 'Overdue', 'Done'];
   selectedTab = 'Assigned';
+  
+  isLoading = false;
+  courses: any[] = [];
 
   constructor(
     private breadcrumbService: BreadcrumbService,
     private comboboxService: ComboboxService,
     private tabService: TabService<string>,
-    private toDoService: ToDoService
+    private toDoService: ToDoService,
+    private userService: UserService
   ) {
     this.breadcrumbService.setBreadcrumbs([
       {
@@ -47,7 +48,7 @@ export class ToDoPageComponent implements OnInit {
     ]);
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     // Set up tabs
     this.tabService.setTabs(this.tabs);
     this.tabService.selectTab(this.tabs[0]);
@@ -59,6 +60,9 @@ export class ToDoPageComponent implements OnInit {
       }
     });
     
+    // Load courses first
+    await this.loadCourses();
+    
     // Set the default combobox selection to "All courses"
     const defaultOption = this.courseOptions.find(option => option.value === 'all');
     if (defaultOption) {
@@ -66,20 +70,58 @@ export class ToDoPageComponent implements OnInit {
     }
     
     // Load initial data
-    this.loadToDoItems();
+    await this.loadToDoItems();
   }
 
-  onSelectOption(option: ComboboxOption): void {
+  private async loadCourses(): Promise<void> {
+    try {
+      const user = this.userService.getUser();
+      if (user) {
+        const allCourses = await GetPublicCourses();
+        this.courses = allCourses.filter((course: any) => 
+          course.students?.some((student: any) => student.id === user.id)
+        );
+        
+        this.courseOptions = [
+          { value: 'all', label: 'All courses' },
+          ...this.courses.map((course: any) => ({
+            value: course.id,
+            label: course.title,
+          }))
+        ];
+      }
+    } catch (error) {
+      console.error('Error loading courses:', error);
+      // Keep default options if error occurs
+    }
+  }
+
+  async onSelectOption(option: ComboboxOption): Promise<void> {
     this.selectedCourse.set(option.value);
-    this.loadToDoItems();
+    await this.loadToDoItems();
   }
   
-  private loadToDoItems(): void {
-    const courseId = this.selectedCourse() === 'all' ? undefined : this.selectedCourse();
-    const items = this.toDoService.getToDoItems(courseId);
+  private async loadToDoItems(): Promise<void> {
+    this.isLoading = true;
     
-    this.toDoItems.set(items);
-    this.categorizedItems.set(this.toDoService.categorizeToDoItems(items));
-    this.itemsByDueDate.set(this.toDoService.categorizeByDueDate(items));
+    try {
+      const courseId = this.selectedCourse() === 'all' ? undefined : this.selectedCourse();
+      const items = await this.toDoService.getToDoItems(courseId);
+      
+      this.toDoItems.set(items);
+      this.categorizedItems.set(this.toDoService.categorizeToDoItems(items));
+      this.itemsByDueDate.set(this.toDoService.categorizeByDueDate(items));
+    } catch (error) {
+      console.error('Error loading to-do items:', error);
+      this.toDoItems.set([]);
+      this.categorizedItems.set({ assigned: [], overdue: [], done: [] });
+      this.itemsByDueDate.set({ noDueDate: [], thisWeek: [], nextWeek: [], later: [] });
+    } finally {
+      this.isLoading = false;
+    }
+  }
+  
+  async refreshData(): Promise<void> {
+    await this.loadToDoItems();
   }
 }

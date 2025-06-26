@@ -1,13 +1,6 @@
 import { Injectable } from '@angular/core';
-// TODO: BACKEND INTEGRATION - Replace these mock imports with actual API service imports
-import { mockTopics } from '@shared/mocks/topic';
-import { mockCourses } from '@shared/mocks/course';
-import { mockSections } from '@shared/mocks/section';
-import { mockAssignmentResponses, mockStudentResponses } from '@shared/mocks/student-response';
-import { AssignmentTopic, QuizTopic, Topic, TopicType } from '@shared/models/topic';
-import { StudentResponse, AssignmentResponseData, QuizResponseData, QuizStatus } from '@shared/models/student-response';
-import { Course } from '@shared/models/course';
-
+import { Router } from '@angular/router';
+import { ReportService } from '@shared/services/report.service';
 import { 
   ToDoItem, 
   ToDoItemsCategories, 
@@ -20,209 +13,21 @@ import {
 
 @Injectable()
 export class ToDoService {
-  // TODO: BACKEND INTEGRATION - Remove static user ID
-  private static readonly CURRENT_USER_ID = '2';
-    // TODO: BACKEND INTEGRATION - NEEDS Promise.all() for data conversion:
-  // Promise.all([
-  //   fetch('/user/work' + (courseId ? `?courseId=${courseId}` : '')), // Raw backend data
-  //   // Additional calls if /user/work lacks course info or submission details
-  // ]) - Convert raw backend data to ToDoItem[] format
-  getToDoItems(courseId?: string): ToDoItem[] {
-    const currentUserId = ToDoService.CURRENT_USER_ID;
+  constructor(
+    private reportService: ReportService,
+    private router: Router
+  ) {}
 
-    const filteredTopics = courseId && courseId !== 'all' 
-      ? this.getTopicsForCourse(courseId, currentUserId)
-      : this.getTopicsForEnrolledCourses(currentUserId);
-
-    return filteredTopics.map(topic => this.convertTopicToToDoItem(topic));  }  
-  
-    private getTopicsForEnrolledCourses(currentUserId: string): Topic[] {
-    const enrolledCourses = mockCourses.filter(course => 
-      course.students.some(student => student.id === currentUserId)
-    );
-      const enrolledCourseSections = mockSections.filter(section => 
-      enrolledCourses.some(course => course.id === section.courseId)
-    );
-    
-    const sectionIds = enrolledCourseSections.map(section => section.id);
-    
-    return mockTopics.filter(topic => 
-      sectionIds.includes(topic.sectionId) && 
-      (topic.type === TopicType.ASSIGNMENT || topic.type === TopicType.QUIZ)
-    );  }
-
-  // TODO: BACKEND INTEGRATION - Replace with API call: GET /course/{courseId}/work
-  private getTopicsForCourse(courseId: string, currentUserId: string): Topic[] {
-    const course = mockCourses.find(c => c.id === courseId);
-    if (!course || !course.students.some(student => student.id === currentUserId)) {
-      return []; 
-    }
-    
-    const courseSections = mockSections.filter(section => section.courseId === courseId);
-    const sectionIds = courseSections.map(section => section.id);
-    
-    return mockTopics.filter(topic => 
-      sectionIds.includes(topic.sectionId) && 
-      (topic.type === TopicType.ASSIGNMENT || topic.type === TopicType.QUIZ)
-    );  }
-
-  private getCourseForTopic(topic: Topic): Course | null {
-    const section = mockSections.find(section => section.id === topic.sectionId);
-    if (!section) return null;
-    
-    return mockCourses.find(course => course.id === section.courseId) || null;  }
-  
-  // TODO: BACKEND INTEGRATION - CRITICAL: Main conversion function needed
-
-  private convertTopicToToDoItem(topic: Topic): ToDoItem {
-    const course = this.getCourseForTopic(topic);
-    const courseTitle = course?.title || 'Unknown Course';
-    
-    if (topic.type === TopicType.ASSIGNMENT) {
-      return this.convertAssignmentToToDoItem(topic as AssignmentTopic, courseTitle);
-    } else if (topic.type === TopicType.QUIZ) {
-      return this.convertQuizToToDoItem(topic as QuizTopic, courseTitle);
-    }
-    
-    return {
-      id: topic.id,
-      title: topic.title,
-      course: courseTitle,
-      type: topic.type,
-      status: 'assigned',
-      dueDate: null,
-      submitted: false,
-      graded: false,
-      icon: 'assignment',
-      topic: topic
-    };  
-  }
-
-  private convertAssignmentToToDoItem(topic: AssignmentTopic, courseTitle: string): ToDoItem {
-    const userResponse = mockAssignmentResponses.find(r => r.topicId === topic.id && r.student.id === '2');
-    const isSubmitted = !!userResponse;
-    const isGraded = userResponse && (userResponse.data as AssignmentResponseData).mark !== undefined;
-    
-    const status = this.getToDoStatus(topic.data.close, isSubmitted);
-    const { dueDateFormatted, dueStatus } = this.formatDueDate(topic.data.close);
-    
-    return {
-      id: topic.id,
-      title: topic.title,
-      course: courseTitle,
-      type: 'assignment',
-      status: status,
-      dueDate: topic.data.close,
-      submitted: isSubmitted,
-      graded: !!isGraded,
-      icon: 'assignment',
-      topic: topic,
-      dueDateFormatted,
-      dueStatus
-    };  
-  }
-  
-  private convertQuizToToDoItem(topic: QuizTopic, courseTitle: string): ToDoItem {
-    const userResponse = mockStudentResponses.find(r => r.topicId === topic.id && r.student.id === '2');
-    const isCompleted = userResponse && (userResponse.data as QuizResponseData).status === QuizStatus.FINISHED;
-    
-    const status = this.getToDoStatus(topic.data.close, !!isCompleted);
-    const { dueDateFormatted, dueStatus } = this.formatDueDate(topic.data.close);
-    
-    return {
-      id: topic.id,
-      title: topic.title,
-      course: courseTitle,
-      type: 'quiz',
-      status: status,
-      dueDate: topic.data.close,
-      submitted: !!isCompleted,
-      graded: !!isCompleted, 
-      icon: 'quiz',
-      topic: topic,
-      dueDateFormatted,
-      dueStatus
-    };  
-  }
-
-  private getToDoStatus(dueDate: string | null, isCompleted: boolean): 'assigned' | 'overdue' | 'done' {
-    if (isCompleted) return 'done';
-    if (!dueDate) return 'assigned';
-    
-    const now = new Date();
-    const due = new Date(dueDate);
-    
-    return now > due ? 'overdue' : 'assigned';  }
-
-  private formatDueDate(dueDate: string | null): { dueDateFormatted: string; dueStatus: string } {
-    if (!dueDate) {
-      return { dueDateFormatted: '', dueStatus: '' };
-    }
-
-    const due = new Date(dueDate);
-    const now = new Date();
-    const timeDiff = due.getTime() - now.getTime();
-    const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
-
-    // Format the date
-    const options: Intl.DateTimeFormatOptions = { 
-      month: 'short', 
-      day: 'numeric' 
-    };
-    const dueDateFormatted = `Due ${due.toLocaleDateString('en-US', options)}`;
-
-    // Determine status
-    let dueStatus = '';
-    if (daysDiff < 0) {
-      dueStatus = `(${Math.abs(daysDiff)} day${Math.abs(daysDiff) !== 1 ? 's' : ''} late)`;
-    } else if (daysDiff === 0) {
-      dueStatus = '(Due today)';
-    } else if (daysDiff === 1) {
-      dueStatus = '(1 day left)';
-    } else {
-      dueStatus = `(${daysDiff} days left)`;    }
-
-    return { dueDateFormatted, dueStatus };
+  async getToDoItems(courseId?: string): Promise<ToDoItem[]> {
+    return await this.reportService.getToDoItems(courseId);
   }
 
   categorizeToDoItems(items: ToDoItem[]): ToDoItemsCategories {
-    return {
-      assigned: items.filter(item => item.status === 'assigned'),
-      overdue: items.filter(item => item.status === 'overdue'),      done: items.filter(item => item.status === 'done')
-    };
+    return this.reportService.categorizeToDoItems(items);
   }
 
   categorizeByDueDate(items: ToDoItem[]): ToDoItemsByDueDate {
-    // Filter only assigned items (not done or overdue)
-    const assignedItems = items.filter(item => item.status === 'assigned');
-    
-    const now = new Date();
-    const startOfWeek = new Date(now);
-    startOfWeek.setDate(now.getDate() - now.getDay()); // Start of this week (Sunday)
-    
-    const endOfThisWeek = new Date(startOfWeek);
-    endOfThisWeek.setDate(startOfWeek.getDate() + 6); // End of this week (Saturday)
-    
-    const endOfNextWeek = new Date(endOfThisWeek);
-    endOfNextWeek.setDate(endOfThisWeek.getDate() + 7); // End of next week
-
-    return {
-      noDueDate: assignedItems.filter(item => !item.dueDate),
-      thisWeek: assignedItems.filter(item => {
-        if (!item.dueDate) return false;
-        const dueDate = new Date(item.dueDate);
-        return dueDate >= now && dueDate <= endOfThisWeek;
-      }),
-      nextWeek: assignedItems.filter(item => {
-        if (!item.dueDate) return false;
-        const dueDate = new Date(item.dueDate);
-        return dueDate > endOfThisWeek && dueDate <= endOfNextWeek;
-      }),      later: assignedItems.filter(item => {
-        if (!item.dueDate) return false;
-        const dueDate = new Date(item.dueDate);
-        return dueDate > endOfNextWeek;
-      })
-    };
+    return this.reportService.categorizeToDoByDueDate(items);
   }
 
   sortItemsByDueDate(items: ToDoItem[]): ToDoItem[] {
@@ -327,5 +132,26 @@ export class ToDoService {
         return dueDate < startOfLastWeek;
       })
     };
+  }
+
+  getCourseIdFromItem(item: ToDoItem): string {
+    // Try to extract course ID from item.id or use a fallback
+    if (item.id) {
+      const parts = item.id.split('-');
+      if (parts.length >= 2 && parts[0] === 'course') {
+        return parts[1];
+      }
+      // Try to extract from the first part of the ID
+      return parts[0] || '1';
+    }
+    return '1'; // fallback course ID
+  }
+
+  navigateToItem(item: ToDoItem): void {
+    if (item.type === 'assignment') {
+      this.router.navigate(['/courses', this.getCourseIdFromItem(item), 'assignment', item.id]);
+    } else if (item.type === 'quiz') {
+      this.router.navigate(['/courses', this.getCourseIdFromItem(item), 'quiz', item.id]);
+    }
   }
 }
