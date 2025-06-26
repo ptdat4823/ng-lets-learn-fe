@@ -27,6 +27,12 @@ export const GetTeacherCourses = (userId: string): Promise<Course[]> => {
   );
 };
 
+export const GetUserCourses = (userId: string): Promise<Course[]> => {
+  return GET(`/course?userId=${userId}`).then((res) =>
+    res.map(convertCourseFromResponseData)
+  );
+};
+
 export const UpdateCourse = (course: Course) => {
   const data = convertCourseToUpdateRequestData(course);
   return PUT(`/course/${course.id}`, data).then(convertCourseFromResponseData);
@@ -45,4 +51,24 @@ export const GetCourseWork = (
     ? `/course/${courseId}/work?type=${type}`
     : `/course/${courseId}/work`;
   return GET(url).then(convertCourseWorkFromResponseData);
+};
+
+export const GetCourseAssignmentReport = (courseId: string) => {
+  return GET(`/course/${courseId}/assignment-report`);
+};
+
+export const GetCourseQuizReport = (courseId: string) => {
+  return GET(`/course/${courseId}/quiz-report`);
+};
+
+export const GetCourseReports = async (courseId: string) => {
+  const [assignmentReport, quizReport] = await Promise.all([
+    GetCourseAssignmentReport(courseId),
+    GetCourseQuizReport(courseId),
+  ]);
+
+  return {
+    assignmentReport,
+    quizReport,
+  };
 };

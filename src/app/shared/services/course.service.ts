@@ -3,6 +3,22 @@ import { Observable, of } from 'rxjs';
 import { Course, Section } from '@shared/models/course';
 import { generateId } from '@shared/helper/string.helper';
 import { Topic } from '@shared/models/topic';
+import { ToastrService } from 'ngx-toastr';
+import { 
+  CreateCourse, 
+  GetCourseById, 
+  GetPublicCourses, 
+  GetTeacherCourses, 
+  GetUserCourses,
+  UpdateCourse, 
+  JoinCourse,
+  GetCourseWork,
+  GetCourseAssignmentReport,
+  GetCourseQuizReport,
+  GetCourseReports
+} from '@modules/courses/api/courses.api';
+import { INewCourseFormData } from '@modules/courses/components/new-course/new-course-form/new-course-form.config';
+import { UserService } from './user.service';
 
 export interface CreateSectionRequest {
   courseId: string;
@@ -39,7 +55,138 @@ export interface UpdateCourseImageResponse {
   providedIn: 'root',
 })
 export class CourseService {
-  constructor() {}
+  constructor(
+    private toastService: ToastrService,
+    private userService: UserService
+  ) {}
+
+  createCourse(newCourseFormData: INewCourseFormData) {
+    return CreateCourse(newCourseFormData)
+      .then((course) => {
+        this.toastService.success('Course created successfully');
+        return course;
+      })
+      .catch((error) => {
+        this.toastService.error(error.message);
+        throw error;
+      });
+  }
+
+  getCourseById(courseId: string) {
+    return GetCourseById(courseId)
+      .then((course) => {
+        return course;
+      })
+      .catch((error) => {
+        this.toastService.error('Failed to load course');
+        throw error;
+      });
+  }
+
+  getPublicCourses() {
+    return GetPublicCourses()
+      .then((courses) => {
+        return courses;
+      })
+      .catch((error) => {
+        this.toastService.error('Failed to load courses');
+        throw error;
+      });
+  }
+
+  getTeacherCourses(userId: string) {
+    return GetTeacherCourses(userId)
+      .then((courses) => {
+        return courses;
+      })
+      .catch((error) => {
+        this.toastService.error('Failed to load teacher courses');
+        throw error;
+      });
+  }
+
+  updateCourse(course: Course) {
+    return UpdateCourse(course)
+      .then((updatedCourse) => {
+        this.toastService.success('Course updated successfully');
+        return updatedCourse;
+      })
+      .catch((error) => {
+        this.toastService.error(error.message);
+        throw error;
+      });
+  }
+
+  joinCourse(courseId: string) {
+    return JoinCourse(courseId)
+      .then(() => {
+        this.toastService.success('Successfully joined course');
+      })
+      .catch((error) => {
+        this.toastService.error(error.message);
+        throw error;
+      });
+  }
+
+  getCourseWork(courseId: string, type?: 'quiz' | 'assignment' | 'meeting') {
+    return GetCourseWork(courseId, type || null)
+      .then((topics) => {
+        return topics;
+      })
+      .catch((error) => {
+        this.toastService.error('Failed to load course work');
+        throw error;
+      });
+  }
+
+  // Course Report Methods for to-review service
+  getCourseAssignmentReport(courseId: string) {
+    return GetCourseAssignmentReport(courseId)
+      .then((report) => {
+        return report;
+      })
+      .catch((error) => {
+        this.toastService.error('Failed to load assignment report');
+        throw error;
+      });
+  }
+
+  getCourseQuizReport(courseId: string) {
+    return GetCourseQuizReport(courseId)
+      .then((report) => {
+        return report;
+      })
+      .catch((error) => {
+        this.toastService.error('Failed to load quiz report');
+        throw error;
+      });
+  }
+
+  getCourseReports(courseId: string) {
+    return GetCourseReports(courseId)
+      .then((reports) => {
+        return reports;
+      })
+      .catch((error) => {
+        this.toastService.error('Failed to load course reports');
+        throw error;
+      });
+  }
+
+  getUserCourses(): Promise<Course[]> {
+    const user = this.userService.getUser();
+    if (!user) {
+      return Promise.reject(new Error('User not found'));
+    }
+    return GetUserCourses(user.id)
+      .then((courses) => {
+        return courses;
+      })
+      .catch((error) => {
+        this.toastService.error('Failed to load user courses');
+        throw error;
+      });
+  }
 
   updateSectionListByUpdatingSection(
     course: Course,
@@ -94,50 +241,6 @@ export class CourseService {
       ...section,
       topics: updatedTopics,
     };
-  }
-
-  createSection(
-    request: CreateSectionRequest
-  ): Observable<CreateSectionResponse> {
-    const section: Section = {
-      id: Date.now().toString(),
-      courseId: request.courseId,
-      title: request.title || 'New Section',
-      description: request.description || null,
-      position: request.position || 1,
-      topics: [],
-    };
-    return of({
-      section,
-      success: true,
-      message: 'Section created successfully',
-    });
-  }
-  updateSection(
-    sectionId: string,
-    updates: Partial<Section>
-  ): Observable<CreateSectionResponse> {
-    return of({
-      section: { ...updates } as Section,
-      success: true,
-      message: 'Section updated successfully',
-    });
-  }
-  deleteSection(
-    sectionId: string
-  ): Observable<{ success: boolean; message: string }> {
-    return of({
-      success: true,
-      message: 'Section deleted successfully',
-    });
-  }
-
-  getCourseById(courseId: string): Observable<Course> {
-    return of({} as Course);
-  }
-
-  getSectionsByCourse(courseId: string): Observable<Section[]> {
-    return of([]);
   }
 
   updateCourseImage(
