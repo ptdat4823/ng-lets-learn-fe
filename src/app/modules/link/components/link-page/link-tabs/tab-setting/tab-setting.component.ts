@@ -1,8 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CollapsibleListService } from '@shared/components/collapsible-list/collapsible-list.service';
 import { linkGeneralSettingFormControls, linkSettingFormSchema, linkValidationMessages } from './link-setting-form.config';
 import { LinkTopic } from '@shared/models/topic';
+import { UpdateTopic } from '@modules/courses/api/topic.api';
 
 @Component({
   selector: 'tab-setting',
@@ -20,14 +22,15 @@ export class TabSettingComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private collapsibleListService: CollapsibleListService
+    private collapsibleListService: CollapsibleListService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) {}  
   ngOnInit(): void {
     this.form = this.fb.group(linkSettingFormSchema, { updateOn: 'submit' });
     this.collapsibleListService.setSectionIds(this.sectionIds);
     this.collapsibleListService.setCanEdit(false);
     this.collapsibleListService.expandAll();
-    
     // Initialize form with existing topic data
     if (this.topic) {
       this.form.patchValue({
@@ -81,7 +84,26 @@ export class TabSettingComponent implements OnInit {
     this.topic.data.url = formValues.externalUrl;
     this.topic.data.description = formValues.description;
     
-    console.log('Submit attempt with:', this.form.value);
-    console.log('Saving topic:', this.topic);
+    const courseId = this.activatedRoute.snapshot.paramMap.get('courseId');
+    
+    if (courseId) {
+      // Call the API to update the topic
+      UpdateTopic(this.topic, courseId)
+        .then((updatedTopic) => {
+          this.topic = updatedTopic as LinkTopic;
+          
+          const topicId = this.activatedRoute.snapshot.paramMap.get('topicId');
+          if (topicId) {
+            this.router.navigate([`/courses/${courseId}/link/${topicId}`], {
+              queryParams: { tab: 'file' }
+            });
+          }
+        })
+        .catch((error) => {
+          console.error('Error updating topic:', error);
+        });
+    } else {
+      console.error('Course ID not found in route parameters');
+    }
   }
 }

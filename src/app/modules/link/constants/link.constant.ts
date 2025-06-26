@@ -1,5 +1,5 @@
 export enum LinkTab {
-  FILE = 'File',
+  FILE = 'Link',
   SETTINGS = 'Settings',
 }
 
