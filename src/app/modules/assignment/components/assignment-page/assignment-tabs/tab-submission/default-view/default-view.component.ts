@@ -12,7 +12,7 @@ import { AssignmentTopic } from '@shared/models/topic';
 export class DefaultViewComponent implements OnInit {
   @Input({ required: true }) topic!: AssignmentTopic;
   @Input() studentResponses: StudentResponse[] = [];
-  studentAssigned = 40;
+  @Input() studentAssigned: number = 0;
 
   ngOnInit(): void {}
 
