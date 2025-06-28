@@ -1,5 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { GetCourseById } from '@modules/courses/api/courses.api';
+import { GetTopic } from '@modules/courses/api/topic.api';
 import {
   QUIZ_STUDENT_TABS,
   QUIZ_TEACHER_TABS,
@@ -13,6 +15,7 @@ import { QuizTopic } from '@shared/models/topic';
 import { Role, User } from '@shared/models/user';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 import { UserService } from '@shared/services/user.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'quiz-page',
@@ -34,17 +37,12 @@ export class QuizPageComponent implements OnInit {
     private tabService: TabService<QuizTab>,
     private userService: UserService,
     private activedRoute: ActivatedRoute,
-    private cdr: ChangeDetectorRef
-  ) {
-    const topicId = this.activedRoute.snapshot.paramMap.get('topicId');
-    const courseId = this.activedRoute.snapshot.paramMap.get('courseId');
-    if (courseId) this.fetchCourseData(courseId);
-    if (topicId) this.fetchTopicData(topicId);
-    if (courseId && topicId) {
-      this.updateBreadcrumb(this.course as Course, this.topic);
-    }
-  }
+    private cdr: ChangeDetectorRef,
+    private toastr: ToastrService
+  ) {}
+
   ngOnInit(): void {
+    this.InitData()
     this.tabService.setTabs(QUIZ_STUDENT_TABS);
     this.tabService.selectedTab$.subscribe((tab) => {
       if (tab) {
@@ -65,14 +63,38 @@ export class QuizPageComponent implements OnInit {
     });
   }
 
-  fetchTopicData(topicId: string) {
-    const res = mockTopics.find((topic) => topic.id === topicId);
-    if (res) this.topic = res as QuizTopic;
+  InitData() {
+    const topicId = this.activedRoute.snapshot.paramMap.get('topicId');
+    const courseId = this.activedRoute.snapshot.paramMap.get('courseId');
+    if (courseId) this.fetchCourseData(courseId);
+    if (topicId && courseId) this.fetchTopicData(topicId, courseId);
+    if (this.course && this.topic) {
+      this.updateBreadcrumb(this.course, this.topic);
+    }
   }
 
-  fetchCourseData(courseId: string) {
-    const res = mockCourses.find((course) => course.id === courseId);
-    if (res) this.course = res;
+  async fetchTopicData(topicId: string, courseId: string) {
+    try {
+      const topic = await GetTopic(topicId, courseId);
+      if (topic) {
+        this.topic = topic as QuizTopic;
+        this.cdr.detectChanges();
+      }
+    } catch (error) {
+      this.toastr.error('Failed to fetch topic', 'Error');
+    }
+  }
+
+  async fetchCourseData(courseId: string) {
+    try {
+      const course = await GetCourseById(courseId);
+      if (course) {
+        this.course = course;
+        this.cdr.detectChanges();
+      }
+    } catch (error) {
+      this.toastr.error('Failed to fetch course', 'Error');
+    }
   }
 
   updateBreadcrumb(course: Course, topic: QuizTopic) {

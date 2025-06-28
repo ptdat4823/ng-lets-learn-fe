@@ -9,7 +9,7 @@
     <div class="date-item">
       <span class="date-label">Due:</span>
       <span class="date-value">{{
-        formatDate(topic.data.open, "EEEE, dd MMMM yyyy HH:mm a")
+        formatDate(topic.data.close, "EEEE, dd MMMM yyyy HH:mm a")
       }}</span>
     </div>
   </div>
@@ -30,20 +30,13 @@
       <span class="setting-value">{{ topic.data.gradingMethod }}</span>
     </div>
     <div class="setting-item">
-      <span
-        [class]="'setting-label ' + gradeColor"
-        >{{ `${gradingMethod}: ` }}</span
-      >
-      <span [class]="'setting-value ' + gradeColor">
-        {{ `${gradeToShow} / ${fullMarkOfQuiz}` }}
+      <span [ngClass]="['setting-label', gradeColor]">
+        {{ gradingMethod }}:
+      </span>
+      <span [ngClass]="['setting-value', gradeColor]">
+        {{ gradeToShow }} / {{ fullMarkOfQuiz }}
       </span>
     </div>
-  </div>
-
-  <div class="attempts-section">
-    <h3 class="attempts-title">Your attempts</h3>
-
-    <quiz-result-table [studentReponses]="studentResponses" />
   </div>
 </card>
 
