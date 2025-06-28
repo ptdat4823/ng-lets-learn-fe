@@ -26,7 +26,7 @@ export class LinkPageComponent implements OnInit {
   tabs = LinkTab;
   user: User | null = null;
   isStudent = true;
-  selectedTab = LinkTab.FILE;
+  selectedTab = LinkTab.LINK;
   courseId: string | null = null;
   topicId: string | null = null;
 

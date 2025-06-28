@@ -4,10 +4,10 @@ import { LinkTopic } from '@shared/models/topic';
 @Component({
   selector: 'tab-file',
   standalone: false,
-  templateUrl: './tab-file.component.html',
-  styleUrls: ['./tab-file.component.scss']
+  templateUrl: './tab-link.component.html',
+  styleUrls: ['./tab-link.component.scss']
 })
-export class TabFileComponent implements OnInit, OnChanges {
+export class TabLinkComponent implements OnInit, OnChanges {
   @Input({ required: true }) topic!: LinkTopic;
 
   hasLink: boolean = false;
