@@ -5,6 +5,7 @@ import { CollapsibleListService } from '@shared/components/collapsible-list/coll
 import { linkGeneralSettingFormControls, linkSettingFormSchema, linkValidationMessages } from './link-setting-form.config';
 import { LinkTopic } from '@shared/models/topic';
 import { UpdateTopic } from '@modules/courses/api/topic.api';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'tab-setting',
@@ -24,7 +25,8 @@ export class TabSettingComponent implements OnInit {
     private fb: FormBuilder,
     private collapsibleListService: CollapsibleListService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private toastrService: ToastrService
   ) {}  
   ngOnInit(): void {
     this.form = this.fb.group(linkSettingFormSchema, { updateOn: 'submit' });
@@ -46,7 +48,7 @@ export class TabSettingComponent implements OnInit {
     return control ? control.disabled : false;
   }
 
-  onSubmit(e: Event): void {
+  async onSubmit(e: Event) {
     e.preventDefault();
     
     // Stop here if form is invalid
@@ -88,10 +90,11 @@ export class TabSettingComponent implements OnInit {
     
     if (courseId) {
       // Call the API to update the topic
-      UpdateTopic(this.topic, courseId)
+      await UpdateTopic(this.topic, courseId)
         .then((updatedTopic) => {
           this.topic = updatedTopic as LinkTopic;
-          
+          this.toastrService.success('Link updated successfully!', 'Success');
+
           const topicId = this.activatedRoute.snapshot.paramMap.get('topicId');
           if (topicId) {
             this.router.navigate([`/courses/${courseId}/link/${topicId}`], {
@@ -101,6 +104,7 @@ export class TabSettingComponent implements OnInit {
         })
         .catch((error) => {
           console.error('Error updating topic:', error);
+          this.toastrService.error('Failed to update link. Please try again.', 'Error');
         });
     } else {
       console.error('Course ID not found in route parameters');
