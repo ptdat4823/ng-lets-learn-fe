@@ -4,16 +4,66 @@
   [formGroup]="form"
 >
   <div class="file-upload-content">
+    @if(uploadedFiles.length === 0) {
     <span class="material-symbols-outlined file-upload-icon">cloud_upload</span>
 
     <div class="upload-text">
       <h4 class="upload-title">Choose files or drag and drop</h4>
       <h4 class="upload-description">{{ description }}</h4>
     </div>
+    }
+
+    <div class="uploaded-files" *ngIf="uploadedFiles.length > 0">
+      <h4>Uploaded Files:</h4>
+      <ul class="file-list">
+        @for(file of uploadedFiles; track file.id) {
+        <li>
+          <div class="file-item">
+            <a
+              class="file-name"
+              [href]="file.displayUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              >{{ file.name }}</a
+            >
+            <div
+              [class]="{
+              'file-actions': true,
+              'deleting': isDeleting,
+            }"
+            >
+              <a
+                *ngIf="file.downloadUrl"
+                [href]="file.downloadUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="download-link"
+              >
+                <span class="material-symbols-outlined tint-secondary"
+                  >download_for_offline</span
+                >
+              </a>
+              @if(isDeleting) {
+              <img src="svgs/loading2-24px.svg" alt="Loading..." />
+              } @else {<span
+                class="material-symbols-outlined error-color"
+                (click)="onDeleteFile(file)"
+                >delete</span
+              >}
+            </div>
+          </div>
+        </li>
+        }
+      </ul>
+    </div>
 
     <app-button
       (click)="openFileSelector()"
-      label="Attach"
+      [label]="
+        uploadedFiles && uploadedFiles.length > 0
+          ? 'Attach more files'
+          : 'Attach'
+      "
       class="attach-button"
     >
       <span class="material-symbols-outlined" icon>attach_file</span>
@@ -30,7 +80,13 @@
 
   <div class="upload-progress" *ngIf="isUploading">
     <div class="progress-bar">
-      <div class="progress-fill" [style.width.%]="uploadProgress"></div>
+      <div
+        [class]="{
+        'progress-fill': true,
+        'green': uploadProgress === 100,
+      }"
+        [style.width.%]="uploadProgress"
+      ></div>
     </div>
     <div class="progress-text">Uploading... {{ uploadProgress }}%</div>
   </div>

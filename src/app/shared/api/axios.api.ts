@@ -3,7 +3,7 @@ import axios from 'axios';
 import { environment } from 'environments/environment.development';
 import { GET } from './utils.api';
 
-const backendUrl = environment.backendUrl || 'http://localhost:8080';
+const backendUrl = environment.BACKEND_URL || 'http://localhost:8080';
 console.log('Backend URL:', backendUrl);
 
 const Axios = axios.create({

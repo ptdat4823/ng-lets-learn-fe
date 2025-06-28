@@ -8,6 +8,11 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import {
+  DeleteCloudinaryFile,
+  UploadMultipleCloudinaryFiles,
+} from '@shared/api/cloudinary.api';
+import { convertCloudinaryUrlToDownloadUrl } from '@shared/helper/cloudinary.api.helper';
 import { CloudinaryFile } from '@shared/models/cloudinary-file';
 import { ToastrService } from 'ngx-toastr';
 
@@ -30,6 +35,7 @@ export class FileUploadComponent {
   @Input() form: FormGroup = new FormGroup({});
   @Input() controlName: string = '';
   @Input() validationMessages: Record<string, string> | null = null;
+  @Input() uploadedFiles: CloudinaryFile[] = [];
 
   @Input() description = 'Texts, images, videos, audios and pdfs';
   @Input() config: FileUploadConfig = {
@@ -59,11 +65,14 @@ export class FileUploadComponent {
   @Input() showSuccessToast = true;
 
   @Output() uploaded = new EventEmitter<CloudinaryFile[]>();
+  @Output() deleted = new EventEmitter<CloudinaryFile>();
 
   isDragging = false;
   isUploading = false;
+  isDeleting = false;
   uploadProgress = 0;
   files: File[] = [];
+  toUploadFiles: CloudinaryFile[] = [];
 
   constructor(private el: ElementRef, private toastService: ToastrService) {}
 
@@ -88,20 +97,20 @@ export class FileUploadComponent {
     this.isDragging = false;
 
     const files = event.dataTransfer?.files;
-    if (files && files.length > 0) this.handleFiles(files);
+    if (files && files.length > 0) this.handleFilesChange(files);
   }
 
   onFileInputChange(event: any) {
     if (!event.target) return;
     const files = event.target.files;
-    if (files && files.length > 0) this.handleFiles(files);
+    if (files && files.length > 0) this.handleFilesChange(files);
   }
 
   openFileSelector() {
     this.fileInput.nativeElement.click();
   }
 
-  handleFiles(fileList: FileList) {
+  handleFilesChange(fileList: FileList) {
     // Convert FileList to array
     const filesArray = Array.from(fileList);
 
@@ -131,42 +140,90 @@ export class FileUploadComponent {
     this.uploadFiles();
   }
 
-  uploadFiles() {
+  async uploadFiles() {
     if (this.files.length === 0) return;
 
     this.isUploading = true;
     this.uploadProgress = 0;
 
+    this.toUploadFiles = this.files.map((file) => ({
+      id: `${Date.now()}_${file.name}`,
+      name: file.name,
+      displayUrl: '',
+      downloadUrl: '',
+    }));
+
     // Simulate upload progress
     const interval = setInterval(() => {
-      this.uploadProgress += 5;
-
       if (this.uploadProgress >= 100) {
         clearInterval(interval);
-        this.isUploading = false;
+        this.hideProgressBar();
+      } else if (this.uploadProgress >= 90) this.uploadProgress += 1;
+      else if (this.uploadProgress >= 70) this.uploadProgress += 2;
+      else if (this.uploadProgress >= 50) this.uploadProgress += 3;
+      else if (this.uploadProgress >= 30) this.uploadProgress += 5;
+      else if (this.uploadProgress >= 10) this.uploadProgress += 10;
+      else this.uploadProgress += 20;
+    }, 20);
 
-        const uploadedFiles: CloudinaryFile[] = this.files.map((file) => ({
-          id: `${Date.now()}_${file.name}`,
-          name: file.name,
-          displayUrl: URL.createObjectURL(file),
-          downloadUrl: URL.createObjectURL(file),
-        }));
+    await UploadMultipleCloudinaryFiles(this.files)
+      .then((response) => {
+        if (this.uploadProgress >= 100) this.onUploadSuccess(response);
+      })
+      .catch((error) => {
+        console.error('Upload failed:', error);
+        this.toastService.error('File upload failed. Please try again.');
+      })
+      .finally(() => {
+        this.uploadProgress = 100;
+        this.hideProgressBar();
+        this.resetFileInput();
+      });
+  }
 
-        this.uploaded.emit(uploadedFiles);
+  hideProgressBar() {
+    setTimeout(() => {
+      this.isUploading = false;
+      this.uploadProgress = 0;
+    }, 2000);
+  }
 
-        this.form.get(this.controlName)?.setValue(uploadedFiles);
+  resetFileInput() {
+    this.fileInput.nativeElement.value = '';
+    this.files = [];
+  }
 
+  onUploadSuccess(res: any) {
+    this.toUploadFiles = this.toUploadFiles.map((file: any, index: number) => ({
+      ...file,
+      displayUrl: res[index].url,
+      downloadUrl: convertCloudinaryUrlToDownloadUrl(res[index].url),
+    }));
+    this.uploadedFiles = [...this.uploadedFiles, ...this.toUploadFiles];
+    this.uploaded.emit(this.uploadedFiles);
+    this.form.get(this.controlName)?.setValue(this.uploadedFiles);
+    if (this.showSuccessToast) {
+      this.toastService.success('Files uploaded successfully');
+    }
+  }
+
+  async onDeleteFile(file: CloudinaryFile) {
+    this.isDeleting = true;
+    await DeleteCloudinaryFile(file.displayUrl)
+      .then(() => {
+        this.uploadedFiles = this.uploadedFiles.filter((f) => f.id !== file.id);
+        this.deleted.emit(file);
+        this.form.get(this.controlName)?.setValue(this.uploadedFiles);
         if (this.showSuccessToast) {
-          this.toastService.success(
-            `Successfully uploaded ${uploadedFiles.length} file(s)`
-          );
+          this.toastService.success('File deleted successfully');
         }
-
-        this.files = [];
-      }
-    }, 100);
-
-    // In a real implementation, you would use the Cloudinary API or another service
-    // to upload the files and get back the URLs and other metadata
+      })
+      .catch((error) => {
+        console.error('Delete failed:', error);
+        this.toastService.error('File deletion failed. Please try again.');
+      })
+      .finally(() => {
+        this.isDeleting = false;
+      });
   }
 }

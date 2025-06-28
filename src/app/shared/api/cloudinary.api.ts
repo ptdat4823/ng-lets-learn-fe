@@ -4,6 +4,7 @@ import {
   getPublicIdFromCloudinaryUrl,
 } from '@shared/helper/cloudinary.api.helper';
 import { POST } from './utils.api';
+import { environment } from 'environments/environment.development';
 
 const VIDEO_TYPES = [
   'video/mp4',
@@ -31,13 +32,13 @@ const IMAGE_TYPES = [
   'image/svg+xml',
 ];
 
-export const UploadCloudinaryFile = (file: File) => {
+export const UploadCloudinaryFile = async (file: File) => {
   if (!file) {
     return Promise.reject(new Error('File is not provided'));
   }
 
-  const cloudName = '';
-  const uploadPreset = '';
+  const cloudName = environment.CLOUDINARY_CLOUD_NAME || '';
+  const uploadPreset = environment.UPLOAD_PRESET_NAME || '';
   if (!cloudName || !uploadPreset) {
     return Promise.reject(
       new Error('Cloud name or upload preset is not found')
@@ -49,13 +50,20 @@ export const UploadCloudinaryFile = (file: File) => {
   else if (VIDEO_TYPES.includes(file.type)) resourceType = 'video';
 
   const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
+
   const requestData = new FormData();
   requestData.append('file', file);
   requestData.append('upload_preset', uploadPreset);
 
-  return POST(uploadUrl, requestData).catch((error) => {
-    return Promise.reject(new Error(`Failed to upload file: ${file.name}`));
-  });
+  return await fetch(uploadUrl, {
+    method: 'POST',
+    body: requestData,
+  })
+    .then((res) => res.json())
+    .catch((error) => {
+      console.error('Error uploading file to Cloudinary:', error);
+      return Promise.reject(new Error(`Failed to upload file: ${file.name}`));
+    });
 };
 
 export const UploadMultipleCloudinaryFiles = (files: File[]) => {
@@ -72,9 +80,9 @@ export const DeleteCloudinaryFile = (imageUrl: string) => {
     return Promise.reject(new Error('Image URL is not provided'));
   }
 
-  const cloudName = '';
-  const apiKey = '';
-  const apiSecret = '';
+  const cloudName = environment.CLOUDINARY_CLOUD_NAME || '';
+  const apiKey = environment.CLOUDINARY_API_KEY || '';
+  const apiSecret = environment.CLOUDINARY_API_SECRET || '';
   if (!cloudName) {
     return Promise.reject(new Error('Cloud name is not found'));
   } else if (!apiKey) {
@@ -95,11 +103,17 @@ export const DeleteCloudinaryFile = (imageUrl: string) => {
   formData.append('timestamp', timestamp);
   formData.append('signature', signature);
 
-  return POST(uploadUrl, formData).catch(() => {
-    return Promise.reject(
-      new Error(`Failed to delete file with url: ${imageUrl}`)
-    );
-  });
+  return fetch(uploadUrl, {
+    method: 'POST',
+    body: formData,
+  })
+    .then((res) => res.json())
+    .catch((error) => {
+      console.error('Error uploading file to Cloudinary:', error);
+      return Promise.reject(
+        new Error(`Failed to delete file with url: ${imageUrl}`)
+      );
+    });
 };
 
 export function DeleteMultipleCloudinaryFiles(listImageUrls: string[]) {

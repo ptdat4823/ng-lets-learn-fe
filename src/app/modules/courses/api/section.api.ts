@@ -16,5 +16,6 @@ export const CreateSection = (section: Section): Promise<Section> => {
 
 export const UpdateSection = (section: Section): Promise<Section> => {
   let data = convertSectionToUpdateRequestData(section);
+  console.log('UpdateSection data: ', data);
   return PUT(`/section/${section.id}`, data);
 };
