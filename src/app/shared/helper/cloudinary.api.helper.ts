@@ -35,3 +35,11 @@ export const generateSignature = (publicId: string, apiSecret: string) => {
   const timestamp = new Date().getTime();
   return `public_id=${publicId}&timestamp=${timestamp}${apiSecret}`;
 };
+
+export const convertCloudinaryUrlToDownloadUrl = (url: string) => {
+  //E.g: url = http://res.cloudinary.com/dggtc5ucv/image/upload/v1720082993/jlqkd6dqyx4mrbsqhe31.jpg
+  // -> downloadUrl = http://res.cloudinary.com/dggtc5ucv/image/upload/fl_attachment/v1720082993/jlqkd6dqyx4mrbsqhe31.jpg
+  //Add /fl_attachment/ after /upload/ in the url
+  const parts = url.split('/upload/');
+  return `${parts[0]}/upload/fl_attachment/${parts[1]}`;
+};

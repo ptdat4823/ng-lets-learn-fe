@@ -171,6 +171,7 @@ export class TabCourseComponent implements OnInit, OnChanges {
       return;
     }
     this.loadingToUpdateSection = true;
+    console.log('Updating section: ', section);
     await UpdateSection(section)
       .then((updatedSection) => {
         this.handleUpdateSectionSuccess(updatedSection.id);

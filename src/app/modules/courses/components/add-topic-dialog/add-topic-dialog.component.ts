@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { 
-  TopicType, 
-  TopicTypeOption, 
+import {
+  TopicType,
+  TopicTypeOption,
   getTopicTypeOptions,
   getActivityTopicOptions,
   getResourceTopicOptions,
   activityTopics,
-  resourceTopics
+  resourceTopics,
 } from '@shared/models/topic';
 
 export interface AddTopicDialogResult {
@@ -18,7 +18,7 @@ export interface AddTopicDialogResult {
   selector: 'app-add-topic-dialog',
   standalone: false,
   templateUrl: './add-topic-dialog.component.html',
-  styleUrl: './add-topic-dialog.component.scss'
+  styleUrl: './add-topic-dialog.component.scss',
 })
 export class AddTopicDialogComponent {
   @Input() show = false;
@@ -36,9 +36,13 @@ export class AddTopicDialogComponent {
   get filteredTopicTypes(): TopicTypeOption[] {
     switch (this.selectedTab) {
       case 'activities':
-        return this.topicTypes.filter(t => this.activityTypes.includes(t.type));
+        return this.topicTypes.filter((t) =>
+          this.activityTypes.includes(t.type)
+        );
       case 'resources':
-        return this.topicTypes.filter(t => this.resourceTypes.includes(t.type));
+        return this.topicTypes.filter((t) =>
+          this.resourceTypes.includes(t.type)
+        );
       default:
         return this.topicTypes;
     }
@@ -46,7 +50,10 @@ export class AddTopicDialogComponent {
 
   selectTab(tab: 'all' | 'activities' | 'resources') {
     this.selectedTab = tab;
-    if (this.selectedTopicType && !this.filteredTopicTypes.find(t => t.type === this.selectedTopicType)) {
+    if (
+      this.selectedTopicType &&
+      !this.filteredTopicTypes.find((t) => t.type === this.selectedTopicType)
+    ) {
       this.selectedTopicType = null;
     }
   }
@@ -65,7 +72,7 @@ export class AddTopicDialogComponent {
 
     this.addTopic.emit({
       topicType: this.selectedTopicType,
-      sectionId: this.sectionId
+      sectionId: this.sectionId,
     });
 
     this.onClose();

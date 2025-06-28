@@ -3,6 +3,10 @@ import {
   convertAssignmentToRequestData,
 } from '@modules/assignment/helper/assignment.api.helper';
 import {
+  convertFileFromResponseData,
+  convertFileToRequestData,
+} from '@modules/file/helper/file.api.helper';
+import {
   convertLinkFromResponseData,
   convertLinkToRequestData,
 } from '@modules/link/helper/link.api.helper';
@@ -16,6 +20,7 @@ import {
 } from '@modules/quiz/helper/quiz.api.helper';
 import {
   AssignmentTopic,
+  FileTopic,
   LinkTopic,
   PageTopic,
   QuizTopic,
@@ -30,11 +35,9 @@ export const convertTopicToRequestData = (topic: Topic) => {
     reqData = convertQuizToRequestData(topic as QuizTopic);
   } else if (type === TopicType.ASSIGNMENT) {
     reqData = convertAssignmentToRequestData(topic as AssignmentTopic);
-  }
-  //   else if (type === TopicType.FILE) {
-  //     reqData = convertCloudinaryFileToRequestData(topic as FileTopic);
-  //   }
-  else if (type === TopicType.LINK) {
+  } else if (type === TopicType.FILE) {
+    reqData = convertFileToRequestData(topic as FileTopic);
+  } else if (type === TopicType.LINK) {
     reqData = convertLinkToRequestData(topic as LinkTopic);
   } else if (type === TopicType.PAGE) {
     reqData = convertPageToRequestData(topic as PageTopic);
@@ -49,11 +52,9 @@ export const convertTopicFromResponseData = (topic: any): Topic | undefined => {
     res = convertQuizFromResponseData(topic);
   } else if (type === TopicType.ASSIGNMENT) {
     res = convertAssignmentFromResponseData(topic);
-  }
-  //   else if (type === TopicType.FILE) {
-  //     res = convertFileFromResponseData(topic);
-  //   }
-  else if (type === TopicType.LINK) {
+  } else if (type === TopicType.FILE) {
+    res = convertFileFromResponseData(topic);
+  } else if (type === TopicType.LINK) {
     res = convertLinkFromResponseData(topic);
   } else if (type === TopicType.PAGE) {
     res = convertPageFromResponseData(topic);
