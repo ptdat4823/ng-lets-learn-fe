@@ -6,14 +6,15 @@ import {
   AssignmentTab,
 } from '@modules/assignment/constants/assignment.constant';
 import { GetCourseById } from '@modules/courses/api/courses.api';
+import { GetTopic } from '@modules/courses/api/topic.api';
 import { TabService } from '@shared/components/tab-list/tab-list.service';
-import { mockCourses } from '@shared/mocks/course';
 import { mockTopics } from '@shared/mocks/topic';
 import { Course } from '@shared/models/course';
 import { AssignmentTopic } from '@shared/models/topic';
 import { Role, User } from '@shared/models/user';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 import { UserService } from '@shared/services/user.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'assignment-page',
@@ -24,7 +25,7 @@ import { UserService } from '@shared/services/user.service';
 })
 export class AssignmentPageComponent implements OnInit {
   course: Course | null = null;
-  topic: AssignmentTopic = mockTopics[1] as AssignmentTopic;
+  topic: AssignmentTopic | null = null;
   tabs = AssignmentTab;
   user: User | null = null;
   isStudent = true;
@@ -35,7 +36,8 @@ export class AssignmentPageComponent implements OnInit {
     private userService: UserService,
     private breadcrumbService: BreadcrumbService,
     private activedRoute: ActivatedRoute,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -63,27 +65,35 @@ export class AssignmentPageComponent implements OnInit {
     const topicId = this.activedRoute.snapshot.paramMap.get('topicId');
     const courseId = this.activedRoute.snapshot.paramMap.get('courseId');
     if (courseId) this.fetchCourseData(courseId);
-    if (topicId) this.fetchTopicData(topicId);
-    if (courseId && topicId) {
-      this.updateBreadcrumb(this.course as Course, this.topic);
+    if (topicId && courseId) this.fetchTopicData(topicId, courseId);
+  }
+
+  async fetchTopicData(topicId: string, courseId: string) {
+    try {
+      const topic = await GetTopic(topicId, courseId);
+      if (topic) {
+        this.topic = topic as AssignmentTopic;
+        if (this.course) {
+          this.updateBreadcrumb(this.course, this.topic);
+        }
+      }
+    } catch (error) {
+      this.toastr.error('Failed to fetch topic', 'Error');
     }
   }
 
-  fetchTopicData(topicId: string) {
-    const res = mockTopics.find((topic) => topic.id === topicId);
-    if (res) this.topic = res as AssignmentTopic;
-  }
-
   async fetchCourseData(courseId: string) {
-    await GetCourseById(courseId).then((course) => {
+    try {
+      const course = await GetCourseById(courseId);
       if (course) {
         this.course = course;
-        this.updateBreadcrumb(this.course, this.topic);
-      } else {
-        this.course = mockCourses[0];
-        this.updateBreadcrumb(this.course, this.topic);
+        if (this.topic) {
+          this.updateBreadcrumb(this.course, this.topic);
+        }
       }
-    });
+    } catch (error) {
+      this.toastr.error('Failed to fetch course', 'Error');
+    }
   }
 
   updateBreadcrumb(course: Course, topic: AssignmentTopic) {

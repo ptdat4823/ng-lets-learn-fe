@@ -1,10 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { mockAssignmentResponses } from '@shared/mocks/student-response';
 import {
   AssignmentResponseData,
   StudentResponse,
 } from '@shared/models/student-response';
 import { AssignmentTopic } from '@shared/models/topic';
+import { Course } from '@shared/models/course';
+import { GetAllAssignmentResponsesOfTopic } from '@modules/assignment/api/assignment-response.api';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'tab-submission',
@@ -14,13 +16,33 @@ import { AssignmentTopic } from '@shared/models/topic';
 })
 export class TabSubmissionComponent implements OnInit {
   @Input({ required: true }) topic!: AssignmentTopic;
-  studentResponses: StudentResponse[] = mockAssignmentResponses;
+  @Input() course!: Course;
+  studentResponses: StudentResponse[] = [];
   filteredStudentResponses: StudentResponse[] = [];
 
   selectedStudentResponse: StudentResponse | null = null;
 
+  constructor(private toastr: ToastrService) {}
+
   ngOnInit(): void {
-    this.filteredStudentResponses = this.studentResponses;
+    this.fetchAssignmentResponses();
+  }
+
+  get assignedCount(): number {
+    return this.course && this.course.students ? this.course.students.length : 0;
+  }
+
+  get submittedCount(): number {
+    return this.studentResponses.length;
+  }
+
+  async fetchAssignmentResponses() {
+    try {
+      this.studentResponses = await GetAllAssignmentResponsesOfTopic(this.topic.id);
+      this.filteredStudentResponses = this.studentResponses;
+    } catch (error) {
+      this.toastr.error('Failed to fetch assignment responses', 'Error');
+    }
   }
 
   filteredStudents(searchTerm: string) {
