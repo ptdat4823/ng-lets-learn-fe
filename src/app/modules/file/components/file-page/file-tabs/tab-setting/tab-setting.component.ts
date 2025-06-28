@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CollapsibleListService } from '@shared/components/collapsible-list/collapsible-list.service';
@@ -7,6 +7,8 @@ import { FileTopic } from '@shared/models/topic';
 import { UpdateTopic } from '@modules/courses/api/topic.api';
 import { ToastrService } from 'ngx-toastr';
 import { scrollToFirstInvalidField } from '@shared/helper/common.helper';
+import { Subscription } from 'rxjs';
+
 @Component({
   selector: 'tab-setting',
   templateUrl: './tab-setting.component.html',
@@ -14,12 +16,13 @@ import { scrollToFirstInvalidField } from '@shared/helper/common.helper';
   standalone: false,
   providers: [CollapsibleListService],
 })
-export class TabSettingComponent implements OnInit {
+export class TabSettingComponent implements OnInit, OnDestroy {
   @Input({ required: true }) topic!: FileTopic;
   form!: FormGroup;
   sectionIds: string[] = ['general'];
   generalFormControls = fileGeneralSettingFormControls;
   validationMessages = fileValidationMessages;
+  private fileControlSubscription?: Subscription;
 
   constructor(
     private fb: FormBuilder,
@@ -28,6 +31,7 @@ export class TabSettingComponent implements OnInit {
     private router: Router,
     private toastrService: ToastrService
   ) {}
+  
   ngOnInit(): void {
     this.form = this.fb.group(fileSettingFormSchema, { updateOn: 'submit' });
     this.collapsibleListService.setSectionIds(this.sectionIds);
@@ -42,6 +46,17 @@ export class TabSettingComponent implements OnInit {
         additionalFile: this.topic.data?.file ? [this.topic.data.file] : []
       });
     }
+
+    this.fileControlSubscription = this.form.get('additionalFile')?.valueChanges.subscribe(files => {
+      if (files && Array.isArray(files) && files.length > 1) {
+        this.form.get('additionalFile')?.setValue([files[0]], { emitEvent: false });
+        this.toastrService.warning('Only 1 file is allowed. The first file will be kept.', 'File Limit');
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.fileControlSubscription?.unsubscribe();
   }
 
   getDisabled(controlName: string): boolean {
@@ -49,7 +64,7 @@ export class TabSettingComponent implements OnInit {
     return control ? control.disabled : false;
   }
 
-  onSubmit(e: Event): void {
+  async onSubmit(e: Event){
     e.preventDefault();
       // Stop here if form is invalid
     if (this.form.invalid) {
@@ -83,7 +98,7 @@ export class TabSettingComponent implements OnInit {
     
     if (courseId) {
       // Call the API to update the topic
-      UpdateTopic(this.topic, courseId)
+      await UpdateTopic(this.topic, courseId)
         .then((updatedTopic) => {
           this.topic = updatedTopic as FileTopic;
           
