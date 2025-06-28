@@ -1,5 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { GetCourseById } from '@modules/courses/api/courses.api';
+import { GetTopic } from '@modules/courses/api/topic.api';
 import {
   QUIZ_STUDENT_TABS,
   QUIZ_TEACHER_TABS,
@@ -35,16 +37,26 @@ export class QuizPageComponent implements OnInit {
     private userService: UserService,
     private activedRoute: ActivatedRoute,
     private cdr: ChangeDetectorRef
-  ) {
+  ) {}
+
+  async InitData() {
     const topicId = this.activedRoute.snapshot.paramMap.get('topicId');
     const courseId = this.activedRoute.snapshot.paramMap.get('courseId');
-    if (courseId) this.fetchCourseData(courseId);
-    if (topicId) this.fetchTopicData(topicId);
-    if (courseId && topicId) {
-      this.updateBreadcrumb(this.course as Course, this.topic);
-    }
+    if (topicId && courseId) await this.FetchData(courseId, topicId);
   }
+
+  async FetchData(courseId: string, topicId: string) {
+    return await GetCourseById(courseId).then(async (course) => {
+      this.course = course;
+      await GetTopic(topicId, courseId).then((topic) => {
+        this.topic = topic as QuizTopic;
+        this.updateBreadcrumb(course, this.topic);
+      });
+    });
+  }
+
   ngOnInit(): void {
+    this.InitData();
     this.tabService.setTabs(QUIZ_STUDENT_TABS);
     this.tabService.selectedTab$.subscribe((tab) => {
       if (tab) {
@@ -55,6 +67,7 @@ export class QuizPageComponent implements OnInit {
 
     this.userService.user$.subscribe((user) => {
       this.user = user;
+      console.log('User in quiz page: ', user);
       if (user?.role === Role.TEACHER) {
         this.tabService.setTabs(QUIZ_TEACHER_TABS);
         this.isStudent = false;

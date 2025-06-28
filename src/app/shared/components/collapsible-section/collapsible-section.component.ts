@@ -56,7 +56,7 @@ export class CollapsibleSectionComponent implements OnInit, AfterViewInit {
   }
 
   toggleExpand(): void {
-    if (!this.canEdit || this.isEditingTitle) return;
+    if (this.isEditingTitle) return;
     this.collapsibleListService.toggleExpand(this.sectionId);
     this.updateContentHeight();
   }

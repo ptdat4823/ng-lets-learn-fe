@@ -13,6 +13,10 @@ import { PageData } from '@shared/models/page';
 import { FileTopicData } from '@shared/models/file-topic';
 import { MeetingData } from '@shared/models/meeting';
 import { generateId } from '@shared/helper/string.helper';
+import {
+  getEndDateOfWeek,
+  getStartDateOfWeek,
+} from '@shared/helper/date.helper';
 
 export interface CreateTopicRequest {
   sectionId: string;
@@ -70,8 +74,8 @@ export class TopicService {
         topicData = {
           description:
             'Complete tasks or projects and submit your work for grading. ',
-          open: null,
-          close: null,
+          open: getStartDateOfWeek(new Date()).toISOString(),
+          close: getEndDateOfWeek(new Date()).toISOString(),
           remindToGrade: null,
           maximumFile: 1,
           maximumFileSize: FileSizeOption['5MB'],
@@ -82,8 +86,8 @@ export class TopicService {
         topicData = {
           description:
             'Test your knowledge with multiple-choice or short-answer questions.',
-          open: null,
-          close: null,
+          open: getStartDateOfWeek(new Date()).toISOString(),
+          close: getEndDateOfWeek(new Date()).toISOString(),
           timeLimit: null,
           timeLimitUnit: TimeLimitType.MINUTES,
           gradeToPass: 0,

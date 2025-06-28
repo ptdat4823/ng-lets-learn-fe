@@ -1,15 +1,13 @@
 <app-tab-list />
 @if(course) {
 <main>
-  @if(selectedTab === tabs.COURSE) { @if(!isStudent){
+  @if(selectedTab === tabs.COURSE) {
   <tab-course
     [course]="course"
     (updateSectionList)="onSectionListChange($event)"
     (cancelChange)="onCancelChange()"
-  />
-  } @else {
-  <tab-course-student [course]="course" />
-  } } @else if(selectedTab === tabs.ACTIVITIES) {
+    [canEdit]="!isStudent"
+  />} @else if(selectedTab === tabs.ACTIVITIES) {
   <tab-activities
     [course]="course"
     [isStudent]="isStudent"
