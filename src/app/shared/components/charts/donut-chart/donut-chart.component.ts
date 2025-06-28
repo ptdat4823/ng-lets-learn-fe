@@ -131,8 +131,6 @@ export class DonutChartComponent implements OnInit, AfterViewInit, OnChanges {
       return;
     }
 
-    console.log('Updating chart with new data:', this.chartData);
-
     this.chart.data.labels = this.chartData.map((item) => item.label);
     this.chart.data.datasets[0].data = this.chartData.map((item) => item.value);
     this.chart.data.datasets[0].backgroundColor = this.chartData.map(
