@@ -42,7 +42,6 @@ export class AssignmentPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.InitData();
-    this.tabService.setTabs(ASSIGNMENT_STUDENT_TABS);
     this.tabService.selectedTab$.subscribe((tab) => {
       if (tab) {
         this.selectedTab = tab;
