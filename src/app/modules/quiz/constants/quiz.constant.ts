@@ -29,3 +29,12 @@ export const questionIconMap = {
   [QuestionType.SHORT_ANSWER]: 'crop_7_5',
   [QuestionType.TRUE_FALSE]: 'hdr_strong',
 };
+
+export const questionTypeDescriptionMap: Record<QuestionType, string> = {
+  [QuestionType.TRUE_FALSE]:
+    "A simple form of multiple choice question with just the two choices 'True' and 'False'.",
+  [QuestionType.CHOICE]:
+    'A question with multiple options where the user selects one or more correct answers.',
+  [QuestionType.SHORT_ANSWER]:
+    'A question that requires a short text answer, typically a few words or a sentence.',
+};

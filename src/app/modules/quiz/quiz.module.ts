@@ -33,6 +33,10 @@ import { TabDashboardComponent } from './components/quiz-page/quiz-tabs/tab-dash
 import { DashboardComponent } from './components/quiz-page/quiz-tabs/tab-dashboard/dashboard/dashboard.component';
 import { CreateTrueFalseQuestionComponent } from './components/quiz-page/create-question/create-true-false-question/create-true-false-question.component';
 import { CreateChoiceQuestionComponent } from './components/quiz-page/create-question/create-choice-question/create-choice-question.component';
+import { CreateShortAnswerQuestionComponent } from './components/quiz-page/create-question/create-short-answer-question/create-short-answer-question.component';
+import { CreateQuestionDialogComponent } from './components/quiz-page/quiz-tabs/tab-question-bank/create-question-dialog/create-question-dialog.component';
+import { CreateQuestionDialogContentComponent } from './components/quiz-page/quiz-tabs/tab-question-bank/create-question-dialog/create-question-dialog-content/create-question-dialog-content.component';
+import { MatDialogActions, MatDialogContent } from '@angular/material/dialog';
 @NgModule({
   declarations: [
     QuizResultTableComponent,
@@ -62,6 +66,9 @@ import { CreateChoiceQuestionComponent } from './components/quiz-page/create-que
     DashboardComponent,
     CreateTrueFalseQuestionComponent,
     CreateChoiceQuestionComponent,
+    CreateShortAnswerQuestionComponent,
+    CreateQuestionDialogComponent,
+    CreateQuestionDialogContentComponent,
   ],
   imports: [
     SharedModule,
@@ -72,6 +79,8 @@ import { CreateChoiceQuestionComponent } from './components/quiz-page/create-que
     CdkDrag,
     MatTableModule,
     MatPaginatorModule,
+    MatDialogContent,
+    MatDialogActions,
   ],
   exports: [QuizAttemptingComponent],
 })

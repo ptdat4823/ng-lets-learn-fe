@@ -42,7 +42,19 @@
         </div>
       </app-collapsible-section>
     </app-collapsible-list>
-    <div class="submit-container">
+    <div class="action-container">
+      <app-button
+        type="button"
+        label="Add answer"
+        variant="ghost"
+        (onClick)="addQuestionChoice()"
+      />
+      <app-button
+        type="button"
+        label="Remove answer"
+        variant="ghost"
+        (onClick)="removeQuestionChoice()"
+      />
       <app-button
         type="submit"
         label="Save"

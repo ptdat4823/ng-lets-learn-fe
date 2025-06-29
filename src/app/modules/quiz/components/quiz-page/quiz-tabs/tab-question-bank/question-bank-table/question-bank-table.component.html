@@ -6,7 +6,8 @@
     </app-button>
   </div>
   <div class="actions-container">
-    <app-button label="New question">
+    <app-button label="New question" (onClick)="onCreateQuestion()">
+      <create-question-dialog />
       <span class="material-symbols-outlined" icon> add_circle </span>
     </app-button>
     <app-button label="Columns" variant="ghost">

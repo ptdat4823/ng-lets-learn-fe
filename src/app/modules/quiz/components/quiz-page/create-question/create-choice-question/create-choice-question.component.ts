@@ -21,6 +21,7 @@ import {
 import { ToastrService } from 'ngx-toastr';
 import {
   createChoiceQuestionGeneralFormControls,
+  getChoiceQuestionAnswerFormControls,
   getChoiceQuestionAnswersFormControls,
 } from './create-choice-question-form.config';
 
@@ -127,13 +128,18 @@ export class CreateChoiceQuestionComponent {
     const answers = this.form.get('answers') as FormArray;
     if (answers) {
       answers.push(this.getDefaultAnswerFormGroup(answers.length));
+      this.answerFormControls = [
+        ...this.answerFormControls,
+        getChoiceQuestionAnswerFormControls(this.answerFormControls.length),
+      ];
     }
   }
 
-  removeQuestionChoice(index: number) {
+  removeQuestionChoice() {
     const answers = this.form.get('answers') as FormArray;
     if (answers && answers.length > 3) {
-      answers.removeAt(index);
+      answers.removeAt(answers.length - 1);
+      this.answerFormControls.pop();
     } else {
       this.toastrService.error(
         'You must have at least 3 choices for a choice question. Please consider using True/False question type instead.'
