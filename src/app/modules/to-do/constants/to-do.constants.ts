@@ -4,6 +4,7 @@ export interface ToDoItem {
   id: string;
   title: string;
   course: string;
+  courseId: string;
   type: string;
   status: 'assigned' | 'overdue' | 'done';
   dueDate: string | null;

@@ -13,7 +13,7 @@
   
   <div class="tab-content">
     @if (selectedTab === 'Assigned') {
-      <tab-assigned [items]="categorizedItems().assigned" [itemsByDueDate]="itemsByDueDate()" />
+      <tab-assigned [items]="categorizedItems().assigned" />
     } @else if (selectedTab === 'Overdue') {
       <tab-overdue [items]="categorizedItems().overdue" />
     } @else if (selectedTab === 'Done') {

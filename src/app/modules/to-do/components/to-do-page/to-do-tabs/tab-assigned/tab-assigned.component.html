@@ -4,10 +4,10 @@
     <app-collapsible-section sectionId="no-due-date">
       <div title class="section-title-wrapper">
         <h2>No due date</h2>
-        <span class="item-count">{{ itemsByDueDate.noDueDate.length }}</span>
+        <span class="item-count">{{ getSectionCount('no-due-date') }}</span>
       </div>
       <div content class="section-content">        
-        @for (item of itemsByDueDate.noDueDate; track item.id) {
+        @for (item of getSectionItems('no-due-date'); track item.id) {
           <div class="review-item" (click)="navigateToItem(item)">
             <div class="item-icon">
               @if (item.type === 'assignment') {
@@ -35,10 +35,10 @@
     <app-collapsible-section sectionId="this-week">
       <div title class="section-title-wrapper">
         <h2>This week</h2>
-        <span class="item-count">{{ itemsByDueDate.thisWeek.length }}</span>
+        <span class="item-count">{{ getSectionCount('this-week') }}</span>
       </div>
       <div content class="section-content">        
-        @for (item of itemsByDueDate.thisWeek; track item.id) {
+        @for (item of getSectionItems('this-week'); track item.id) {
           <div class="review-item" (click)="navigateToItem(item)">
             <div class="item-icon">
               @if (item.type === 'assignment') {
@@ -52,7 +52,8 @@
               <div class="item-info">
                 <div class="course-name">{{ item.course }}</div>
                 <div class="due-date">
-                  <span class="due-text">{{ item.dueDateFormatted }}</span>                  <span class="due-status">{{ item.dueStatus }}</span>
+                  <span class="due-text">{{ item.dueDateFormatted }}</span>                  
+                  <span class="due-status">{{ item.dueStatus }}</span>
                 </div>
               </div>
             </div>
@@ -69,10 +70,10 @@
     <app-collapsible-section sectionId="next-week">
       <div title class="section-title-wrapper">
         <h2>Next week</h2>
-        <span class="item-count">{{ itemsByDueDate.nextWeek.length }}</span>
+        <span class="item-count">{{ getSectionCount('next-week') }}</span>
       </div>
       <div content class="section-content">        
-        @for (item of itemsByDueDate.nextWeek; track item.id) {
+        @for (item of getSectionItems('next-week'); track item.id) {
           <div class="review-item" (click)="navigateToItem(item)">
             <div class="item-icon">
               @if (item.type === 'assignment') {
@@ -86,7 +87,8 @@
               <div class="item-info">
                 <div class="course-name">{{ item.course }}</div>
                 <div class="due-date">
-                  <span class="due-text">{{ item.dueDateFormatted }}</span>                  <span class="due-status">{{ item.dueStatus }}</span>
+                  <span class="due-text">{{ item.dueDateFormatted }}</span>                  
+                  <span class="due-status">{{ item.dueStatus }}</span>
                 </div>
               </div>
             </div>
@@ -103,10 +105,10 @@
     <app-collapsible-section sectionId="later">
       <div title class="section-title-wrapper">
         <h2>Later</h2>
-        <span class="item-count">{{ itemsByDueDate.later.length }}</span>
+        <span class="item-count">{{ getSectionCount('later') }}</span>
       </div>
       <div content class="section-content">        
-        @for (item of itemsByDueDate.later; track item.id) {
+        @for (item of getSectionItems('later'); track item.id) {
           <div class="review-item" (click)="navigateToItem(item)">
             <div class="item-icon">
               @if (item.type === 'assignment') {
@@ -120,7 +122,8 @@
               <div class="item-info">
                 <div class="course-name">{{ item.course }}</div>
                 <div class="due-date">
-                  <span class="due-text">{{ item.dueDateFormatted }}</span>                  <span class="due-status">{{ item.dueStatus }}</span>
+                  <span class="due-text">{{ item.dueDateFormatted }}</span>                  
+                  <span class="due-status">{{ item.dueStatus }}</span>
                 </div>
               </div>
             </div>
