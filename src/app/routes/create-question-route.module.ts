@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CreateChoiceQuestionComponent } from '@modules/quiz/components/quiz-page/create-question/create-choice-question/create-choice-question.component';
+import { CreateShortAnswerQuestionComponent } from '@modules/quiz/components/quiz-page/create-question/create-short-answer-question/create-short-answer-question.component';
 import { CreateTrueFalseQuestionComponent } from '@modules/quiz/components/quiz-page/create-question/create-true-false-question/create-true-false-question.component';
 
 const routes: Routes = [
@@ -11,6 +12,10 @@ const routes: Routes = [
   {
     path: 'choice/create',
     component: CreateChoiceQuestionComponent,
+  },
+  {
+    path: 'short-answer/create',
+    component: CreateShortAnswerQuestionComponent,
   },
 ];
 

@@ -37,11 +37,12 @@
   gap: 0.5rem;
 }
 
-.submit-container {
+.action-container {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  gap: 0.5rem;
 
   .submit-button {
     ::ng-deep {
