@@ -1,8 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CollapsibleListService } from '@shared/components/collapsible-list/collapsible-list.service';
 import { linkGeneralSettingFormControls, linkSettingFormSchema, linkValidationMessages } from './link-setting-form.config';
 import { LinkTopic } from '@shared/models/topic';
+import { UpdateTopic } from '@modules/courses/api/topic.api';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'tab-setting',
@@ -20,14 +23,16 @@ export class TabSettingComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private collapsibleListService: CollapsibleListService
+    private collapsibleListService: CollapsibleListService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private toastrService: ToastrService
   ) {}  
   ngOnInit(): void {
     this.form = this.fb.group(linkSettingFormSchema, { updateOn: 'submit' });
     this.collapsibleListService.setSectionIds(this.sectionIds);
     this.collapsibleListService.setCanEdit(false);
     this.collapsibleListService.expandAll();
-    
     // Initialize form with existing topic data
     if (this.topic) {
       this.form.patchValue({
@@ -43,7 +48,7 @@ export class TabSettingComponent implements OnInit {
     return control ? control.disabled : false;
   }
 
-  onSubmit(e: Event): void {
+  async onSubmit(e: Event) {
     e.preventDefault();
     
     // Stop here if form is invalid
@@ -81,7 +86,28 @@ export class TabSettingComponent implements OnInit {
     this.topic.data.url = formValues.externalUrl;
     this.topic.data.description = formValues.description;
     
-    console.log('Submit attempt with:', this.form.value);
-    console.log('Saving topic:', this.topic);
+    const courseId = this.activatedRoute.snapshot.paramMap.get('courseId');
+    
+    if (courseId) {
+      // Call the API to update the topic
+      await UpdateTopic(this.topic, courseId)
+        .then((updatedTopic) => {
+          this.topic = updatedTopic as LinkTopic;
+          this.toastrService.success('Link updated successfully!', 'Success');
+
+          const topicId = this.activatedRoute.snapshot.paramMap.get('topicId');
+          if (topicId) {
+            this.router.navigate([`/courses/${courseId}/link/${topicId}`], {
+              queryParams: { tab: 'file' }
+            });
+          }
+        })
+        .catch((error) => {
+          console.error('Error updating topic:', error);
+          this.toastrService.error('Failed to update link. Please try again.', 'Error');
+        });
+    } else {
+      console.error('Course ID not found in route parameters');
+    }
   }
 }
