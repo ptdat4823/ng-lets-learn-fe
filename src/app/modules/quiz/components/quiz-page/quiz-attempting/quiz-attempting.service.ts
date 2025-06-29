@@ -49,6 +49,7 @@ export class QuizAttemptingService {
     this.timerService.start();
     const init = this.studentResponseService.getInitQuizResponse(topicId);
     this.studentResponse.next(init);
+    console.log('Quiz started with initial response:', init);
   }
 
   setCurrentQuestionId(id: string) {

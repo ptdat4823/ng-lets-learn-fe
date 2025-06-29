@@ -2,7 +2,7 @@
   @if(selectedTab === tabs.QUIZ){ @if(!isStudent){
   <tab-quiz [topic]="topic" />
   } @else {
-  <tab-quiz-student [topic]="topic" />
+  <tab-quiz-student [topic]="topic" [course]="course!" />
   } } @else if(selectedTab === tabs.SETTINGS) {
   <tab-setting [topic]="topic" />
   } @else if(selectedTab === tabs.QUESTIONS) {

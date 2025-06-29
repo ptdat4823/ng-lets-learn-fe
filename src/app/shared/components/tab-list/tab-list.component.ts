@@ -1,5 +1,9 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { TabService } from './tab-list.service';
+import {
+  getLocalStorageData,
+  setLocalStorageData,
+} from '@shared/helper/local-storage.helper';
 
 @Component({
   selector: 'app-tab-list',
@@ -22,20 +26,15 @@ export class TabListComponent implements OnInit {
     this.tabService.tabs$.subscribe((tabs) => {
       this.tabs = tabs;
     });
-    if (!this.selectedTab) {
-      if (this.localStorageKey) {
-        const storedTab = localStorage.getItem(this.localStorageKey);
-        if (storedTab && this.tabs.includes(storedTab)) {
-          this.tabService.selectTab(storedTab);
-        }
-      } else if (this.tabs.length > 0) {
-        this.tabService.selectTab(this.tabs[0]);
-      }
-    }
+
+    const storedTab = getLocalStorageData(this.localStorageKey, this.tabs[0]);
+    console.log('Stored tab from local storage:', storedTab);
+    this.tabService.selectTab(storedTab);
+    console.log('Selected tab initialized:', this.selectedTab);
   }
 
   onTabClick(tab: string): void {
-    if (this.localStorageKey) localStorage.setItem(this.localStorageKey, tab);
+    if (this.localStorageKey) setLocalStorageData(this.localStorageKey, tab);
     this.tabService.selectTab(tab);
   }
 }

@@ -9,7 +9,8 @@ import { SettingsPageComponent } from '@modules/settings/components/settings-pag
 const routes: Routes = [
   { path: 'auth/login', component: LoginPageComponent },
   { path: 'auth/signup', component: RegisterPageComponent },
-  { path: 'home', redirectTo: 'courses' },    {
+  { path: 'home', redirectTo: 'courses' },
+  {
     path: '',
     component: LayoutComponent,
     children: [
@@ -25,9 +26,7 @@ const routes: Routes = [
       {
         path: 'to-do',
         loadChildren: () =>
-          import('@modules/to-do/to-do.module').then(
-            (m) => m.ToDoModule
-          ),
+          import('@modules/to-do/to-do.module').then((m) => m.ToDoModule),
       },
       {
         path: 'courses',
@@ -39,7 +38,7 @@ const routes: Routes = [
     ],
   },
   {
-    path: 'quiz',
+    path: 'courses/:courseId/quiz',
     loadChildren: () =>
       import('@routes/quiz-attempting-route.module').then(
         (m) => m.QuizAttemptingRoutingModule

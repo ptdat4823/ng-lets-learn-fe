@@ -1,14 +1,12 @@
-import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { GetCourseById } from '@modules/courses/api/courses.api';
+import { GetTopic } from '@modules/courses/api/topic.api';
 import { getCharacter } from '@shared/helper/string.helper';
-import { mockTopics } from '@shared/mocks/topic';
-import { mockUsers } from '@shared/mocks/user';
+import { Course } from '@shared/models/course';
 import { Question, QuestionType } from '@shared/models/question';
 import { getSecondFromTimeLimitType } from '@shared/models/quiz';
 import { QuizTopic } from '@shared/models/topic';
-import { RouteService } from '@shared/services/route.service';
-import { UserService } from '@shared/services/user.service';
 import { debounceTime } from 'rxjs';
 import { QuizAttemptingService } from './quiz-attempting.service';
 
@@ -22,12 +20,10 @@ import { QuizAttemptingService } from './quiz-attempting.service';
 export class QuizAttemptingComponent implements OnInit {
   constructor(
     private quizAttemptingService: QuizAttemptingService,
-    private userService: UserService,
-    private routeService: RouteService,
-    private activedRoute: ActivatedRoute,
-    private location: Location
+    private activedRoute: ActivatedRoute
   ) {}
   topic: QuizTopic | null = null;
+  course: Course | null = null;
   questions: Question[] = [];
   questionTypes = QuestionType;
 
@@ -39,6 +35,7 @@ export class QuizAttemptingComponent implements OnInit {
   showAnswer = false;
 
   ngOnInit(): void {
+    this.InitData();
     this.quizAttemptingService.questions$.subscribe((questions) => {
       this.questions = questions;
     });
@@ -56,26 +53,28 @@ export class QuizAttemptingComponent implements OnInit {
     this.quizAttemptingService.flaggedQuestions$.subscribe((flagged) => {
       this.flaggedQuestions = flagged;
     });
-
-    this.userService.setUser(mockUsers[0]);
-    this.fetchQuiz();
   }
 
-  fetchQuiz() {
-    const topicId = this.routeService.getParam(this.activedRoute, 'topicId');
-    const topic = mockTopics.find((topic) => topic.id === topicId);
-    if (!topic) {
-      this.location.back();
-      return;
-    }
-    const quiz = topic as QuizTopic;
-    this.topic = quiz;
-    this.quizAttemptingService.setQuestions(this.topic.data.questions);
-    this.quizAttemptingService.setCurrentQuestionId(this.questions[0].id);
-    if (this.hasLimitTime(quiz)) {
-      const countDown = this.getCountDown(quiz);
-      this.quizAttemptingService.startQuiz(topicId, countDown);
-    } else this.quizAttemptingService.startQuiz(topicId);
+  async InitData() {
+    const topicId = this.activedRoute.snapshot.paramMap.get('topicId');
+    const courseId = this.activedRoute.snapshot.paramMap.get('courseId');
+    if (topicId && courseId) await this.FetchData(courseId, topicId);
+  }
+
+  async FetchData(courseId: string, topicId: string) {
+    return await GetCourseById(courseId).then(async (course) => {
+      this.course = course;
+      return await GetTopic(topicId, courseId).then((topic) => {
+        this.topic = topic as QuizTopic;
+        const quiz = topic as QuizTopic;
+        this.quizAttemptingService.setQuestions(this.topic.data.questions);
+        this.quizAttemptingService.setCurrentQuestionId(this.questions[0].id);
+        if (this.hasLimitTime(quiz)) {
+          const countDown = this.getCountDown(quiz);
+          this.quizAttemptingService.startQuiz(topicId, countDown);
+        } else this.quizAttemptingService.startQuiz(topicId);
+      });
+    });
   }
 
   hasLimitTime(quiz: QuizTopic): boolean {

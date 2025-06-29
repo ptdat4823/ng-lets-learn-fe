@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { UserService } from './user.service';
 import { Router } from '@angular/router';
 import { ROUTES } from '@shared/constants/routes';
+import { clearAllLocalStorageData } from '@shared/helper/local-storage.helper';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -56,6 +57,7 @@ export class AuthService {
       .then(() => {
         this.userService.clearUser();
         this.toastService.success('Logged out successfully');
+        clearAllLocalStorageData();
       })
       .catch((error) => {
         this.toastService.error(error.message);

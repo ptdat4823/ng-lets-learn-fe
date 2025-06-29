@@ -1,6 +1,7 @@
 @use "styles/theme/theme.variables" as *;
 
 .course-card {
+  height: 100%;
   display: flex;
   flex-direction: column;
   border-radius: 0.5rem;
