@@ -147,7 +147,7 @@ export class FileUploadComponent {
     this.uploadProgress = 0;
 
     this.toUploadFiles = this.files.map((file) => ({
-      id: `${Date.now()}_${file.name}`,
+      id: crypto.randomUUID(),
       name: file.name,
       displayUrl: '',
       downloadUrl: '',
