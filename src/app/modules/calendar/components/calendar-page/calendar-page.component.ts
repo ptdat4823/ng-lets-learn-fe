@@ -2,17 +2,13 @@ import { Component, computed, inject, signal, OnInit } from '@angular/core';
 import { ComboboxService } from '@shared/components/combobox/combobox.service';
 import { ComboboxOption } from '@shared/components/combobox/combobox.type';
 import {
-  getEndDateOfWeek,
   getStartDateOfWeek,
+  getEndDateOfWeek,
 } from '@shared/helper/date.helper';
-import { Course } from '@shared/models/course';
 import { Topic } from '@shared/models/topic';
-import { Role, User } from '@shared/models/user';
 import { CalendarRange } from '../calendar/calendar.type';
 import { CalendarPageService } from './calendar-page.service';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
-import { UserService } from '@shared/services/user.service';
-import { GetPublicCourses, GetTeacherCourses } from '@modules/courses/api/courses.api';
 import { GetAllWorkingTopicsOfUser } from '@shared/api/user.api';
 
 @Component({
@@ -23,12 +19,12 @@ import { GetAllWorkingTopicsOfUser } from '@shared/api/user.api';
   providers: [ComboboxService, CalendarPageService],
 })
 export class CalendarPageComponent implements OnInit {
-  courseOptions: ComboboxOption[] = [
+  courseOptions = signal<ComboboxOption[]>([
     { value: 'all', label: 'All courses' },
-  ];
+  ]);
 
-  topics: Topic[] = [];
-  selectedCourseId: string = 'all';
+  topics = signal<Topic[]>([]);
+  selectedCourseId = signal<string>('all');
   isLoading = signal<boolean>(false);
   hasError = signal<boolean>(false);
 
@@ -41,17 +37,19 @@ export class CalendarPageComponent implements OnInit {
     this.calendarPageService.formatCalendarRange(this.calendarRange())
   );
 
-  get filteredTopics(): Topic[] {
-    if (this.selectedCourseId === 'all') return this.topics;
-    return this.topics.filter(
-      (topic: any) => topic.course && topic.course.id === this.selectedCourseId
+  filteredTopics = computed(() => {
+    const topics = this.topics();
+    const selectedCourseId = this.selectedCourseId();
+    
+    if (selectedCourseId === 'all') return topics;
+    return topics.filter(
+      (topic: any) => topic.course && topic.course.id === selectedCourseId
     );
-  }
+  });
 
   constructor(
     private calendarPageService: CalendarPageService,
-    private breadcrumbService: BreadcrumbService,
-    private userService: UserService
+    private breadcrumbService: BreadcrumbService
   ) {
     this.breadcrumbService.setBreadcrumbs([
       {
@@ -71,31 +69,6 @@ export class CalendarPageComponent implements OnInit {
     this.hasError.set(false);
     
     try {
-      // Load courses for the combobox based on user role
-      const user = this.userService.getUser();
-      if (!user) {
-        throw new Error('User not found');
-      }
-
-      let courses: Course[] = [];
-      if (user.role === Role.TEACHER) {
-        courses = await GetTeacherCourses(user.id);
-      } else {
-        const publicCourses = await GetPublicCourses();
-        courses = publicCourses.filter(course =>
-          course.students.some(student => student.id === user.id)
-        );
-      }
-
-      this.courseOptions = [
-        { value: 'all', label: 'All courses' },
-        ...courses.map((course) => ({
-          value: course.id,
-          label: course.title,
-        })),
-      ];
-
-      // Load topics for the current calendar range
       await this.loadTopics();
     } catch (error) {
       console.error('Error loading calendar data:', error);
@@ -109,16 +82,39 @@ export class CalendarPageComponent implements OnInit {
     try {
       const startDate = this.calendarRange().start.toISOString();
       const endDate = this.calendarRange().end.toISOString();
-      this.topics = await GetAllWorkingTopicsOfUser(startDate, endDate);
+      const topics = await GetAllWorkingTopicsOfUser(startDate, endDate);
+      
+      this.topics.set(topics);
+      this.updateCourseOptions(topics);
     } catch (error) {
       console.error('Error loading topics:', error);
       this.hasError.set(true);
     }
   }
 
+  private updateCourseOptions(topics: Topic[]): void {
+    const courseOptions: ComboboxOption[] = [
+      { value: 'all', label: 'All courses' },
+    ];
+    
+    const checkIds: string[] = [];
+    topics.forEach((topic) => {
+      if (topic.course && !checkIds.includes(topic.course.id)) {
+        courseOptions.push({ 
+          value: topic.course.id, 
+          label: topic.course.title 
+        });
+        checkIds.push(topic.course.id);
+      }
+    });
+    
+    this.courseOptions.set(courseOptions);
+  }
+
   navigatePrevious(): void {
     const newDate = new Date(this.calendarRange().start);
     newDate.setDate(this.calendarRange().start.getDate() - 7);
+    
     this.calendarRange.set({
       start: getStartDateOfWeek(newDate),
       end: getEndDateOfWeek(newDate),
@@ -129,6 +125,7 @@ export class CalendarPageComponent implements OnInit {
   navigateNext(): void {
     const newDate = new Date(this.calendarRange().start);
     newDate.setDate(this.calendarRange().start.getDate() + 7);
+    
     this.calendarRange.set({
       start: getStartDateOfWeek(newDate),
       end: getEndDateOfWeek(newDate),
@@ -137,7 +134,7 @@ export class CalendarPageComponent implements OnInit {
   }
 
   onSelectOption(option: ComboboxOption) {
-    this.selectedCourseId = option.value;
+    this.selectedCourseId.set(option.value);
   }
 
   retryLoad(): void {
