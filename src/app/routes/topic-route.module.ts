@@ -24,9 +24,20 @@ const routes: Routes = [
     component: PagePageComponent,
   },
   {
-    path:'file/:topicId',
+    path: 'file/:topicId',
     component: FilePageComponent,
-  }
+  },
+  {
+    path: 'file/:topicId',
+    component: FilePageComponent,
+  },
+  {
+    path: 'question',
+    loadChildren: () =>
+      import('@routes/create-question-route.module').then(
+        (m) => m.CreateQuestionRoutingModule
+      ),
+  },
 ];
 
 @NgModule({

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { FormControlField } from '@shared/helper/form.helper';
@@ -18,6 +18,7 @@ export class FormFieldComponent {
 
   @Input() descriptionOptionKey: any = 'default';
   @Input() showLabel = true;
+  @Input() labelPosition: 'left' | 'top' = 'left';
 
   @Output() onCheckChange = new EventEmitter<MatCheckboxChange>();
 

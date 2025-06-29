@@ -35,17 +35,15 @@ export class ComboboxComponent implements OnInit {
   selectedOption: ComboboxOption | null = null;
   dropdownPosition = { top: '', left: '', bottom: '', right: '' };
 
-  findOptionByValue(value: string): ComboboxOption | null {
-    if (!value) return null;
+  findOptionByValue(value: any): ComboboxOption | null {
+    if (value === undefined || value === null) return null;
     return this.options.find((option) => option.value === value) || null;
   }
 
   ngOnInit(): void {
     const initValue = this.form.get(this.controlName)?.value;
-    if (initValue) {
-      const initOption = this.findOptionByValue(initValue);
-      this.comboboxService.selectOption(initOption);
-    }
+    const initOption = this.findOptionByValue(initValue);
+    this.comboboxService.selectOption(initOption);
 
     this.comboboxService.selectedOption$.subscribe((option) => {
       this.selectedOption = option;

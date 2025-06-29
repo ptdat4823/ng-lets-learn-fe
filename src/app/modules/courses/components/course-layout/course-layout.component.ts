@@ -79,6 +79,11 @@ export class CourseLayoutComponent implements OnInit {
 
       this.breadcrumbService.setBreadcrumbs([
         {
+          label: 'Home',
+          url: `/courses`,
+          active: false,
+        },
+        {
           label: this.course.title,
           url: `/courses/${this.course.id}`,
           active: true,
@@ -88,6 +93,7 @@ export class CourseLayoutComponent implements OnInit {
   }
 
   onSectionListChange(sections: Section[]) {
+    console.log('Sections changed:', sections);
     if (!this.course) return;
     this.course = {
       ...this.course,

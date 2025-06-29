@@ -28,4 +28,12 @@ export class UserService {
     clearLocalStorageData(LOCAL_STORAGE_KEYS.USER);
     this.userSubject.next(null);
   }
+
+  updateUser(updates: Partial<User>) {
+    const currentUser = this.getUser();
+    if (currentUser) {
+      const updatedUser = { ...currentUser, ...updates };
+      this.setUser(updatedUser);
+    }
+  }
 }

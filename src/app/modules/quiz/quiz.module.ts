@@ -31,6 +31,8 @@ import { StatusColumnComponent } from './components/quiz-page/quiz-tabs/tab-ques
 import { ActionColumnComponent } from './components/quiz-page/quiz-tabs/tab-question-bank/question-bank-table/table-columns/action-column/action-column.component';
 import { TabDashboardComponent } from './components/quiz-page/quiz-tabs/tab-dashboard/tab-dashboard.component';
 import { DashboardComponent } from './components/quiz-page/quiz-tabs/tab-dashboard/dashboard/dashboard.component';
+import { CreateTrueFalseQuestionComponent } from './components/quiz-page/create-question/create-true-false-question/create-true-false-question.component';
+import { CreateChoiceQuestionComponent } from './components/quiz-page/create-question/create-choice-question/create-choice-question.component';
 @NgModule({
   declarations: [
     QuizResultTableComponent,
@@ -57,7 +59,9 @@ import { DashboardComponent } from './components/quiz-page/quiz-tabs/tab-dashboa
     StatusColumnComponent,
     ActionColumnComponent,
     TabDashboardComponent,
-    DashboardComponent
+    DashboardComponent,
+    CreateTrueFalseQuestionComponent,
+    CreateChoiceQuestionComponent,
   ],
   imports: [
     SharedModule,

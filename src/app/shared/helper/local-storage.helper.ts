@@ -14,3 +14,7 @@ export const setLocalStorageData = <T>(key: string, data: T): void => {
 export const clearLocalStorageData = (key: string): void => {
   localStorage.removeItem(key);
 };
+
+export const clearAllLocalStorageData = (): void => {
+  localStorage.clear();
+};

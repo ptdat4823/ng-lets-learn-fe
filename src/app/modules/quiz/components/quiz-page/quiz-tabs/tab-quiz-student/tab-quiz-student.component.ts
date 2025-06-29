@@ -4,12 +4,14 @@ import {
   ConfirmMessageData,
   ConfirmMessageService,
 } from '@shared/components/confirm-message/confirm-message.service';
-import { formatDateString } from '@shared/helper/date.helper';
+import { formatDateString, isInDate } from '@shared/helper/date.helper';
 import { mockStudentResponses } from '@shared/mocks/student-response';
 import { GradingMethod } from '@shared/models/quiz';
 import { QuizTopic } from '@shared/models/topic';
 import { StudentResponseService } from '@shared/services/student-response.service';
 import { TabQuizService } from '../tab-quiz/tab-quiz.service';
+import { Course } from '@shared/models/course';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'tab-quiz-student',
@@ -20,6 +22,7 @@ import { TabQuizService } from '../tab-quiz/tab-quiz.service';
 })
 export class TabQuizStudentComponent {
   @Input({ required: true }) topic!: QuizTopic;
+  @Input({ required: true }) course!: Course;
 
   studentResponses = mockStudentResponses;
   gradingMethod: GradingMethod = GradingMethod.HIGHEST_GRADE;
@@ -31,7 +34,8 @@ export class TabQuizStudentComponent {
     private tabQuizService: TabQuizService,
     private studentResponseService: StudentResponseService,
     private router: Router,
-    private confirmMessageService: ConfirmMessageService
+    private confirmMessageService: ConfirmMessageService,
+    private toastr: ToastrService
   ) {}
 
   confirmMessageData: ConfirmMessageData = {
@@ -42,6 +46,7 @@ export class TabQuizStudentComponent {
   };
 
   openConfirmMessage() {
+    if (!this.checkValidQuiz()) return;
     this.confirmMessageService.openDialog();
   }
 
@@ -98,7 +103,21 @@ export class TabQuizStudentComponent {
     return formatDateString(date, pattern);
   }
 
+  checkValidQuiz(): boolean {
+    if (!this.topic || !this.topic.data) {
+      this.toastr.error('Quiz is not available.');
+      return false;
+    }
+    if (this.topic.data.questions.length === 0) {
+      this.toastr.error('This quiz has no questions.');
+      return false;
+    }
+    return true;
+  }
+
   startQuiz() {
-    this.router.navigate([`quiz/${this.topic.id}/attempting`]);
+    this.router.navigate([
+      `courses/${this.course.id}/quiz/${this.topic.id}/attempting`,
+    ]);
   }
 }
