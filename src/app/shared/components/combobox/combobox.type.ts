@@ -1,1 +1,1 @@
-export type ComboboxOption = { value: string; label: string };
+export type ComboboxOption = { value: any; label: string };

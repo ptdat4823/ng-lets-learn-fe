@@ -1,4 +1,10 @@
-<div [formGroup]="form" class="container">
+<div
+  [formGroup]="form"
+  [class]="{
+  'container': true,
+  'flex-col': labelPosition === 'top',
+}"
+>
   @if(showLabel) {
   <label [for]="control.id" class="input-label">
     {{ control.label }}
