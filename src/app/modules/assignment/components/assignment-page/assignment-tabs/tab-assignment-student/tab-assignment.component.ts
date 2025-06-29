@@ -4,9 +4,12 @@ import { AssignmentTopic } from '@shared/models/topic';
 import { formatDateString } from '@shared/helper/date.helper';
 import { acceptedExplorerFileTypes } from '@modules/assignment/constants/assignment.constant';
 import { StudentResponse } from '@shared/models/student-response';
-import { GetAllAssignmentResponsesOfUser } from '@modules/assignment/api/assignment-response.api';
+import { GetAllAssignmentResponsesOfTopic, CreateAssignmentResponse, DeleteAssignmentResponse } from '@modules/assignment/api/assignment-response.api';
 import { UserService } from '@shared/services/user.service';
 import { ToastrService } from 'ngx-toastr';
+import { UploadMultipleCloudinaryFiles } from '@shared/api/cloudinary.api';
+import { convertCloudinaryUrlToDownloadUrl } from '@shared/helper/cloudinary.api.helper';
+import { CloudinaryFile } from '@shared/models/cloudinary-file';
 
 @Component({
   selector: 'tab-assignment-student',
@@ -36,10 +39,9 @@ export class TabAssignmentStudentComponent implements OnInit {
     try {
       const user = this.userService.getUser();
       if (user) {
-        const responses = await GetAllAssignmentResponsesOfUser(user.id);
-        // Find the response for this specific topic
+        const responses = await GetAllAssignmentResponsesOfTopic(this.topic.id);
         this.studentResponse = responses.find((response: StudentResponse) => 
-          response.topicId === this.topic.id
+          response.student.id === user.id
         ) || null;
       }
     } catch (error) {
@@ -55,15 +57,65 @@ export class TabAssignmentStudentComponent implements OnInit {
     this.fileInput.nativeElement.click();
   }
 
-  onSelectedFile(event: Event) {
+  async onSelectedFile(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      console.log('Selected file:', input.files);
+      const files = Array.from(input.files);
+      
+      const user = this.userService.getUser();
+      if (!user) {
+        this.toastr.error('User not found', 'Error');
+        return;
+      }
+
+      try {
+        // Upload files to Cloudinary
+        this.toastr.info('Uploading files...', 'Please wait');
+        const cloudinaryResponses = await UploadMultipleCloudinaryFiles(files);
+        
+        // Convert Cloudinary responses to CloudinaryFile objects
+        const fileList: CloudinaryFile[] = cloudinaryResponses.map((response: any, idx: number) => ({
+          id: crypto.randomUUID(),
+          name: files[idx].name,
+          displayUrl: response.url,
+          downloadUrl: convertCloudinaryUrlToDownloadUrl(response.url),
+        }));
+
+        const newResponse = {
+          id: '',
+          student: user,
+          topicId: this.topic.id,
+          data: {
+            submittedAt: new Date().toISOString(),
+            files: fileList,
+            mark: null,
+            note: '',
+          },
+        };
+
+        console.log('Creating assignment response with data:', newResponse);
+        this.studentResponse = await CreateAssignmentResponse(this.topic.id, newResponse);
+        this.toastr.success('Assignment submitted successfully', 'Success');
+      } catch (error) {
+        console.error('Error submitting assignment:', error);
+        if (error instanceof Error) {
+          this.toastr.error(`Failed to submit assignment: ${error.message}`, 'Error');
+        } else {
+          this.toastr.error('Failed to submit assignment', 'Error');
+        }
+      }
     }
     this.fileInput.nativeElement.value = '';
   }
 
-  onRemoveSubmission() {
-    this.studentResponse = null;
+  async onRemoveSubmission() {
+    if (!this.studentResponse) return;
+    try {
+      await DeleteAssignmentResponse(this.topic.id, this.studentResponse.id);
+      this.studentResponse = null;
+      this.toastr.success('Submission removed successfully', 'Success');
+    } catch (error) {
+      this.toastr.error('Failed to remove submission', 'Error');
+    }
   }
 }
