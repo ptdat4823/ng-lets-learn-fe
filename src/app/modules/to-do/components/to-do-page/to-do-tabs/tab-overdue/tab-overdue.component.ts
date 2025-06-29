@@ -1,48 +1,58 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToDoService } from '../../to-do.service';
 import { ToDoItem, OverdueItemsByTime } from '../../../../constants/to-do.constants';
-import { mockCourses } from '@shared/mocks/course';
 import { CollapsibleListService } from '@shared/components/collapsible-list/collapsible-list.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'tab-overdue',
   standalone: false,
   templateUrl: './tab-overdue.component.html',
   styleUrl: './tab-overdue.component.scss',
-  providers: [CollapsibleListService, ToDoService],
+  providers: [CollapsibleListService]
 })
-export class TabOverdueComponent implements OnInit {
+export class TabOverdueComponent implements OnInit, OnDestroy, OnChanges {
   @Input() items: ToDoItem[] = [];
-  @Input() itemsByTime: OverdueItemsByTime = { thisWeek: [], lastWeek: [], sooner: [] };
   
-  sectionIds: string[] = ['this-week', 'last-week', 'sooner'];
-  
-  collapsedSections: { [key: string]: boolean } = {
-    thisWeek: false,
-    lastWeek: true,
-    sooner: true
+  itemsByTime: OverdueItemsByTime = { 
+    thisWeek: [], 
+    lastWeek: [], 
+    sooner: [] 
   };
-
+  
+  private destroy$ = new Subject<void>();
+  
   constructor(
     private router: Router,
-    private collapsibleListService: CollapsibleListService,
-    private toDoService: ToDoService
+    private toDoService: ToDoService,
+    public collapsibleListService: CollapsibleListService
   ) {}
 
-  ngOnInit(): void {
-    this.collapsibleListService.setSectionIds(this.sectionIds);
-    this.collapsibleListService.setCanEdit(false);
-    this.collapsibleListService.expandAll();
-    
-    this.loadOverdueItems();
+  ngOnInit() {
+    this.initializeCollapsibleSections();
+    this.updateCategorizedItems();
   }
 
-  private loadOverdueItems(): void {
-    const allItems = this.toDoService.getToDoItems();
-    
-    const overdueItems = allItems.filter(item => item.status === 'overdue');
-    
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  ngOnChanges() {
+    this.updateCategorizedItems();
+  }
+
+  private initializeCollapsibleSections() {
+    const sectionIds = ['this-week', 'last-week', 'sooner'];
+    this.collapsibleListService.setSectionIds(sectionIds);
+    this.collapsibleListService.setCanEdit(false);
+    this.collapsibleListService.expandAll();
+  }
+
+  private updateCategorizedItems() {
+    const overdueItems = this.items.filter((item: ToDoItem) => item.status === 'overdue');
     this.itemsByTime = this.toDoService.categorizeOverdueItems(overdueItems);
     
     this.itemsByTime.thisWeek = this.toDoService.sortItemsByDueDate(this.itemsByTime.thisWeek);
@@ -50,30 +60,21 @@ export class TabOverdueComponent implements OnInit {
     this.itemsByTime.sooner = this.toDoService.sortItemsByDueDate(this.itemsByTime.sooner);
   }
 
-  getSectionCount(section: string): number {
-    switch (section) {
-      case 'this-week': return this.itemsByTime.thisWeek.length;
-      case 'last-week': return this.itemsByTime.lastWeek.length;
-      case 'sooner': return this.itemsByTime.sooner.length;
-      default: return 0;
+  getSectionItems(sectionId: string): ToDoItem[] {
+    switch (sectionId) {
+      case 'this-week':
+        return this.itemsByTime.thisWeek;
+      case 'last-week':
+        return this.itemsByTime.lastWeek;
+      case 'sooner':
+        return this.itemsByTime.sooner;
+      default:
+        return [];
     }
   }
 
-  getSectionItems(section: string): ToDoItem[] {
-    switch (section) {
-      case 'this-week': return this.itemsByTime.thisWeek;
-      case 'last-week': return this.itemsByTime.lastWeek;
-      case 'sooner': return this.itemsByTime.sooner;
-      default: return [];
-    }
-  }
-
-  toggleSection(sectionKey: string): void {
-    this.collapsedSections[sectionKey] = !this.collapsedSections[sectionKey];
-  }
-
-  isSectionCollapsed(sectionKey: string): boolean {
-    return this.collapsedSections[sectionKey];
+  getSectionCount(sectionId: string): number {
+    return this.getSectionItems(sectionId).length;
   }
 
   navigateToItem(item: ToDoItem): void {
@@ -85,7 +86,6 @@ export class TabOverdueComponent implements OnInit {
   }
 
   private getCourseIdFromItem(item: ToDoItem): string {
-    const course = mockCourses.find(c => c.title === item.course);
-    return course?.id || '1'; 
+    return item.courseId || '1';
   }
 }
