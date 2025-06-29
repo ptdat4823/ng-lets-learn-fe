@@ -1,3 +1,5 @@
+import { CloudinaryFile } from "./cloudinary-file";
+
 export type AssignmentData = {
   description: string;
   open: string | null;
@@ -5,6 +7,7 @@ export type AssignmentData = {
   remindToGrade: string | null;
   maximumFile: number | null;
   maximumFileSize: FileSizeOption | null;
+  cloudinaryFiles?: CloudinaryFile[];
 };
 
 export enum FileSizeOption {

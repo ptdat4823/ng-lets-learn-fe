@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 type SummaryTableField = {
   label: string;
   value: string | number;
@@ -10,25 +10,10 @@ type SummaryTableData = Record<string, SummaryTableField>;
   templateUrl: './grading-summary-table.component.html',
   styleUrl: './grading-summary-table.component.scss',
 })
-export class GradingSummaryTableComponent {
-  defaultSummaryTable: SummaryTableData = {
-    hiddenFromStudent: {
-      label: 'Hidden from students',
-      value: 'No',
-    },
-    assigned: {
-      label: 'Assigned',
-      value: 40,
-    },
-    submitted: {
-      label: 'Submitted',
-      value: 36,
-    },
-    needGrading: {
-      label: 'Need grading',
-      value: 0,
-    },
-  };
+export class GradingSummaryTableComponent implements OnInit {
+  @Input() assigned: number = 0;
+  @Input() submitted: number = 0;
+  @Input() needGrading: number = 0;
 
   tableFields: SummaryTableField[] = [];
 
@@ -36,7 +21,16 @@ export class GradingSummaryTableComponent {
     this.getTableFields();
   }
 
+  ngOnChanges(): void {
+    this.getTableFields();
+  }
+
   getTableFields() {
-    this.tableFields = Object.values(this.defaultSummaryTable);
+    this.tableFields = [
+      { label: 'Hidden from students', value: 'No' },
+      { label: 'Assigned', value: this.assigned },
+      { label: 'Submitted', value: this.submitted },
+      { label: 'Need grading', value: this.needGrading },
+    ];
   }
 }

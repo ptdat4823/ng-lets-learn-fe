@@ -9,7 +9,7 @@
     <div class="date-item">
       <span class="date-label">Due:</span>
       <span class="date-value">{{
-        formatDate(topic.data.open, "EEEE, dd MMMM yyyy HH:mm a")
+        formatDate(topic.data.close, "EEEE, dd MMMM yyyy HH:mm a")
       }}</span>
     </div>
   </div>
@@ -27,7 +27,11 @@
   <div class="attempts-section">
     <h3 class="attempts-title">Your attempts</h3>
 
-    <grading-summary-table />
+    <grading-summary-table
+      [assigned]="assignedCount"
+      [submitted]="submittedCount"
+      [needGrading]="needGradingCount"
+    />
   </div>
 </card>
 

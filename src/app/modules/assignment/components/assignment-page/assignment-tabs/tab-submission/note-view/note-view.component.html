@@ -3,13 +3,13 @@
     <textarea
       class="note-input"
       placeholder="Write a note here"
-      [(ngModel)]="note"
+      [(ngModel)]="noteInput"
     ></textarea>
     <div class="note-actions" [class]="{ visible: noteInput !== note }">
-      <div class="circle-button green">
+      <div class="circle-button green" (click)="onSaveNote()">
         <span class="material-symbols-outlined">check</span>
       </div>
-      <div class="circle-button red">
+      <div class="circle-button red" (click)="onClearNote()">
         <span class="material-symbols-outlined">close</span>
       </div>
     </div>
