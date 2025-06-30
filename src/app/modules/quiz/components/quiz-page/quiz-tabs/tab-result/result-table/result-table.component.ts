@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { getDurationText } from '@shared/helper/date.helper';
-// import { mockStudentResponses } from '@shared/mocks/student-response'; // Remove mock import
 import {
   QuizResponseData,
   StudentResponse,
