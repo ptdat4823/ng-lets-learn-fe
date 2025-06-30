@@ -3,12 +3,10 @@ import { ComboboxOption } from '@shared/components/combobox/combobox.type';
 import { ComboboxService } from '@shared/components/combobox/combobox.service';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 import { CollapsibleListService } from '@shared/components/collapsible-list/collapsible-list.service';
-import { mockCourses } from '@shared/mocks/course';
 import { ToReviewService } from './to-review.service';
-import { ReviewItem, ReviewItemsCategories } from '../../constants/to-review.constants';
+import { ReviewItem } from '../../constants/to-review.constants';
 import { Router } from '@angular/router';
-import { GetTeacherCourses } from '@modules/courses/api/courses.api';
-import { UserService } from '@shared/services/user.service';
+import { isWorkingInProgressTopic, isClosedTopic, isNoDueDateTopic } from '../../helper/to-review.util';
 
 @Component({
   selector: 'to-review-page',
@@ -18,29 +16,21 @@ import { UserService } from '@shared/services/user.service';
   providers: [ComboboxService, CollapsibleListService],
 })
 export class ToReviewPageComponent implements OnInit {  
-  courseOptions: ComboboxOption[] = [
+  courseOptions = signal<ComboboxOption[]>([
     { value: 'all', label: 'All courses' }
-  ];
+  ]);
   
   selectedCourse = signal<string>('all');
   sectionIds: string[] = ['work-in-progress', 'closed', 'no-due-date'];
 
-  workInProgressItems: ReviewItem[] = [];
-  closedItems: ReviewItem[] = [];
-  noDueDateItems: ReviewItem[] = [];
-
-  allItems: ReviewItem[] = [];
-  overallStats: any = {};
+  allReviewItems: ReviewItem[] = [];
   isLoading = false;
-  courses: any[] = [];
 
   constructor(
     private breadcrumbService: BreadcrumbService,
     private collapsibleListService: CollapsibleListService,
-    private comboboxService: ComboboxService,
     private toReviewService: ToReviewService,
-    private router: Router,
-    private userService: UserService
+    private router: Router
   ) {
     this.breadcrumbService.setBreadcrumbs([
       {
@@ -56,74 +46,72 @@ export class ToReviewPageComponent implements OnInit {
     this.collapsibleListService.setCanEdit(false);
     this.collapsibleListService.expandAll();
     
-    const user = this.userService.getUser();
-    if (user) {
-      const courses = await GetTeacherCourses(user.id);
-      this.courses = courses;
-      this.courseOptions = [
-        { value: 'all', label: 'All courses' },
-        ...courses.map((course: any) => ({
-          value: course.id,
-          label: course.title,
-        })),
-      ];
-    }
-    
-    const defaultOption = this.courseOptions.find(option => option.value === 'all');
-    if (defaultOption) {
-      this.comboboxService.selectOption(defaultOption);
-    }
-    
-    await this.loadReviewItems();
+    await this.loadInitialData();
   }
 
-  async onSelectOption(option: ComboboxOption): Promise<void> {
-    this.selectedCourse.set(option.value);
-    await this.loadReviewItems();
-  }  
-  
-  private async loadReviewItems(): Promise<void> {
+  private async loadInitialData(): Promise<void> {
     this.isLoading = true;
-    
     try {
-      const selectedCourseId = this.selectedCourse();
-      const reviewItems = await this.toReviewService.getReviewItems(selectedCourseId);
-      
-      const sortedItems = this.toReviewService.sortItemsByDueDate(reviewItems);
-      
-      this.allItems = sortedItems;
-
-      const categorizedItems = this.toReviewService.categorizeReviewItems(sortedItems);
-      this.workInProgressItems = categorizedItems.workInProgress;
-      this.closedItems = categorizedItems.closed;
-      this.noDueDateItems = categorizedItems.noDueDate;
-
-      this.overallStats = this.toReviewService.getOverallStats(reviewItems);
-      
+      this.allReviewItems = await this.toReviewService.getReviewItems();
+      this.updateCourseOptions(this.allReviewItems);
     } catch (error) {
-      this.workInProgressItems = [];
-      this.closedItems = [];
-      this.noDueDateItems = [];
-      this.allItems = [];
-      this.overallStats = {};
+      console.error("Failed to load review items", error);
     } finally {
       this.isLoading = false;
     }
   }
 
-  navigateToItem(item: ReviewItem): void {
-    if (item.type === 'assignment') {
-      this.router.navigate(['/courses', this.getCourseIdFromItem(item), 'assignment', item.id]);
-    } else if (item.type === 'quiz') {
-      this.router.navigate(['/courses', this.getCourseIdFromItem(item), 'quiz', item.id]);
+  private updateCourseOptions(items: ReviewItem[]): void {
+    const courseOptions: ComboboxOption[] = [
+      { value: 'all', label: 'All courses' },
+    ];
+    const checkIds = new Set<string>();
+    
+    items.forEach(item => {
+      const course = item.topic.course;
+      if (course && !checkIds.has(course.id)) {
+        courseOptions.push({ value: course.id, label: course.title });
+        checkIds.add(course.id);
+      }
+    });
+    
+    this.courseOptions.set(courseOptions);
+  }
+  
+  onSelectOption(option: ComboboxOption): void {
+    this.selectedCourse.set(option.value);
+  }  
+
+  get filteredItemsByCourse(): ReviewItem[] {
+    const courseId = this.selectedCourse();
+    if (courseId === 'all') {
+      return this.allReviewItems;
     }
+    return this.allReviewItems.filter(item => item.topic.course?.id === courseId);
+  }
+  
+  get workInProgressItems(): ReviewItem[] {
+    return this.filteredItemsByCourse.filter(item => isWorkingInProgressTopic(item.topic));
   }
 
-  private getCourseIdFromItem(item: ReviewItem): string {
-    const course = this.courses.find((c: any) => c.title === item.course);
-    return course?.id || ''; 
+  get closedItems(): ReviewItem[] {
+    return this.filteredItemsByCourse.filter(item => isClosedTopic(item.topic));
   }
+
+  get noDueDateItems(): ReviewItem[] {
+    return this.filteredItemsByCourse.filter(item => isNoDueDateTopic(item.topic));
+  }
+
+  navigateToItem(item: ReviewItem): void {
+    const courseId = item.topic.course?.id;
+    if (!courseId) {
+      console.error("Could not find course ID for the item.", item);
+      return;
+    }
+    this.router.navigate(['/courses', courseId, item.topic.type, item.topic.id]);
+  }
+  
   refreshData(): void {
-    this.loadReviewItems();
+    this.loadInitialData();
   }
 }

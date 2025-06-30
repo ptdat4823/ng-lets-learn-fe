@@ -1,10 +1,10 @@
 import { Component, Input, OnInit, OnDestroy, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
-import { ToDoService } from '../../to-do.service';
 import { ToDoItem, OverdueItemsByTime } from '../../../../constants/to-do.constants';
 import { CollapsibleListService } from '@shared/components/collapsible-list/collapsible-list.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { isOverdueTopic } from '../../../../helper/to-do.util';
 
 @Component({
   selector: 'tab-overdue',
@@ -26,7 +26,6 @@ export class TabOverdueComponent implements OnInit, OnDestroy, OnChanges {
   
   constructor(
     private router: Router,
-    private toDoService: ToDoService,
     public collapsibleListService: CollapsibleListService
   ) {}
 
@@ -51,13 +50,46 @@ export class TabOverdueComponent implements OnInit, OnDestroy, OnChanges {
     this.collapsibleListService.expandAll();
   }
 
+  private sortItemsByDueDate(items: ToDoItem[]): ToDoItem[] {
+    return items.sort((a, b) => {
+      if (!a.dueDate && !b.dueDate) return 0;
+      if (!a.dueDate) return 1;
+      if (!b.dueDate) return -1;
+      return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
+    });
+  }
+  
+  private categorizeOverdueItems(items: ToDoItem[]): OverdueItemsByTime {
+    const overdueItems = items.filter(item => isOverdueTopic(item.topic));
+    const now = new Date();
+    const startOfThisWeek = new Date(now);
+    startOfThisWeek.setDate(now.getDate() - now.getDay());
+    const startOfLastWeek = new Date(startOfThisWeek);
+    startOfLastWeek.setDate(startOfThisWeek.getDate() - 7);
+
+    return {
+      thisWeek: this.sortItemsByDueDate(overdueItems.filter(item => {
+        if (!item.dueDate) return false;
+        const dueDate = new Date(item.dueDate);
+        return dueDate >= startOfThisWeek && dueDate <= now; // Overdue this week
+      })),
+      lastWeek: this.sortItemsByDueDate(overdueItems.filter(item => {
+        if (!item.dueDate) return false;
+        const dueDate = new Date(item.dueDate);
+        const endOfLastWeek = new Date(startOfThisWeek);
+        endOfLastWeek.setDate(startOfThisWeek.getDate() - 1);
+        return dueDate >= startOfLastWeek && dueDate <= endOfLastWeek;
+      })),
+      sooner: this.sortItemsByDueDate(overdueItems.filter(item => {
+        if (!item.dueDate) return false;
+        const dueDate = new Date(item.dueDate);
+        return dueDate < startOfLastWeek;
+      }))
+    };
+  }
+
   private updateCategorizedItems() {
-    const overdueItems = this.items.filter((item: ToDoItem) => item.status === 'overdue');
-    this.itemsByTime = this.toDoService.categorizeOverdueItems(overdueItems);
-    
-    this.itemsByTime.thisWeek = this.toDoService.sortItemsByDueDate(this.itemsByTime.thisWeek);
-    this.itemsByTime.lastWeek = this.toDoService.sortItemsByDueDate(this.itemsByTime.lastWeek);
-    this.itemsByTime.sooner = this.toDoService.sortItemsByDueDate(this.itemsByTime.sooner);
+    this.itemsByTime = this.categorizeOverdueItems(this.items);
   }
 
   getSectionItems(sectionId: string): ToDoItem[] {

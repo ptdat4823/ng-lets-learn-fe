@@ -6,7 +6,6 @@ export interface ToDoItem {
   course: string;
   courseId: string;
   type: string;
-  status: 'assigned' | 'overdue' | 'done';
   dueDate: string | null;
   submitted: boolean;
   graded: boolean;

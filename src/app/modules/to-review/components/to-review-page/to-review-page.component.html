@@ -1,7 +1,7 @@
 <div class="to-review-page">
   <app-combobox
     class="course-combobox"
-    [options]="courseOptions || []"
+    [options]="courseOptions()"
     (onSelect)="onSelectOption($event)"
     placeholder="Select a course"
   />
@@ -41,7 +41,7 @@
                   </div>
                 } @else if (item.type === 'quiz') {
                   <div class="stat-group">
-                    <span class="stat-value">{{ item.attempted || 0 }}</span>
+                    <span class="stat-value">{{ item.submitted || 0 }}</span>
                     <span class="stat-label">Attempted</span>
                   </div>
                   <div class="stat-group">
@@ -93,7 +93,7 @@
                   </div>
                 } @else if (item.type === 'quiz') {
                   <div class="stat-group">
-                    <span class="stat-value">{{ item.attempted || 0 }}</span>
+                    <span class="stat-value">{{ item.submitted || 0 }}</span>
                     <span class="stat-label">Attempted</span>
                   </div>
                   <div class="stat-group">
@@ -145,7 +145,7 @@
                   </div>
                 } @else if (item.type === 'quiz') {
                   <div class="stat-group">
-                    <span class="stat-value">{{ item.attempted || 0 }}</span>
+                    <span class="stat-value">{{ item.submitted || 0 }}</span>
                     <span class="stat-label">Attempted</span>
                   </div>
                   <div class="stat-group">

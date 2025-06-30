@@ -1,10 +1,10 @@
 import { Component, Input, OnInit, OnDestroy, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
-import { ToDoService } from '../../to-do.service';
 import { ToDoItem, ToDoItemsByDueDate } from '../../../../constants/to-do.constants';
 import { CollapsibleListService } from '@shared/components/collapsible-list/collapsible-list.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { isWorkingInProgressTopic, isNoDueDateTopic } from '../../../../helper/to-do.util';
 
 @Component({
   selector: 'tab-assigned',
@@ -27,7 +27,6 @@ export class TabAssignedComponent implements OnInit, OnDestroy, OnChanges {
   
   constructor(
     private router: Router,
-    private toDoService: ToDoService,
     public collapsibleListService: CollapsibleListService
   ) {}
 
@@ -52,13 +51,39 @@ export class TabAssignedComponent implements OnInit, OnDestroy, OnChanges {
     this.collapsibleListService.expandAll();
   }
 
+  private categorizeByDueDate(items: ToDoItem[]): ToDoItemsByDueDate {
+    const now = new Date();
+    const startOfWeek = new Date(now);
+    startOfWeek.setDate(now.getDate() - now.getDay());
+    const endOfThisWeek = new Date(startOfWeek);
+    endOfThisWeek.setDate(startOfWeek.getDate() + 6);
+    const endOfNextWeek = new Date(endOfThisWeek);
+    endOfNextWeek.setDate(endOfThisWeek.getDate() + 7);
+
+    const workingItems = items.filter(item => isWorkingInProgressTopic(item.topic));
+
+    return {
+      noDueDate: items.filter(item => isNoDueDateTopic(item.topic)),
+      thisWeek: workingItems.filter(item => {
+        if (!item.dueDate) return false;
+        const dueDate = new Date(item.dueDate);
+        return dueDate >= now && dueDate <= endOfThisWeek;
+      }),
+      nextWeek: workingItems.filter(item => {
+        if (!item.dueDate) return false;
+        const dueDate = new Date(item.dueDate);
+        return dueDate > endOfThisWeek && dueDate <= endOfNextWeek;
+      }),
+      later: workingItems.filter(item => {
+        if (!item.dueDate) return false;
+        const dueDate = new Date(item.dueDate);
+        return dueDate > endOfNextWeek;
+      })
+    };
+  }
+
   private updateCategorizedItems() {
-    const assignedItems = this.items.filter((item: ToDoItem) => item.status === 'assigned');
-    this.itemsByDueDate = this.toDoService.categorizeByDueDate(assignedItems);
-    
-    this.itemsByDueDate.thisWeek = this.toDoService.sortItemsByDueDate(this.itemsByDueDate.thisWeek);
-    this.itemsByDueDate.nextWeek = this.toDoService.sortItemsByDueDate(this.itemsByDueDate.nextWeek);
-    this.itemsByDueDate.later = this.toDoService.sortItemsByDueDate(this.itemsByDueDate.later);
+    this.itemsByDueDate = this.categorizeByDueDate(this.items);
   }
 
   getSectionItems(sectionId: string): ToDoItem[] {

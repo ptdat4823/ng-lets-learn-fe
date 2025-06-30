@@ -4,10 +4,9 @@ import { ComboboxService } from '@shared/components/combobox/combobox.service';
 import { TabService } from '@shared/components/tab-list/tab-list.service';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 import { ToDoService } from './to-do.service';
-import { ToDoItem, ToDoItemsCategories, ToDoItemsByDueDate } from '../../constants/to-do.constants';
-import { GetPublicCourses } from '@modules/courses/api/courses.api';
-import { UserService } from '@shared/services/user.service';
-import { Role } from '@shared/models/user';
+import { ToDoItem } from '../../constants/to-do.constants';
+import { Topic } from '@shared/models/topic';
+import { isDoneTopic, isOverdueTopic, isWorkingInProgressTopic, isNoDueDateTopic } from '../../helper/to-do.util';
 
 @Component({
   selector: 'to-do-page',
@@ -20,36 +19,19 @@ export class ToDoPageComponent implements OnInit {
   tabs: string[] = ['Assigned', 'Overdue', 'Done'];
   selectedTab: string = 'Assigned';
   
-  courseOptions: ComboboxOption[] = [
+  courseOptions = signal<ComboboxOption[]>([
     { value: 'all', label: 'All courses' }
-  ];
+  ]);
   
-  selectedCourse = signal<string>('all');
-  courses: any[] = [];
-
+  selectedCourseId = signal<string>('all');
   allItems: ToDoItem[] = [];
-  categorizedItems = signal<ToDoItemsCategories>({
-    assigned: [],
-    overdue: [],
-    done: []
-  });
-  
-  itemsByDueDate = signal<ToDoItemsByDueDate>({
-    noDueDate: [],
-    thisWeek: [],
-    nextWeek: [],
-    later: []
-  });
-  
-  overallStats: any = {};
   isLoading = false;
 
   constructor(
     private breadcrumbService: BreadcrumbService,
     private comboboxService: ComboboxService,
     private tabService: TabService<string>,
-    private toDoService: ToDoService,
-    private userService: UserService
+    private toDoService: ToDoService
   ) {
     this.breadcrumbService.setBreadcrumbs([
       {
@@ -72,69 +54,72 @@ export class ToDoPageComponent implements OnInit {
       }
     });
     
-    const user = this.userService.getUser();
-    if (user) {
-      const allCourses = await GetPublicCourses();
-      this.courses = allCourses.filter((course: any) =>
-        Array.isArray(course.students) && course.students.some((student: any) => student.id === user.id)
-      );
-      
-      this.courseOptions = [
-        { value: 'all', label: 'All courses' },
-        ...this.courses.map((course: any) => ({
-          value: course.id,
-          label: course.title,
-        })),
-      ];
-    }
-    
-    // Set the default combobox selection to "All courses"
-    const defaultOption = this.courseOptions.find(option => option.value === 'all');
-    if (defaultOption) {
-      this.comboboxService.selectOption(defaultOption);
-    }
-    
     // Load initial data
-    await this.loadToDoItems();
+    await this.loadInitialData();
   }
 
   async onSelectOption(option: ComboboxOption): Promise<void> {
-    this.selectedCourse.set(option.value);
-    await this.loadToDoItems();
+    this.selectedCourseId.set(option.value);
+    this.updateCourseOptionsFromItems(this.allItems);
   }
 
-  private async loadToDoItems(): Promise<void> {
+  private async loadInitialData(): Promise<void> {
     this.isLoading = true;
-    
     try {
-      const selectedCourseId = this.selectedCourse();
-      const toDoItems = await this.toDoService.getToDoItems(selectedCourseId);
-      
+      const toDoItems = await this.toDoService.getToDoItems();
       this.allItems = toDoItems;
-      this.categorizedItems.set(this.toDoService.categorizeToDoItems(toDoItems));
-      this.itemsByDueDate.set(this.toDoService.categorizeByDueDate(toDoItems));
-      this.overallStats = this.toDoService.getOverallStats(toDoItems);
-      
+      this.updateCourseOptionsFromItems(this.allItems);
     } catch (error) {
       this.allItems = [];
-      this.categorizedItems.set({
-        assigned: [],
-        overdue: [],
-        done: []
-      });
-      this.itemsByDueDate.set({
-        noDueDate: [],
-        thisWeek: [],
-        nextWeek: [],
-        later: []
-      });
-      this.overallStats = {};
+      this.updateCourseOptionsFromItems([]);
     } finally {
       this.isLoading = false;
     }
   }
 
+  private updateCourseOptionsFromItems(items: ToDoItem[]): void {
+    const courseOptions: ComboboxOption[] = [
+      { value: 'all', label: 'All courses' },
+    ];
+    
+    const checkIds: string[] = [];
+    items.forEach((item) => {
+      const course = item.topic.course;
+      if (course && !checkIds.includes(course.id)) {
+        courseOptions.push({ 
+          value: course.id, 
+          label: course.title 
+        });
+        checkIds.push(course.id);
+      }
+    });
+    
+    this.courseOptions.set(courseOptions);
+  }
+
+  get doneItems(): ToDoItem[] {
+    return this.filteredItemsByCourse.filter(item => isDoneTopic(item.topic));
+  }
+
+  get assignedItems(): ToDoItem[] {
+    return this.filteredItemsByCourse.filter(item => isWorkingInProgressTopic(item.topic));
+  }
+
+  get overdueItems(): ToDoItem[] {
+    return this.filteredItemsByCourse.filter(item => isOverdueTopic(item.topic));
+  }
+
+  get noDueDateItems(): ToDoItem[] {
+    return this.filteredItemsByCourse.filter(item => isNoDueDateTopic(item.topic));
+  }
+
+  get filteredItemsByCourse(): ToDoItem[] {
+    const courseId = this.selectedCourseId();
+    if (courseId === 'all') return this.allItems;
+    return this.allItems.filter(item => item.courseId === courseId);
+  }
+
   refreshData(): void {
-    this.loadToDoItems();
+    this.loadInitialData();
   }
 }
