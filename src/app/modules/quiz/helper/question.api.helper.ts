@@ -67,8 +67,8 @@ export const convertQuestionFromResponseData = (data: any): Question => {
     defaultMark,
     usage,
     data: choiceQuestion,
-    createdAt,
-    modifiedAt: updatedAt,
+    createdAt: createdAt ? new Date(createdAt) : undefined,
+    modifiedAt: updatedAt ? new Date(updatedAt) : (createdAt ? new Date(createdAt) : undefined),
     createdBy,
     modifiedBy,
   };

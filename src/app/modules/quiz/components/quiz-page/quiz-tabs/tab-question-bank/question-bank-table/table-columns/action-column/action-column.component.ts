@@ -1,6 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { DropdownOption } from '@shared/components/dropdown/dropdown.component';
 import { QuestionElement } from '../../question-bank-table.component';
+import { openAlertDialog } from '@shared/helper/alert.helper';
+import { ToastrService } from 'ngx-toastr';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'action-column',
@@ -21,12 +24,24 @@ export class ActionColumnComponent {
     },
   ];
 
+  constructor(private toastr: ToastrService, private dialog: MatDialog) {}
+
   onEditRow(index: number): void {
-    console.log('Edit row at index:', index);
+    this.toastr.info('Under development', 'Info');
   }
 
-  onDeleteRow(index: number): void {
-    console.log('Delete row at index:', index);
+  async onDeleteRow(index: number): Promise<void> {
+    const confirmed = await openAlertDialog(
+      this.dialog,
+      'Delete Question',
+      'Are you sure you want to delete this question?',
+      'Delete',
+      'Cancel',
+      true
+    );
+    if (confirmed) {
+      this.toastr.success('Delete action confirmed', 'Success');
+    }
   }
 
   onDropdownSelect(option: DropdownOption): void {

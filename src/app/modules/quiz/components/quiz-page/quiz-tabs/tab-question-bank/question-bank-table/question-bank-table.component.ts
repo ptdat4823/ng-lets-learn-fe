@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { questionIconMap } from '@modules/quiz/constants/quiz.constant';
-import { mockQuestions } from '@shared/mocks/question';
+import { getQuestionBank } from '@modules/quiz/api/question.api';
 import {
   Question,
   QuestionStatus,
@@ -10,7 +10,9 @@ import { User } from '@shared/models/user';
 import { DialogService } from '@shared/services/dialog.service';
 import { format } from 'date-fns';
 import { CreateQuestionDialogData } from '../create-question-dialog/create-question-dialog.component';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 export type QuestionElement = {
   index: number;
@@ -29,8 +31,8 @@ export type QuestionElement = {
   templateUrl: './question-bank-table.component.html',
   styleUrl: './question-bank-table.component.scss',
 })
-export class QuestionBankTableComponent implements OnInit {
-  questions = mockQuestions;
+export class QuestionBankTableComponent implements OnInit, AfterViewInit {
+  questions: Question[] = [];
   courseId: string = '';
   displayedColumns: string[] = [
     'index',
@@ -43,19 +45,37 @@ export class QuestionBankTableComponent implements OnInit {
     'modifiedAt',
     'actions',
   ];
-  dataSource: QuestionElement[] = [];
+  dataSource = new MatTableDataSource<QuestionElement>([]);
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
     private dialogService: DialogService<CreateQuestionDialogData>,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.courseId =
-      this.router.routerState.snapshot.root.queryParams['courseId'];
-    this.dataSource = this.convertQuestionsToQuestionElements(this.questions);
+    this.courseId = this.route.snapshot.paramMap.get('courseId') || '';
+    getQuestionBank(this.courseId).then((questions) => {
+      this.questions = questions && Array.isArray(questions) ? questions : [];
+      const elements = this.convertQuestionsToQuestionElements(this.questions);
+      this.dataSource.data = elements;
+      if (this.paginator) {
+        this.dataSource.paginator = this.paginator;
+      }
+    });
     this.dialogService.setCancelAction(() => this.onCancelCreateQuestion());
     this.dialogService.setConfirmAction(() => this.onConfirmCreateQuestion());
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   convertQuestionsToQuestionElements(questions: Question[]): QuestionElement[] {

@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { getDurationText } from '@shared/helper/date.helper';
-import { mockStudentResponses } from '@shared/mocks/student-response';
 import {
   QuizResponseData,
   StudentResponse,
 } from '@shared/models/student-response';
 import { StudentResponseService } from '@shared/services/student-response.service';
+import { GetAllQuizResponsesOfTopic } from '../../../../../api/quiz-response.api';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 export type ResultElement = {
   index: number;
@@ -22,8 +24,9 @@ export type ResultElement = {
   templateUrl: './result-table.component.html',
   styleUrl: './result-table.component.scss',
 })
-export class ResultTableComponent implements OnInit {
-  studentResponses = mockStudentResponses;
+export class ResultTableComponent implements OnInit, AfterViewInit {
+  @Input() topicId!: string;
+  studentResponses: StudentResponse[] = [];
   displayedColumns: string[] = [
     'index',
     'image',
@@ -32,14 +35,35 @@ export class ResultTableComponent implements OnInit {
     'duration',
     'grade',
   ];
-  dataSource: ResultElement[] = [];
+  dataSource = new MatTableDataSource<ResultElement>([]);
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(private studentResponseService: StudentResponseService) {}
 
   ngOnInit(): void {
-    this.dataSource = this.convertStudentResponsesToResultElements(
-      this.studentResponses
-    );
+    if (!this.topicId) {
+      this.studentResponses = [];
+      this.dataSource.data = [];
+      return;
+    }
+    GetAllQuizResponsesOfTopic(this.topicId)
+      .then((responses: StudentResponse[] = []) => {
+        this.studentResponses = Array.isArray(responses) ? responses : [];
+        const elements = this.convertStudentResponsesToResultElements(this.studentResponses);
+        this.dataSource.data = elements;
+        if (this.paginator) {
+          this.dataSource.paginator = this.paginator;
+        }
+      })
+      .catch(() => {
+        this.studentResponses = [];
+        this.dataSource.data = [];
+      });
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
   }
 
   convertStudentResponsesToResultElements(
@@ -59,7 +83,6 @@ export class ResultTableComponent implements OnInit {
         grade: score,
       };
     });
-
     return converted;
   }
 }
