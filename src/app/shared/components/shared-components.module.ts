@@ -62,6 +62,7 @@ import { BarChartComponent } from './charts/bar-chart/bar-chart.component';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { PopoverComponent } from './popover/popover.component';
 import { AccountPopoverComponent } from './header/account-popover/account-popover.component';
+import { AlertComponent } from './alert/alert.component';
 
 @NgModule({
   declarations: [
@@ -109,6 +110,7 @@ import { AccountPopoverComponent } from './header/account-popover/account-popove
     StatCardComponent,
     PopoverComponent,
     AccountPopoverComponent,
+    AlertComponent,
   ],
   imports: [
     CommonModule,
@@ -168,6 +170,7 @@ import { AccountPopoverComponent } from './header/account-popover/account-popove
     StatCardComponent,
     PopoverComponent,
     AccountPopoverComponent,
+    AlertComponent,
   ],
 })
 export class SharedComponentsModule {}

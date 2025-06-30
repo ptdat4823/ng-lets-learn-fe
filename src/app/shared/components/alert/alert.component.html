@@ -1,0 +1,10 @@
+<div class="alert-backdrop">
+  <div class="alert-dialog">
+    <div class="alert-title">{{ title }}</div>
+    <div class="alert-message">{{ message }}</div>
+    <div class="alert-actions">
+      <button class="alert-btn confirm" (click)="onConfirm()">{{ confirmText }}</button>
+      <button *ngIf="showCancel" class="alert-btn cancel" (click)="onCancel()">{{ cancelText }}</button>
+    </div>
+  </div>
+</div>
