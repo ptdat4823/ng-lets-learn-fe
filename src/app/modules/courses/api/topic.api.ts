@@ -1,5 +1,5 @@
 import { GetUserWork } from '@shared/api/user.api';
-import { GET, PUT } from '@shared/api/utils.api';
+import { DELETE, GET, POST, PUT } from '@shared/api/utils.api';
 import { Topic } from '@shared/models/topic';
 import {
   convertTopicFromResponseData,
@@ -13,11 +13,22 @@ export const GetTopic = (id: string, courseId: string) => {
   );
 };
 
+export const CreateTopic = (topic: Topic, courseId: string) => {
+  const data = convertTopicToRequestData(topic);
+  return POST(`/course/${courseId}/topic`, data).then(
+    convertTopicFromResponseData
+  );
+};
+
 export const UpdateTopic = (topic: Topic, courseId: string) => {
   const data = convertTopicToRequestData(topic);
   return PUT(`/course/${courseId}/topic/${topic.id}`, data).then(
     convertTopicFromResponseData
   );
+};
+
+export const DeleteTopic = (topicId: string, courseId: string): Promise<void> => {
+  return DELETE(`/course/${courseId}/topic/${topicId}`);
 };
 
 export const GetAllQuizzesOfUser = () => {

@@ -14,8 +14,11 @@ import {
   GetSection,
   UpdateSection,
 } from '@modules/courses/api/section.api';
+import { UpdateCourse } from '@modules/courses/api/courses.api';
+import { CreateTopic, DeleteTopic } from '@modules/courses/api/topic.api';
 import { CollapsibleListService } from '@shared/components/collapsible-list/collapsible-list.service';
 import { Course, Section } from '@shared/models/course';
+import { Topic } from '@shared/models/topic';
 import { CourseService } from '@shared/services/course.service';
 import {
   CreateTopicRequest,
@@ -101,15 +104,19 @@ export class TabCourseComponent implements OnInit, OnChanges {
     this.showUpdateImageDialog = false;
   }
 
-  onUpdateImage(result: UpdateCourseImageResult) {
+  async onUpdateImage(result: UpdateCourseImageResult) {
     if (result && result.success) {
-      // Update the course image URL
-      this.course.imageUrl = result.imageUrl;
-      this.toastr.success(result.message);
+      try {
+        this.course.imageUrl = result.imageUrl;
+        await UpdateCourse(this.course);
+        this.toastr.success(result.message);
+      } catch (error: any) {
+        this.toastr.error(error.message || 'Failed to update course image');
+      }
     }
   }
 
-  onAddNewTopic(result: AddTopicDialogResult) {
+  async onAddNewTopic(result: AddTopicDialogResult) {
     const createRequest: CreateTopicRequest = {
       sectionId: result.sectionId,
       type: result.topicType,
@@ -119,17 +126,25 @@ export class TabCourseComponent implements OnInit, OnChanges {
       (s) => s.id === createRequest.sectionId
     );
     if (!section) return;
-    const newTopic = this.topicService.getNewTopic(createRequest);
-    const updatedSection = this.courseService.updateSectionByAddingTopic(
-      section,
-      newTopic
-    );
-    const updatedSections =
-      this.courseService.updateSectionListByUpdatingSection(
-        this.course,
-        updatedSection
+
+    try {
+      const newTopic = this.topicService.getNewTopic(createRequest);
+      const createdTopic = await CreateTopic(newTopic, this.course.id) as Topic;
+      
+      const updatedSection = this.courseService.updateSectionByAddingTopic(
+        section,
+        createdTopic
       );
-    this.updateSectionList.emit(updatedSections);
+      const updatedSections =
+        this.courseService.updateSectionListByUpdatingSection(
+          this.course,
+          updatedSection
+        );
+      this.updateSectionList.emit(updatedSections);
+      this.toastr.success('New topic added successfully');
+    } catch (error: any) {
+      this.toastr.error(error.message || 'Failed to add new topic');
+    }
   }
 
   async onAddNewSection() {
@@ -198,19 +213,25 @@ export class TabCourseComponent implements OnInit, OnChanges {
     this.updateSectionList.emit(updatedSection);
   }
 
-  onDeleteTopic(topicId: string, sectionId: string) {
+  async onDeleteTopic(topicId: string, sectionId: string) {
     const section = this.course.sections.find((s) => s.id === sectionId);
     if (!section) return;
 
-    const updatedSection = this.courseService.updateSectionByDeletingTopic(
-      section,
-      topicId
-    );
-    const updatedSections =
-      this.courseService.updateSectionListByUpdatingSection(
-        this.course,
-        updatedSection
+    try {
+      await DeleteTopic(topicId, this.course.id);
+      const updatedSection = this.courseService.updateSectionByDeletingTopic(
+        section,
+        topicId
       );
-    this.updateSectionList.emit(updatedSections);
+      const updatedSections =
+        this.courseService.updateSectionListByUpdatingSection(
+          this.course,
+          updatedSection
+        );
+      this.updateSectionList.emit(updatedSections);
+      this.toastr.success('Topic deleted successfully');
+    } catch (error: any) {
+      this.toastr.error(error.message || 'Failed to delete topic');
+    }
   }
 }
