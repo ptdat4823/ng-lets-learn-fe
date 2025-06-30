@@ -16,7 +16,7 @@ import {
   createTrueFalseQuestionAnswerFormControls,
   createTrueFalseQuestionGeneralFormControls,
 } from './create-true-false-question-form.config';
-import { CreateQuestion } from '@modules/quiz/api/question.api';
+import { CreateQuestion, GetQuestion } from '@modules/quiz/api/question.api';
 import { ActivatedRoute, Router } from '@angular/router';
 import { generateId } from '@shared/helper/string.helper';
 import { ToastrService } from 'ngx-toastr';
@@ -93,10 +93,28 @@ export class CreateTrueFalseQuestionComponent {
 
   ngOnInit(): void {
     this.courseId = this.activedRoute.snapshot.paramMap.get('courseId') ?? '';
-    this.initForm(this.question);
+    const questionId = this.activedRoute.snapshot.paramMap.get('questionId');
+    if (questionId) {
+      this.fetchQuestionData(questionId);
+    } else {
+      this.initForm(this.question);
+    }
     this.collapsibleListService.setSectionIds(this.sectionIds);
     this.collapsibleListService.setCanEdit(false); // disable edit UI in collapsible list
     this.collapsibleListService.expandAll();
+  }
+
+  async fetchQuestionData(id: string) {
+    await GetQuestion(id)
+      .then((question) => {
+        console.log('Fetched question:', question);
+        this.question = question;
+        this.initForm(this.question);
+      })
+      .catch((error) => {
+        console.error('Failed to fetch question:', error);
+        this.toastrService.error('Failed to fetch question data.');
+      });
   }
 
   async onSubmit(e: Event) {
