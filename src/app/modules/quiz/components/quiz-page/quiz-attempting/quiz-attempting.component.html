@@ -8,14 +8,14 @@
 
   <div class="quiz-content">
     <ng-container>
-      @for(question of questions; track question.id){ @if(currentQuestionId
-      ===question.id) {
+      @for(question of questions; track question.id; let i = $index){
+      @if(currentQuestionId ===question.id) {
       <div class="question-container">
         <div class="question-header">
           <div class="question-header-main">
             <app-button
               variant="gradient-blue"
-              [label]="'Question ' + question.id + ' / ' + questions.length"
+              [label]="'Question ' + (i + 1) + ' / ' + questions.length"
             />
             <span
               class="material-symbols-outlined"

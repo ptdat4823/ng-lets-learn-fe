@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   ConfirmMessageData,
@@ -12,6 +12,8 @@ import { StudentResponseService } from '@shared/services/student-response.servic
 import { TabQuizService } from '../tab-quiz/tab-quiz.service';
 import { Course } from '@shared/models/course';
 import { ToastrService } from 'ngx-toastr';
+import { GetAllQuizResponsesOfTopic } from '@modules/quiz/api/quiz-response.api';
+import { StudentResponse } from '@shared/models/student-response';
 
 @Component({
   selector: 'tab-quiz-student',
@@ -20,7 +22,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './tab-quiz-student.component.scss',
   providers: [TabQuizService, StudentResponseService],
 })
-export class TabQuizStudentComponent {
+export class TabQuizStudentComponent implements OnInit {
   @Input({ required: true }) topic!: QuizTopic;
   @Input({ required: true }) course!: Course;
 
@@ -60,6 +62,7 @@ export class TabQuizStudentComponent {
   }
 
   ngOnInit(): void {
+    this.fetchData();
     this.confirmMessageService.setData(this.confirmMessageData);
     this.confirmMessageService.setCancelAction(() =>
       this.onCancelConfirmMessage()
@@ -70,33 +73,54 @@ export class TabQuizStudentComponent {
     this.tabQuizService.topic$.subscribe((topic) => {
       if (!topic) return;
       this.topic = topic;
-      this.fullMarkOfQuiz = this.tabQuizService.getFullMarkOfQuiz(topic);
-      this.gradingMethod = topic.data.gradingMethod;
-
-      if (this.gradingMethod === GradingMethod.FIRST_GRADE) {
-        this.gradeToShow = this.tabQuizService.getFirstAttemptGrade(
-          this.studentResponses
-        );
-      } else if (this.gradingMethod === GradingMethod.LAST_GRADE) {
-        this.gradeToShow = this.tabQuizService.getLastAttemptGrade(
-          this.studentResponses
-        );
-      } else if (this.gradingMethod === GradingMethod.AVERAGE_GRADE) {
-        this.gradeToShow = this.tabQuizService.getAverageGrade(
-          this.studentResponses
-        );
-      } else {
-        this.gradeToShow = this.tabQuizService.getHighestGrade(
-          this.studentResponses
-        );
-      }
-
-      this.gradeColor = this.studentResponseService.getGradeColor(
-        this.gradeToShow,
-        this.fullMarkOfQuiz
-      );
+      this.updateGradingDisplayData(this.studentResponses);
     });
     this.tabQuizService.setTopic(this.topic);
+  }
+
+  async fetchData() {
+    await GetAllQuizResponsesOfTopic(this.topic.id)
+      .then((responses) => {
+        this.updateGradingDisplayData(responses);
+      })
+      .catch((error) => {
+        console.error('Failed to fetch quiz responses:', error);
+        this.toastr.error(error.message);
+      });
+  }
+
+  updateGradingDisplayData(quizResponses: StudentResponse[]) {
+    this.studentResponses = quizResponses;
+
+    if (!this.topic || !this.topic.data) {
+      this.toastr.error('Quiz is not available.');
+      return;
+    }
+    this.fullMarkOfQuiz = this.tabQuizService.getFullMarkOfQuiz(this.topic);
+    this.gradingMethod = this.topic.data.gradingMethod;
+
+    if (this.gradingMethod === GradingMethod.FIRST_GRADE) {
+      this.gradeToShow = this.tabQuizService.getFirstAttemptGrade(
+        this.studentResponses
+      );
+    } else if (this.gradingMethod === GradingMethod.LAST_GRADE) {
+      this.gradeToShow = this.tabQuizService.getLastAttemptGrade(
+        this.studentResponses
+      );
+    } else if (this.gradingMethod === GradingMethod.AVERAGE_GRADE) {
+      this.gradeToShow = this.tabQuizService.getAverageGrade(
+        this.studentResponses
+      );
+    } else {
+      this.gradeToShow = this.tabQuizService.getHighestGrade(
+        this.studentResponses
+      );
+    }
+
+    this.gradeColor = this.studentResponseService.getGradeColor(
+      this.gradeToShow,
+      this.fullMarkOfQuiz
+    );
   }
 
   formatDate(date: string | null, pattern: string = 'MM/dd/yyyy HH:mm a') {

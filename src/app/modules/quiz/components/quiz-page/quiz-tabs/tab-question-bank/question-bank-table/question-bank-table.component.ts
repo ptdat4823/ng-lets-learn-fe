@@ -1,4 +1,12 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  Input,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { questionIconMap } from '@modules/quiz/constants/quiz.constant';
 import { getQuestionBank } from '@modules/quiz/api/question.api';
 import {
@@ -13,9 +21,13 @@ import { CreateQuestionDialogData } from '../create-question-dialog/create-quest
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { QuizTopic } from '@shared/models/topic';
+import { ToastrService } from 'ngx-toastr';
+import { UpdateTopic } from '@modules/courses/api/topic.api';
 
 export type QuestionElement = {
   index: number;
+  id: string;
   type: QuestionType;
   name: string;
   defaultMark: number;
@@ -32,6 +44,8 @@ export type QuestionElement = {
   styleUrl: './question-bank-table.component.scss',
 })
 export class QuestionBankTableComponent implements OnInit, AfterViewInit {
+  @Input({ required: true }) topic!: QuizTopic;
+  @Output() topicChange = new EventEmitter<QuizTopic>();
   questions: Question[] = [];
   courseId: string = '';
   displayedColumns: string[] = [
@@ -52,7 +66,8 @@ export class QuestionBankTableComponent implements OnInit, AfterViewInit {
   constructor(
     private dialogService: DialogService<CreateQuestionDialogData>,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastrService: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -82,6 +97,7 @@ export class QuestionBankTableComponent implements OnInit, AfterViewInit {
     return questions.map((question, index) => {
       return {
         index: index + 1,
+        id: question.id,
         type: question.type,
         name: question.questionName,
         defaultMark: question.defaultMark,
@@ -123,5 +139,23 @@ export class QuestionBankTableComponent implements OnInit, AfterViewInit {
       ]);
     }
     this.dialogService.closeDialog();
+  }
+
+  onAddToQuiz(questionId: string) {
+    const questionToAdd = this.questions.find(
+      (question) => question.id === questionId
+    );
+    if (!questionToAdd) {
+      this.toastrService.error('Question not found in the question bank.');
+      return;
+    }
+    const updatedQuiz: QuizTopic = {
+      ...this.topic,
+      data: {
+        ...this.topic.data,
+        questions: [...this.topic.data.questions, questionToAdd],
+      },
+    };
+    this.topicChange.emit(updatedQuiz);
   }
 }

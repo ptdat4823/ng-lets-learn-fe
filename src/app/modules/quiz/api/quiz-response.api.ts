@@ -21,7 +21,9 @@ export const CreateQuizResponse = (
   );
 };
 
-export const GetAllQuizResponsesOfTopic = (topicId: string) => {
+export const GetAllQuizResponsesOfTopic = (
+  topicId: string
+): Promise<StudentResponse[]> => {
   return GET(`/topic/${topicId}/quiz-response`).then((res) =>
     res.map(convertQuizResponseFromResponseData)
   );
