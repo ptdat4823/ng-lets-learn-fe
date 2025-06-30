@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GetCourseById } from '@modules/courses/api/courses.api';
-import { GetTopic } from '@modules/courses/api/topic.api';
+import { GetTopic, UpdateTopic } from '@modules/courses/api/topic.api';
 import {
   QUIZ_STUDENT_TABS,
   QUIZ_TEACHER_TABS,
@@ -13,6 +13,7 @@ import { QuizTopic } from '@shared/models/topic';
 import { Role, User } from '@shared/models/user';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 import { UserService } from '@shared/services/user.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'quiz-page',
@@ -34,7 +35,8 @@ export class QuizPageComponent implements OnInit {
     private tabService: TabService<QuizTab>,
     private userService: UserService,
     private activedRoute: ActivatedRoute,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private toastrService: ToastrService
   ) {}
 
   async InitData() {
@@ -89,5 +91,21 @@ export class QuizPageComponent implements OnInit {
         active: true,
       },
     ]);
+  }
+
+  async onTopicChange(updatedQuiz: QuizTopic) {
+    if (!this.course) {
+      console.error('Course is not defined');
+      return;
+    }
+    await UpdateTopic(updatedQuiz, this.course.id)
+      .then((res) => {
+        this.topic = res as QuizTopic;
+        this.cdr.detectChanges();
+        this.toastrService.success('Topic updated successfully');
+      })
+      .catch((error) => {
+        this.toastrService.error(error.message);
+      });
   }
 }

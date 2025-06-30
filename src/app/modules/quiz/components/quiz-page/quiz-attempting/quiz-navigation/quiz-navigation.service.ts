@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { QuizAttemptingService } from '../quiz-attempting.service';
-import { BehaviorSubject } from 'rxjs';
-import { Question } from '@shared/models/question';
 import { QuestionResult } from '@modules/quiz/constants/quiz.constant';
+import { Question } from '@shared/models/question';
+import { BehaviorSubject } from 'rxjs';
+import { QuizAttemptingService } from '../quiz-attempting.service';
 
 @Injectable()
 export class QuizNavigationService {

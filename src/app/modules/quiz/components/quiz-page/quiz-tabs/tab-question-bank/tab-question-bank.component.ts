@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { QuizTopic } from '@shared/models/topic';
 
 @Component({
@@ -9,4 +9,9 @@ import { QuizTopic } from '@shared/models/topic';
 })
 export class TabQuestionBankComponent {
   @Input({ required: true }) topic!: QuizTopic;
+  @Output() topicChange = new EventEmitter<QuizTopic>();
+
+  onTopicChange(topic: QuizTopic): void {
+    this.topicChange.emit(topic);
+  }
 }
