@@ -162,6 +162,7 @@ export class ToReviewService {
     });
   }
 
+
   getOverallStats(items: ReviewItem[]) {
     const total = items.length;
     const workInProgress = items.filter(item => isWorkingInProgressTopic(item.topic)).length;

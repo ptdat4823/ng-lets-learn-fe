@@ -22,7 +22,6 @@ export class TabAssignedComponent implements OnInit, OnDestroy, OnChanges {
     nextWeek: [], 
     later: [] 
   };
-  
   private destroy$ = new Subject<void>();
   
   constructor(
@@ -100,6 +99,7 @@ export class TabAssignedComponent implements OnInit, OnDestroy, OnChanges {
         return [];
     }
   }
+
 
   getSectionCount(sectionId: string): number {
     return this.getSectionItems(sectionId).length;

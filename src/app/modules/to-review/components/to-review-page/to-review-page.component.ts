@@ -30,7 +30,7 @@ export class ToReviewPageComponent implements OnInit {
     private breadcrumbService: BreadcrumbService,
     private collapsibleListService: CollapsibleListService,
     private toReviewService: ToReviewService,
-    private router: Router
+    private router: Router,
   ) {
     this.breadcrumbService.setBreadcrumbs([
       {
@@ -45,6 +45,7 @@ export class ToReviewPageComponent implements OnInit {
     this.collapsibleListService.setSectionIds(this.sectionIds);
     this.collapsibleListService.setCanEdit(false);
     this.collapsibleListService.expandAll();
+    
     
     await this.loadInitialData();
   }

@@ -31,7 +31,7 @@ export class ToDoPageComponent implements OnInit {
     private breadcrumbService: BreadcrumbService,
     private comboboxService: ComboboxService,
     private tabService: TabService<string>,
-    private toDoService: ToDoService
+    private toDoService: ToDoService,
   ) {
     this.breadcrumbService.setBreadcrumbs([
       {

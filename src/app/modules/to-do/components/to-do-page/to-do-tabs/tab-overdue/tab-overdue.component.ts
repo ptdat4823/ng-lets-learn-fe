@@ -119,5 +119,6 @@ export class TabOverdueComponent implements OnInit, OnDestroy, OnChanges {
 
   private getCourseIdFromItem(item: ToDoItem): string {
     return item.courseId || '1';
+    return item.courseId || '1';
   }
 }
