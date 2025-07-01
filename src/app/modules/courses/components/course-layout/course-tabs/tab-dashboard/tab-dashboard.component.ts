@@ -6,6 +6,8 @@ import { getMonthName } from '@shared/helper/date.helper';
 import { generateMonthOptions } from '@shared/helper/date.helper';
 import { ComboboxService } from '@shared/components/combobox/combobox.service';
 import { BarChartSegment } from '@shared/components/charts/bar-chart/bar-chart.component';
+import { GetQuizOverallReport, GetAssignmentOverallReport } from '@shared/api/report.api';
+import { QuizOverallReport, AssignmentOverallReport } from '@shared/models/report';
 
 @Component({
   selector: 'tab-dashboard',
@@ -38,87 +40,176 @@ export class TabDashboardComponent implements OnInit {
   quizAvgMarkSegments: BarChartSegment[] = [];
   quizCompletionRateSegments: BarChartSegment[] = [];
 
-  ngOnInit(): void {
+  quizReport: QuizOverallReport | null = null;
+  assignmentReport: AssignmentOverallReport | null = null;
+
+  async ngOnInit(): Promise<void> {
     this.monthOptions = generateMonthOptions();
     this.selectedMonthValue = this.monthOptions[0]?.value || '';
-    this.onMonthChange(this.selectedMonthValue);
+    await this.onMonthChange(this.selectedMonthValue);
   }
 
-  updateStatsForMonth(month: number, year: number): void {
-    // For now, using static data as before
-    this.assignmentsStats = [
-      {
-        label: 'Total assignments',
-        value: '7',
-        increasement: '2 assignments',
-        note: `Compare to last month (${getMonthName(month - 1)} ${year})`,
-      },
-      {
-        label: 'Avg completion rate',
-        value: '74 %',
-        increasement: '2.5 %',
-        note: `Compare to last month (${getMonthName(month - 1)} ${year})`,
-      },
-      { label: 'Assignments to do', value: '2 assignments' },
-      { label: 'Next assignment will end on', value: 'Fri, Dec 20, 2024' },
-    ];
-    this.quizStats = [
-      { label: 'Total quizzes', value: '7' },
-      { label: 'Number of question rang', value: '10 - 40' },
-      { label: 'Avg completion rate', value: '74 %' },
-      { label: 'Score range', value: '1.9 - 8.8' },
-    ];
-    this.fileTypeSegments = [
-      { value: 150, color: '#FF5252', label: 'pdf' },
-      { value: 70, color: '#E040FB', label: 'docx' },
-      { value: 30, color: '#448AFF', label: 'zip' },
-      { value: 30, color: '#4CAF50', label: 'xlsx' },
-    ];
-    this.gradedSegments = [
-      { value: 100, color: '#4CAF50', label: '80 - 100 points' },
-      { value: 90, color: '#448AFF', label: '50 - 79 points' },
-      { value: 60, color: '#FFC107', label: '20 - 49 points' },
-      { value: 30, color: '#FF5252', label: '0 - 19 points' },
-    ];
-    this.assignmentsAvgMarkSegments = [
-      { value: 8.2, color: '#06B6D4', label: 'First exam' },
-      { value: 8.2, color: '#06B6D4', label: 'Introduction to Astronogy' },
-      { value: 6.6, color: '#06B6D4', label: 'Final test' },
-    ];
-    this.assignmentsCompletionRateSegments = [
-      { value: 82, color: '#8B5CF6', label: 'First exam' },
-      { value: 82, color: '#8B5CF6', label: 'Introduction to Astronogy' },
-      { value: 66, color: '#8B5CF6', label: 'Final test' },
-    ];
-    this.questionTypeSegments = [
-      { value: 300, color: '#EC4899', label: 'Multiple choice' },
-      { value: 75, color: '#8B5CF6', label: 'True/false' },
-      { value: 125, color: '#F97316', label: 'Short answer' },
-    ];
-    this.studentMarkSegments = [
-      { value: 5, color: '#FF5252', label: '80 - 100%' },
-      { value: 15, color: '#448AFF', label: '50 - 79%' },
-      { value: 10, color: '#4CAF50', label: '20 - 49%' },
-      { value: 5, color: '#FFC107', label: '0 - 19%' },
-      { value: 5, color: '#9E9E9E', label: 'Not attempted' },
-    ];
-    this.quizAvgMarkSegments = [
-      { value: 8.2, color: '#06B6D4', label: 'First exam' },
-      { value: 8.2, color: '#06B6D4', label: 'Introduction to Astronogy' },
-      { value: 6.6, color: '#06B6D4', label: 'Final test' },
-    ];
-    this.quizCompletionRateSegments = [
-      { value: 82, color: '#8B5CF6', label: 'First exam' },
-      { value: 82, color: '#8B5CF6', label: 'Introduction to Astronogy' },
-      { value: 66, color: '#8B5CF6', label: 'Final test' },
-    ];
-  }
-
-  onMonthChange(value: string): void {
+  async onMonthChange(value: string): Promise<void> {
     const [year, month] = value.split('-').map(Number);
     this.selectedMonth = month;
     this.selectedYear = year;
     this.selectedMonthValue = value;
-    this.updateStatsForMonth(month, year);
+    await Promise.all([
+      this.fetchQuizOverallReport(),
+      this.fetchAssignmentOverallReport()
+    ]);
+    this.updateStatsForMonth();
+  }
+
+  async fetchQuizOverallReport() {
+    // Calculate start and end of month
+    const start = new Date(this.selectedYear, this.selectedMonth, 1);
+    const end = new Date(this.selectedYear, this.selectedMonth + 1, 0, 23, 59, 59, 999);
+    const startTime = start.toISOString();
+    const endTime = end.toISOString();
+    try {
+      this.quizReport = await GetQuizOverallReport(this.course.id, startTime, endTime);
+    } catch (error) {
+      this.quizReport = null;
+    }
+  }
+
+  async fetchAssignmentOverallReport() {
+    // Calculate start and end of month
+    const start = new Date(this.selectedYear, this.selectedMonth, 1);
+    const end = new Date(this.selectedYear, this.selectedMonth + 1, 0, 23, 59, 59, 999);
+    const startTime = start.toISOString();
+    const endTime = end.toISOString();
+    try {
+      this.assignmentReport = await GetAssignmentOverallReport(this.course.id, startTime, endTime);
+    } catch (error) {
+      this.assignmentReport = null;
+    }
+  }
+
+  updateStatsForMonth(): void {
+    // Quiz
+    if (!this.quizReport) {
+      this.quizStats = [];
+      this.questionTypeSegments = [];
+      this.studentMarkSegments = [];
+      this.quizAvgMarkSegments = [];
+      this.quizCompletionRateSegments = [];
+    } else {
+      this.quizStats = [
+        { label: 'Total quizzes', value: this.quizReport.quizCount.toString() },
+        { label: 'Number of question rang', value: `${this.quizReport.minQuestionCount} - ${this.quizReport.maxQuestionCount}` },
+        { label: 'Avg completion rate', value: `${(this.quizReport.avgCompletionPercentage > 1 ? this.quizReport.avgCompletionPercentage : this.quizReport.avgCompletionPercentage * 100).toFixed(1)} %` },
+        { label: 'Score range', value: `${this.quizReport.minStudentScoreBase10.toFixed(1)} - ${this.quizReport.maxStudentScoreBase10.toFixed(1)}` },
+      ];
+      // Question type segments
+      this.questionTypeSegments = [
+        { value: this.quizReport.multipleChoiceQuestionCount, color: '#EC4899', label: 'Multiple choice' },
+        { value: this.quizReport.trueFalseQuestionCount, color: '#8B5CF6', label: 'True/false' },
+        { value: this.quizReport.shortAnswerQuestionCount, color: '#F97316', label: 'Short answer' },
+      ];
+      // Mark distribution segments
+      this.studentMarkSegments = [
+        { value: this.quizReport.markDistributionCount['8'], color: '#4CAF50', label: '80 - 100%' },
+        { value: this.quizReport.markDistributionCount['5'], color: '#448AFF', label: '50 - 79%' },
+        { value: this.quizReport.markDistributionCount['2'], color: '#FFC107', label: '20 - 49%' },
+        { value: this.quizReport.markDistributionCount['0'], color: '#FF5252', label: '0 - 19%' },
+        { value: this.quizReport.markDistributionCount['-1'], color: '#9E9E9E', label: 'Not attempted' },
+      ];
+      // Avg mark segments (per quiz)
+      this.quizAvgMarkSegments = this.quizReport.singleQuizReports.map((q, idx) => ({
+        value: q.avgStudentMarkBase10,
+        color: '#06B6D4',
+        label: q.name || `Quiz ${idx + 1}`,
+      }));
+      // Completion rate segments (per quiz)
+      this.quizCompletionRateSegments = this.quizReport.singleQuizReports.map((q, idx) => ({
+        value: q.completionRate,
+        color: '#8B5CF6',
+        label: q.name || `Quiz ${idx + 1}`,
+      }));
+    }
+    // Assignments
+    if (!this.assignmentReport) {
+      this.assignmentsStats = [];
+      this.fileTypeSegments = [];
+      this.gradedSegments = [];
+      this.assignmentsAvgMarkSegments = [];
+      this.assignmentsCompletionRateSegments = [];
+    } else {
+      this.assignmentsStats = [
+        { label: 'Total assignments', value: this.assignmentReport.assignmentCount?.toString() ?? '0' },
+        { label: 'Avg completion rate', value: `${(this.assignmentReport.avgCompletionRate ?? 0).toFixed(1)} %` },
+        { label: 'Assignments to do', value: this.assignmentReport.assignmentsCountInProgress?.toString() ?? '0' },
+        {
+          label: 'Next assignment will end on',
+          value: this.assignmentReport.closestNextEndAssignment
+        ? (() => {
+            const date = new Date(this.assignmentReport.closestNextEndAssignment);
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            const month = date.toLocaleString('en-US', { month: 'short' });
+            const day = date.getDate();
+            return `${hours}:${minutes} ${month} ${day}`;
+          })()
+        : '-'
+        },
+      ];
+      // File type segments
+      this.fileTypeSegments = Object.entries(this.assignmentReport.fileTypeCount || {}).map(([type, count], idx) => ({
+        value: count as number,
+        color: ['#FF5252', '#E040FB', '#448AFF', '#4CAF50'][idx % 4],
+        label: type
+      }));
+      // Graded segments (mark distribution)
+      this.gradedSegments = [
+        { value: this.assignmentReport.markDistributionCount['8'], color: '#4CAF50', label: '80 - 100%' },
+        { value: this.assignmentReport.markDistributionCount['5'], color: '#448AFF', label: '50 - 79%' },
+        { value: this.assignmentReport.markDistributionCount['2'], color: '#FFC107', label: '20 - 49%' },
+        { value: this.assignmentReport.markDistributionCount['0'], color: '#FF5252', label: '0 - 19%' },
+        { value: this.assignmentReport.markDistributionCount['-1'], color: '#9E9E9E', label: 'Not attempted' },
+      ];
+      // Avg mark segments (per assignment)
+      this.assignmentsAvgMarkSegments = (this.assignmentReport.singleAssignmentReports || []).map((a, idx) => ({
+        value: a.avgMark / 10,
+        color: '#06B6D4',
+        label: a.name || `Assignment ${idx + 1}`,
+      }));
+      // Completion rate segments (per assignment)
+      this.assignmentsCompletionRateSegments = (this.assignmentReport.singleAssignmentReports || []).map((a, idx) => ({
+        value: a.completionRate * 100,
+        color: '#8B5CF6',
+        label: a.name || `Assignment ${idx + 1}`,
+      }));
+    }
+  }
+
+  get totalQuizQuestions(): number {
+    if (!this.quizReport) return 0;
+    return (
+      (this.quizReport.multipleChoiceQuestionCount || 0) +
+      (this.quizReport.trueFalseQuestionCount || 0) +
+      (this.quizReport.shortAnswerQuestionCount || 0)
+    );
+  }
+
+  get studentsS(): any[] {
+    if (!this.quizReport) return [];
+    return this.quizReport.studentWithMarkOver8.map(s => s.student);
+  }
+
+  get studentsA(): any[] {
+    if (!this.quizReport) return [];
+    return this.quizReport.studentWithMarkOver5.map(s => s.student);
+  }
+
+  get studentsB(): any[] {
+    if (!this.quizReport) return [];
+    return this.quizReport.studentWithMarkOver2.map(s => s.student);
+  }
+
+  get studentsC(): any[] {
+    if (!this.quizReport) return [];
+    return this.quizReport.studentWithMarkOver0.map(s => s.student);
   }
 }
