@@ -8,6 +8,7 @@ import {
   QuizTab,
 } from '@modules/quiz/constants/quiz.constant';
 import { TabService } from '@shared/components/tab-list/tab-list.service';
+import { mockTopics } from '@shared/mocks/topic';
 import { Course } from '@shared/models/course';
 import { QuizTopic } from '@shared/models/topic';
 import { Role, User } from '@shared/models/user';
@@ -24,7 +25,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class QuizPageComponent implements OnInit {
   course: Course | null = null;
-  topic: QuizTopic | null = null;
+  topic: QuizTopic = mockTopics[0] as QuizTopic;
   tabs = QuizTab;
   user: User | null = null;
   isStudent = true;
@@ -50,7 +51,7 @@ export class QuizPageComponent implements OnInit {
       this.course = course;
       await GetTopic(topicId, courseId).then((topic) => {
         this.topic = topic as QuizTopic;
-        this.updateBreadcrumb(course, this.topic!);
+        this.updateBreadcrumb(course, this.topic);
       });
     });
   }
