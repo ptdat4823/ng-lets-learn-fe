@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { LayoutService } from '@shared/components/layout/layout.service';
 import { Course } from '@shared/models/course';
 import { wrapGrid } from 'animate-css-grid';
@@ -12,6 +12,7 @@ import { wrapGrid } from 'animate-css-grid';
 })
 export class StudentCourseListComponent {
   @Input() courses: Course[] = [];
+  @Output() submitCode = new EventEmitter<string>();
   constructor(
     private responsive: BreakpointObserver,
     private layoutService: LayoutService
@@ -44,5 +45,9 @@ export class StudentCourseListComponent {
     this.layoutService.isCollapsed$.subscribe((value) => {
       this.isSidebarCollapsed = value;
     });
+  }
+
+  onSubmitCode(code: string) {
+    this.submitCode.emit(code);
   }
 }
