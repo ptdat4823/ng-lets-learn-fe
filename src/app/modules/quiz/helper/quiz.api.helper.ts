@@ -27,9 +27,24 @@ export const convertQuizToRequestData = (quiz: QuizTopic) => {
   if (!data) return reqData;
 
   const { questions } = data;
+  // Flatten question.data into the question object
+  const convertedQuestions = removeTempIdInQuestions(questions).map((q: any) => {
+    if (q.data && typeof q.data === 'object') {
+      const { choices, multiple, ...restData } = q.data;
+      return {
+        ...q,
+        ...restData,
+        choices: Array.isArray(choices) ? choices : [],
+        multiple: typeof multiple === 'boolean' ? multiple : false,
+        data: undefined, // Remove data property
+      };
+    }
+    return q;
+  });
+
   const convertedData = {
     ...data,
-    questions: removeTempIdInQuestions(questions),
+    questions: convertedQuestions,
   };
 
   return {

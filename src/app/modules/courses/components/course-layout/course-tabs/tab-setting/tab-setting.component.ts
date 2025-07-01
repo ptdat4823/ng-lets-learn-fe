@@ -33,6 +33,18 @@ export class TabSettingComponent implements OnInit {
     this.collapsibleListService.setSectionIds(this.sectionIds);
     this.collapsibleListService.setCanEdit(false); // disable edit UI in collapsible list
     this.collapsibleListService.expandAll();
+    if (this.course) {
+      this.form.patchValue(this.getFormValuesFromCourse(this.course));
+    }
+  }
+
+  private getFormValuesFromCourse(course: Course) {
+    return {
+      name: course.title || '',
+      category: course.category || '',
+      level: course.level || 'beginner',
+      price: course.price ?? '',
+    };
   }
 
   getDisabled(controlName: string): boolean {
@@ -42,12 +54,11 @@ export class TabSettingComponent implements OnInit {
   }
 
   onSubmit(e: Event): void {
-    e.preventDefault(); // Prevent default form submission
-    // Stop here if form is invalid
-    if (this.form.invalid) {
-      this.form.markAllAsTouched(); // Mark all controls as touched to show validation errors
+    e.preventDefault();
 
-      // Find first invalid control and scroll to it
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+
       const firstInvalidControl: HTMLElement = document.querySelector(
         'form .ng-invalid'
       ) as HTMLElement;
@@ -62,11 +73,6 @@ export class TabSettingComponent implements OnInit {
 
       return;
     }
-
-    // Here you would typically call your authentication service
     console.log('submit attempt with:', this.form.value);
-
-    // Navigate to dashboard or home page after successful login
-    // this.router.navigate(['/dashboard']);
   }
 }
