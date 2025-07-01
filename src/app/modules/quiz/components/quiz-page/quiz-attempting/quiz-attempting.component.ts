@@ -9,6 +9,9 @@ import { getSecondFromTimeLimitType } from '@shared/models/quiz';
 import { QuizTopic } from '@shared/models/topic';
 import { debounceTime } from 'rxjs';
 import { QuizAttemptingService } from './quiz-attempting.service';
+import { GetQuizResponse } from '@modules/quiz/api/quiz-response.api';
+import { ToastrService } from 'ngx-toastr';
+import { QuizResponseData } from '@shared/models/student-response';
 
 @Component({
   selector: 'quiz-attempting',
@@ -20,7 +23,8 @@ import { QuizAttemptingService } from './quiz-attempting.service';
 export class QuizAttemptingComponent implements OnInit {
   constructor(
     private quizAttemptingService: QuizAttemptingService,
-    private activedRoute: ActivatedRoute
+    private activedRoute: ActivatedRoute,
+    private toastr: ToastrService
   ) {}
   topic: QuizTopic | null = null;
   course: Course | null = null;
@@ -35,7 +39,6 @@ export class QuizAttemptingComponent implements OnInit {
   showAnswer = false;
 
   ngOnInit(): void {
-    this.InitData();
     this.quizAttemptingService.questions$.subscribe((questions) => {
       this.questions = questions;
     });
@@ -53,27 +56,80 @@ export class QuizAttemptingComponent implements OnInit {
     this.quizAttemptingService.flaggedQuestions$.subscribe((flagged) => {
       this.flaggedQuestions = flagged;
     });
+    this.InitData();
   }
 
   async InitData() {
     const topicId = this.activedRoute.snapshot.paramMap.get('topicId');
     const courseId = this.activedRoute.snapshot.paramMap.get('courseId');
-    if (topicId && courseId) await this.FetchData(courseId, topicId);
+    const quizResponseId =
+      this.activedRoute.snapshot.paramMap.get('quizResponseId');
+    if (topicId && courseId && quizResponseId) {
+      await this.InitReviewModeData(courseId, topicId, quizResponseId);
+    } else {
+      await this.InitAttemptingModeData(courseId!, topicId!);
+    }
   }
 
-  async FetchData(courseId: string, topicId: string) {
+  async InitReviewModeData(
+    courseId: string,
+    topicId: string,
+    quizResponseId: string
+  ) {
+    const resQuizResponse = this.FetchQuizResponse(topicId, quizResponseId);
+    const resCourseAndTopicData = this.FetchCourseAndTopicData(
+      courseId,
+      topicId
+    );
+    await Promise.all([resQuizResponse, resCourseAndTopicData]).then(
+      ([quizResponse, topic]) => {
+        const quiz = topic as QuizTopic;
+        this.InitFirstQuizDisplayData(quiz);
+        if (quizResponse) {
+          const quizResponseData = quizResponse.data as QuizResponseData;
+          this.quizAttemptingService.setAnswerRecordFromQuizAnswers(
+            quizResponseData.answers
+          );
+          this.quizAttemptingService.setStudentResponse(quizResponse);
+          this.quizAttemptingService.setShowAnswer(true);
+          this.isReviewMode = true;
+        }
+      }
+    );
+  }
+
+  InitFirstQuizDisplayData(topic: QuizTopic) {
+    this.quizAttemptingService.setQuestions(topic.data.questions);
+    this.quizAttemptingService.setCurrentQuestionId(this.questions[0].id);
+  }
+
+  async InitAttemptingModeData(courseId: string, topicId: string) {
+    await this.FetchCourseAndTopicData(courseId, topicId).then((topic) => {
+      const quiz = topic as QuizTopic;
+      this.InitFirstQuizDisplayData(quiz);
+      if (this.hasLimitTime(quiz)) {
+        const countDown = this.getCountDown(quiz);
+        this.quizAttemptingService.startQuiz(topicId, countDown);
+      } else {
+        this.quizAttemptingService.startQuiz(topicId);
+      }
+    });
+  }
+
+  async FetchCourseAndTopicData(courseId: string, topicId: string) {
     return await GetCourseById(courseId).then(async (course) => {
       this.course = course;
       return await GetTopic(topicId, courseId).then((topic) => {
         this.topic = topic as QuizTopic;
-        const quiz = topic as QuizTopic;
-        this.quizAttemptingService.setQuestions(this.topic.data.questions);
-        this.quizAttemptingService.setCurrentQuestionId(this.questions[0].id);
-        if (this.hasLimitTime(quiz)) {
-          const countDown = this.getCountDown(quiz);
-          this.quizAttemptingService.startQuiz(topicId, countDown);
-        } else this.quizAttemptingService.startQuiz(topicId);
+        return topic;
       });
+    });
+  }
+
+  async FetchQuizResponse(topicId: string, id: string) {
+    return await GetQuizResponse(topicId, id).catch((error) => {
+      this.toastr.error(error.message);
+      console.error('Error fetching quiz response:', error);
     });
   }
 

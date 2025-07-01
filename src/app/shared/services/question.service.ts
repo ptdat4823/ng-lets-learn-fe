@@ -36,6 +36,16 @@ export class QuestionService {
     }
     return answer as string;
   }
+  parseFromHashAnswer(question: Question, answer: string): string | string[] {
+    if (question.type === QuestionType.CHOICE) {
+      const data = question.data as ChoiceQuestion;
+      if (data.multiple) {
+        return this.parseMultipleChoiceAnswerFromHashAnswer(data, answer);
+      }
+      return this.parseSingleChoiceAnswerFromHashAnswer(data, answer);
+    }
+    return answer;
+  }
 
   convertSingleChoiceAnswerToHashAnswer(
     question: ChoiceQuestion,
@@ -45,6 +55,16 @@ export class QuestionService {
     const index = choices.findIndex((choice) => choice.id === choiceId);
     if (index === -1) return '';
     return index.toString();
+  }
+  parseSingleChoiceAnswerFromHashAnswer(
+    question: ChoiceQuestion,
+    answer: string
+  ): string {
+    if (!answer) return '';
+    const choices = question.choices;
+    const index = parseInt(answer, 10);
+    if (isNaN(index) || index < 0 || index >= choices.length) return '';
+    return choices[index].id;
   }
   convertMultipleChoiceAnswerToHashAnswer(
     question: ChoiceQuestion,
@@ -56,6 +76,19 @@ export class QuestionService {
       const isSelected = choiceIds.includes(choice.id);
       res += isSelected ? '1' : '0';
     });
+    return res;
+  }
+  parseMultipleChoiceAnswerFromHashAnswer(
+    question: ChoiceQuestion,
+    answer: string
+  ): string[] {
+    const choices = question.choices;
+    const res: string[] = [];
+    for (let i = 0; i < choices.length; i++) {
+      if (answer[i] === '1') {
+        res.push(choices[i].id);
+      }
+    }
     return res;
   }
 

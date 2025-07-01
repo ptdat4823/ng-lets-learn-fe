@@ -1,5 +1,12 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, inject, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { formatDateString, getDurationText } from '@shared/helper/date.helper';
 import {
   QuizResponseData,
@@ -14,6 +21,7 @@ import {
 })
 export class QuizResultTableComponent implements OnInit {
   @Input() studentReponses: StudentResponse[] = [];
+  @Output() review = new EventEmitter<string>();
   private responsive = inject(BreakpointObserver);
   datePattern = 'dd/MM/yyyy HH:mm a';
 
@@ -40,5 +48,8 @@ export class QuizResultTableComponent implements OnInit {
     const startTime = quizResponse.startedAt;
     const endTime = quizResponse.completedAt;
     return this.getDurationString(startTime, endTime, 6);
+  }
+  onReviewClick(response: StudentResponse) {
+    this.review.emit(response.id);
   }
 }

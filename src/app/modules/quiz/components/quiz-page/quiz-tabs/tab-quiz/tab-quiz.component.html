@@ -17,27 +17,6 @@
   <div class="quiz-description">
     <p>{{ topic.data.description }}</p>
   </div>
-
-  <app-button label="Preview Quiz" class="preview-button" />
-
-  <div class="quiz-settings">
-    <div class="setting-item">
-      <span class="setting-label">Attempts allowed:</span>
-      <span class="setting-value">{{ topic.data.attemptAllowed }}</span>
-    </div>
-    <div class="setting-item">
-      <span class="setting-label">Grading method:</span>
-      <span class="setting-value">{{ topic.data.gradingMethod }}</span>
-    </div>
-    <div class="setting-item">
-      <span [ngClass]="['setting-label', gradeColor]">
-        {{ gradingMethod }}:
-      </span>
-      <span [ngClass]="['setting-value', gradeColor]">
-        {{ gradeToShow }} / {{ fullMarkOfQuiz }}
-      </span>
-    </div>
-  </div>
 </card>
 
 <card>

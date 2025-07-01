@@ -55,7 +55,6 @@ export class QuizAttemptingService {
     const init = this.studentResponseService.getInitQuizResponse(topicId);
     this.topicId = topicId;
     this.studentResponse.next(init);
-    console.log('Quiz started with initial response:', init);
   }
 
   setCurrentQuestionId(id: string) {
@@ -198,6 +197,21 @@ export class QuizAttemptingService {
     });
 
     return quizAnswers;
+  }
+  setAnswerRecordFromQuizAnswers(quizAnsers: QuizAnswer[]) {
+    const answerRecord: Record<string, any> = {};
+    quizAnsers.forEach((quizAnswer) => {
+      const questionId = quizAnswer.question.id;
+      answerRecord[questionId] = this.questionService.parseFromHashAnswer(
+        quizAnswer.question,
+        quizAnswer.answer
+      );
+    });
+    this.answerRecord.next(answerRecord);
+    this.setShowAnswer(true);
+  }
+  setStudentResponse(response: StudentResponse) {
+    this.studentResponse.next(response);
   }
 
   async finishQuiz() {

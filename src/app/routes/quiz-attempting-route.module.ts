@@ -7,6 +7,10 @@ const routes: Routes = [
     path: ':topicId/attempting',
     component: QuizAttemptingComponent,
   },
+  {
+    path: ':topicId/:quizResponseId/reviewing',
+    component: QuizAttemptingComponent,
+  },
 ];
 
 @NgModule({
