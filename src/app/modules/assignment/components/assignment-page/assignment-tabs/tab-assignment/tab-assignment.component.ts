@@ -1,4 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { StudentResponseService } from '@shared/services/student-response.service';
 import { AssignmentTopic } from '@shared/models/topic';
 import { formatDateString } from '@shared/helper/date.helper';
@@ -7,6 +13,8 @@ import { AssignmentTab } from '@modules/assignment/constants/assignment.constant
 import { GetAllAssignmentResponsesOfTopic } from '@modules/assignment/api/assignment-response.api';
 import { StudentResponse } from '@shared/models/student-response';
 import { Course } from '@shared/models/course';
+import { CloudinaryFile } from '@shared/models/cloudinary-file';
+import { AssignmentData } from '@shared/models/assignment';
 
 @Component({
   selector: 'tab-assignment',
@@ -15,23 +23,30 @@ import { Course } from '@shared/models/course';
   styleUrl: './tab-assignment.component.scss',
   providers: [StudentResponseService],
 })
-export class TabAssignmentComponent implements OnInit {
+export class TabAssignmentComponent implements OnInit, OnChanges {
   @Input({ required: true }) topic!: AssignmentTopic;
   @Input() course!: Course;
 
   studentResponses: StudentResponse[] = [];
+  uploadedFiles: CloudinaryFile[] = [];
 
-  constructor(
-    private studentResponseService: StudentResponseService,
-    private tabService: TabService<string>,
-  ) {}
+  constructor(private tabService: TabService<string>) {}
 
   ngOnInit(): void {
     this.fetchAssignmentResponses();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['topic'] && this.topic) {
+      const assignmentData = this.topic.data as AssignmentData;
+      this.uploadedFiles = assignmentData.cloudinaryFiles ?? [];
+    }
+  }
+
   get assignedCount(): number {
-    return this.course && this.course.students ? this.course.students.length : 0;
+    return this.course && this.course.students
+      ? this.course.students.length
+      : 0;
   }
 
   get submittedCount(): number {
@@ -39,7 +54,7 @@ export class TabAssignmentComponent implements OnInit {
   }
 
   get needGradingCount(): number {
-    return this.studentResponses.filter(res => {
+    return this.studentResponses.filter((res) => {
       const data = res.data as any;
       return !data || data.mark === null || data.mark === undefined;
     }).length;
@@ -47,7 +62,9 @@ export class TabAssignmentComponent implements OnInit {
 
   async fetchAssignmentResponses() {
     try {
-      this.studentResponses = await GetAllAssignmentResponsesOfTopic(this.topic.id);
+      this.studentResponses = await GetAllAssignmentResponsesOfTopic(
+        this.topic.id
+      );
     } catch (error) {
       throw error;
     }

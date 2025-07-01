@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  OnDestroy,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { CollapsibleListService } from '@shared/components/collapsible-list/collapsible-list.service';
@@ -23,6 +30,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class TabSettingComponent implements OnInit {
   @Input({ required: true }) topic!: AssignmentTopic;
+  @Output() topicChange = new EventEmitter<AssignmentTopic>();
   form!: FormGroup;
   sectionIds: string[] = ['general', 'availability', 'submission'];
   showPassword = false;
@@ -49,9 +57,10 @@ export class TabSettingComponent implements OnInit {
       // Check if open/close times exist to set checkbox states
       const hasOpenTime = !!this.topic.data?.open;
       const hasCloseTime = !!this.topic.data?.close;
-      const hasMaximumFileUpload = !!this.topic.data?.maximumFile && this.topic.data.maximumFile > 1;
+      const hasMaximumFileUpload =
+        !!this.topic.data?.maximumFile && this.topic.data.maximumFile > 1;
       const hasMaximumFileSize = !!this.topic.data?.maximumFileSize;
-      
+
       this.form.patchValue({
         name: this.topic.title || '',
         description: this.topic.data?.description || '',
@@ -59,12 +68,16 @@ export class TabSettingComponent implements OnInit {
         hasCloseTime: hasCloseTime,
         hasMaximumFileUpload: hasMaximumFileUpload,
         hasMaximumFileSize: hasMaximumFileSize,
-        open: this.topic.data?.open ? new Date(this.topic.data.open) : new Date(),
-        close: this.topic.data?.close ? new Date(this.topic.data.close) : new Date(),
+        open: this.topic.data?.open
+          ? new Date(this.topic.data.open)
+          : new Date(),
+        close: this.topic.data?.close
+          ? new Date(this.topic.data.close)
+          : new Date(),
         maximumFile: this.topic.data?.maximumFile || 1,
         maximumFileSize: this.topic.data?.maximumFileSize || '',
         additionalFile: this.topic.data?.cloudinaryFiles || [],
-        remindToGrade: this.topic.data?.remindToGrade || null
+        remindToGrade: this.topic.data?.remindToGrade || null,
       });
 
       if (hasOpenTime) {
@@ -72,19 +85,19 @@ export class TabSettingComponent implements OnInit {
       } else {
         this.form.get('open')?.disable();
       }
-      
+
       if (hasCloseTime) {
         this.form.get('close')?.enable();
       } else {
         this.form.get('close')?.disable();
       }
-      
+
       if (hasMaximumFileUpload) {
         this.form.get('maximumFile')?.enable();
       } else {
         this.form.get('maximumFile')?.disable();
       }
-      
+
       if (hasMaximumFileSize) {
         this.form.get('maximumFileSize')?.enable();
       } else {
@@ -140,54 +153,71 @@ export class TabSettingComponent implements OnInit {
       return;
     }
     if (!this.topic) return;
-    
+
     const formValues = this.form.getRawValue();
     this.topic.title = formValues.name;
 
     this.topic.data = this.topic.data || {};
     this.topic.data.description = formValues.description;
-    
+
     if (formValues.hasOpenTime && this.form.get('open')?.enabled) {
-      this.topic.data.open = formValues.open ? new Date(formValues.open).toISOString() : null;
+      this.topic.data.open = formValues.open
+        ? new Date(formValues.open).toISOString()
+        : null;
     } else {
       this.topic.data.open = null;
     }
-    
+
     if (formValues.hasCloseTime && this.form.get('close')?.enabled) {
-      this.topic.data.close = formValues.close ? new Date(formValues.close).toISOString() : null;
+      this.topic.data.close = formValues.close
+        ? new Date(formValues.close).toISOString()
+        : null;
     } else {
       this.topic.data.close = null;
     }
-    
-    if (formValues.hasMaximumFileUpload && this.form.get('maximumFile')?.enabled) {
+
+    if (
+      formValues.hasMaximumFileUpload &&
+      this.form.get('maximumFile')?.enabled
+    ) {
       this.topic.data.maximumFile = formValues.maximumFile;
     } else {
-      this.topic.data.maximumFile = 1; 
+      this.topic.data.maximumFile = 1;
     }
-    
-    if (formValues.hasMaximumFileSize && this.form.get('maximumFileSize')?.enabled) {
+
+    if (
+      formValues.hasMaximumFileSize &&
+      this.form.get('maximumFileSize')?.enabled
+    ) {
       this.topic.data.maximumFileSize = formValues.maximumFileSize;
     } else {
       this.topic.data.maximumFileSize = null;
     }
-    
+
     if (formValues.additionalFile && formValues.additionalFile.length > 0) {
       const uploadedFile = formValues.additionalFile[0];
       this.topic.data.cloudinaryFiles = [uploadedFile];
     }
     this.topic.data.remindToGrade = formValues.remindToGrade;
     (this.topic.data as any).topicId = this.topic.id;
-    
+
     const courseId = this.activatedRoute.snapshot.paramMap.get('courseId');
     if (courseId) {
       await UpdateTopic(this.topic, courseId)
         .then((updatedTopic) => {
           this.topic = updatedTopic as AssignmentTopic;
-          this.toastr.success('Assignment settings saved successfully!', 'Success');
+          this.toastr.success(
+            'Assignment settings saved successfully!',
+            'Success'
+          );
+          this.topicChange.emit(this.topic);
         })
         .catch((error) => {
           console.error('Error updating assignment:', this.topic.data);
-          this.toastr.error('Failed to save assignment settings. Please try again.', 'Error');
+          this.toastr.error(
+            'Failed to save assignment settings. Please try again.',
+            'Error'
+          );
           throw error;
         });
     } else {

@@ -24,11 +24,23 @@
 }
 
 .topic-description {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 
   p {
     line-height: 1.5;
     color: $text-secondary-color;
+  }
+}
+
+.file-upload-section {
+  width: 100%;
+  margin-bottom: 20px;
+
+  .file-list {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 }
 

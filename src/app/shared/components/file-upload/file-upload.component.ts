@@ -4,6 +4,7 @@ import {
   EventEmitter,
   HostListener,
   Input,
+  OnInit,
   Output,
   ViewChild,
 } from '@angular/core';
@@ -30,13 +31,11 @@ export interface FileUploadConfig {
   templateUrl: './file-upload.component.html',
   styleUrl: './file-upload.component.scss',
 })
-export class FileUploadComponent {
+export class FileUploadComponent implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   @Input() form: FormGroup = new FormGroup({});
   @Input() controlName: string = '';
   @Input() validationMessages: Record<string, string> | null = null;
-  @Input() uploadedFiles: CloudinaryFile[] = [];
-
   @Input() description = 'Texts, images, videos, audios and pdfs';
   @Input() config: FileUploadConfig = {
     maxFiles: 10,
@@ -73,8 +72,16 @@ export class FileUploadComponent {
   uploadProgress = 0;
   files: File[] = [];
   toUploadFiles: CloudinaryFile[] = [];
+  uploadedFiles: CloudinaryFile[] = [];
 
   constructor(private el: ElementRef, private toastService: ToastrService) {}
+
+  ngOnInit(): void {
+    const initValue = this.form.get(this.controlName)?.value;
+    if (initValue && Array.isArray(initValue)) {
+      this.uploadedFiles = initValue;
+    }
+  }
 
   @HostListener('dragover', ['$event'])
   onDragOver(event: DragEvent) {

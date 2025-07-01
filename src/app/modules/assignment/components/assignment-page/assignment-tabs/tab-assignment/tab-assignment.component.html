@@ -18,6 +18,17 @@
     <p>{{ topic.data.description }}</p>
   </div>
 
+  @if(uploadedFiles && uploadedFiles.length > 0) {
+  <div class="file-upload-section">
+    <h4>Attached files:</h4>
+    <div class="file-list">
+      @for(file of uploadedFiles; track file.id) {
+      <file-download-link [file]="file" />
+      }
+    </div>
+  </div>
+  }
+
   <app-button
     label="Grade"
     class="grade-button"

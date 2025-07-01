@@ -109,4 +109,11 @@ export class AssignmentPageComponent implements OnInit {
       },
     ]);
   }
+  onTopicChange(topic: AssignmentTopic) {
+    this.topic = topic;
+    if (this.course) {
+      this.updateBreadcrumb(this.course, this.topic);
+    }
+    this.cdr.detectChanges();
+  }
 }
