@@ -124,7 +124,7 @@ export class TabDashboardComponent implements OnInit {
       }));
       // Completion rate segments (per quiz)
       this.quizCompletionRateSegments = this.quizReport.singleQuizReports.map((q, idx) => ({
-        value: q.completionRate,
+        value: q.completionRate * 100,
         color: '#8B5CF6',
         label: q.name || `Quiz ${idx + 1}`,
       }));
@@ -190,6 +190,28 @@ export class TabDashboardComponent implements OnInit {
       (this.quizReport.multipleChoiceQuestionCount || 0) +
       (this.quizReport.trueFalseQuestionCount || 0) +
       (this.quizReport.shortAnswerQuestionCount || 0)
+    );
+  }
+
+  get totalQuizStudents(): number {
+    if (!this.quizReport) return 0;
+    // Sum all students in mark distribution (excluding 'Not attempted')
+    return (
+      (this.quizReport.markDistributionCount['8'] || 0) +
+      (this.quizReport.markDistributionCount['5'] || 0) +
+      (this.quizReport.markDistributionCount['2'] || 0) +
+      (this.quizReport.markDistributionCount['0'] || 0)
+    );
+  }
+
+  get totalGradedSubmissions(): number {
+    if (!this.assignmentReport) return 0;
+    // Graded = all except 'Not attempted'
+    return (
+      (this.assignmentReport.markDistributionCount['8'] || 0) +
+      (this.assignmentReport.markDistributionCount['5'] || 0) +
+      (this.assignmentReport.markDistributionCount['2'] || 0) +
+      (this.assignmentReport.markDistributionCount['0'] || 0)
     );
   }
 

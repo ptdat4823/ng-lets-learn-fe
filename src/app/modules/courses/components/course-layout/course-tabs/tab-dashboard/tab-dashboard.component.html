@@ -47,16 +47,15 @@
           <app-donut-chart
             [chartData]="fileTypeSegments"
             title="File type submission"
-            centerText="280"
+            [centerText]="assignmentReport?.assignmentCount?.toString() ?? '0'"
             centerSubtext="Total submissions"
           ></app-donut-chart>
         </div>
-
         <div class="chart-card">
           <app-donut-chart
             [chartData]="gradedSegments"
             title="Graded submissions"
-            centerText="280"
+            [centerText]="totalGradedSubmissions.toString()"
             centerSubtext="Graded submissions"
           ></app-donut-chart>
         </div>
@@ -88,7 +87,7 @@
           <app-donut-chart
             [chartData]="questionTypeSegments"
             title="Question type distribution"
-            centerText="500"
+            [centerText]="totalQuizQuestions.toString()"
             centerSubtext="Total questions"
           ></app-donut-chart>
         </div>
@@ -96,7 +95,7 @@
           <app-donut-chart
             [chartData]="studentMarkSegments"
             title="Student mark distribution"
-            centerText="40"
+            [centerText]="totalQuizStudents.toString()"
             centerSubtext="Total students"
           ></app-donut-chart>
         </div>
