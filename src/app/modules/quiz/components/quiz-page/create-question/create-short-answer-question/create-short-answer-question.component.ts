@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { CreateQuestion } from '@modules/quiz/api/question.api';
+import { CreateQuestion, GetQuestion } from '@modules/quiz/api/question.api';
 import { CollapsibleListService } from '@shared/components/collapsible-list/collapsible-list.service';
 import { generateId } from '@shared/helper/string.helper';
 import {
@@ -150,10 +150,28 @@ export class CreateShortAnswerQuestionComponent {
 
   ngOnInit(): void {
     this.courseId = this.activedRoute.snapshot.paramMap.get('courseId') ?? '';
-    this.initForm(this.question);
+    const questionId = this.activedRoute.snapshot.paramMap.get('questionId');
+    if (questionId) {
+      this.fetchQuestionData(questionId);
+    } else {
+      this.initForm(this.question);
+    }
     this.collapsibleListService.setSectionIds(this.sectionIds);
     this.collapsibleListService.setCanEdit(false); // disable edit UI in collapsible list
     this.collapsibleListService.expandAll();
+  }
+
+  async fetchQuestionData(id: string) {
+    await GetQuestion(id)
+      .then((question) => {
+        console.log('Fetched question:', question);
+        this.question = question;
+        this.initForm(this.question);
+      })
+      .catch((error) => {
+        console.error('Failed to fetch question:', error);
+        this.toastrService.error('Failed to fetch question data.');
+      });
   }
 
   checkValidGradePercents() {
@@ -233,7 +251,7 @@ export class CreateShortAnswerQuestionComponent {
       .then((question) => {
         console.log('Question created successfully:', question);
         this.toastrService.success('Question created successfully!');
-        // this.location.back();
+        this.location.back();
       })
       .catch((error) => {
         console.error('Error creating question:', error);

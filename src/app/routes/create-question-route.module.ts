@@ -10,11 +10,23 @@ const routes: Routes = [
     component: CreateTrueFalseQuestionComponent,
   },
   {
+    path: 'true-false/:questionId/edit',
+    component: CreateTrueFalseQuestionComponent,
+  },
+  {
     path: 'choice/create',
     component: CreateChoiceQuestionComponent,
   },
   {
+    path: 'choice/:questionId/edit',
+    component: CreateChoiceQuestionComponent,
+  },
+  {
     path: 'short-answer/create',
+    component: CreateShortAnswerQuestionComponent,
+  },
+  {
+    path: 'short-answer/:questionId/edit',
     component: CreateShortAnswerQuestionComponent,
   },
 ];

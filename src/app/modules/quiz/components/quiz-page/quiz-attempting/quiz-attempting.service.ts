@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { CreateQuizResponse } from '@modules/quiz/api/quiz-response.api';
 import { QuestionResult } from '@modules/quiz/constants/quiz.constant';
 import { TimerService } from '@shared/components/timer/timer.service';
 import {
@@ -14,6 +15,7 @@ import {
 import { QuestionService } from '@shared/services/question.service';
 import { QuizService } from '@shared/services/quiz.service';
 import { StudentResponseService } from '@shared/services/student-response.service';
+import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
@@ -36,11 +38,14 @@ export class QuizAttemptingService {
   private studentResponse = new BehaviorSubject<StudentResponse | null>(null);
   public studentResponse$ = this.studentResponse.asObservable();
 
+  private topicId: string | null = null;
+
   constructor(
     private quizService: QuizService,
     private questionService: QuestionService,
     private studentResponseService: StudentResponseService,
-    private timerService: TimerService
+    private timerService: TimerService,
+    private toastService: ToastrService
   ) {}
 
   startQuiz(topicId: string, countDown?: number) {
@@ -48,6 +53,7 @@ export class QuizAttemptingService {
     this.timerService.setCountDown(countDown ?? 0);
     this.timerService.start();
     const init = this.studentResponseService.getInitQuizResponse(topicId);
+    this.topicId = topicId;
     this.studentResponse.next(init);
     console.log('Quiz started with initial response:', init);
   }
@@ -194,9 +200,9 @@ export class QuizAttemptingService {
     return quizAnswers;
   }
 
-  finishQuiz() {
+  async finishQuiz() {
     const studentResponse = this.studentResponse.value;
-    if (!studentResponse) return;
+    if (!studentResponse || !this.topicId) return;
 
     this.setShowAnswer(true);
     const quizAnswers = this.getQuizAnswers();
@@ -215,5 +221,12 @@ export class QuizAttemptingService {
     };
 
     this.studentResponse.next(updatedStudentResponse);
+    return await CreateQuizResponse(this.topicId, updatedStudentResponse)
+      .then(() => {
+        this.toastService.success('Your quiz has been submitted successfully!');
+      })
+      .catch((error) => {
+        this.toastService.error(error.message);
+      });
   }
 }
