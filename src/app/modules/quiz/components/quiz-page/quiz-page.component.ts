@@ -25,7 +25,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class QuizPageComponent implements OnInit {
   course: Course | null = null;
-  topic: QuizTopic = mockTopics[0] as QuizTopic;
+  topic: QuizTopic | null = null;
   tabs = QuizTab;
   user: User | null = null;
   isStudent = true;
@@ -40,35 +40,16 @@ export class QuizPageComponent implements OnInit {
     private toastrService: ToastrService
   ) {}
 
-  async InitData() {
-    const topicId = this.activedRoute.snapshot.paramMap.get('topicId');
-    const courseId = this.activedRoute.snapshot.paramMap.get('courseId');
-    if (topicId && courseId) await this.FetchData(courseId, topicId);
-  }
-
-  async FetchData(courseId: string, topicId: string) {
-    return await GetCourseById(courseId).then(async (course) => {
-      this.course = course;
-      await GetTopic(topicId, courseId).then((topic) => {
-        this.topic = topic as QuizTopic;
-        this.updateBreadcrumb(course, this.topic);
-      });
-    });
-  }
-
   ngOnInit(): void {
     this.InitData();
-    this.tabService.setTabs(QUIZ_STUDENT_TABS);
     this.tabService.selectedTab$.subscribe((tab) => {
       if (tab) {
         this.selectedTab = tab;
         this.cdr.detectChanges();
       }
     });
-
     this.userService.user$.subscribe((user) => {
       this.user = user;
-      console.log('User in quiz page: ', user);
       if (user?.role === Role.TEACHER) {
         this.tabService.setTabs(QUIZ_TEACHER_TABS);
         this.isStudent = false;
@@ -77,6 +58,41 @@ export class QuizPageComponent implements OnInit {
         this.isStudent = true;
       }
     });
+  }
+
+  InitData() {
+    const topicId = this.activedRoute.snapshot.paramMap.get('topicId');
+    const courseId = this.activedRoute.snapshot.paramMap.get('courseId');
+    if (courseId) this.fetchCourseData(courseId);
+    if (topicId && courseId) this.fetchTopicData(topicId, courseId);
+  }
+
+  async fetchTopicData(topicId: string, courseId: string) {
+    try {
+      const topic = await GetTopic(topicId, courseId);
+      if (topic) {
+        this.topic = topic as QuizTopic;
+        if (this.course) {
+          this.updateBreadcrumb(this.course, this.topic);
+        }
+      }
+    } catch (error) {
+      this.toastrService.error('Failed to fetch topic', 'Error');
+    }
+  }
+
+  async fetchCourseData(courseId: string) {
+    try {
+      const course = await GetCourseById(courseId);
+      if (course) {
+        this.course = course;
+        if (this.topic) {
+          this.updateBreadcrumb(this.course, this.topic);
+        }
+      }
+    } catch (error) {
+      this.toastrService.error('Failed to fetch course', 'Error');
+    }
   }
 
   updateBreadcrumb(course: Course, topic: QuizTopic) {

@@ -15,6 +15,7 @@ import { QuizTopic } from '@shared/models/topic';
 import { UpdateTopic } from '@modules/courses/api/topic.api';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute } from '@angular/router';
+import { TimeLimitType } from '@shared/models/quiz';
 
 @Component({
   selector: 'tab-setting',
@@ -40,7 +41,7 @@ export class TabSettingComponent implements OnInit {
     private fb: FormBuilder,
     private collapsibleListService: CollapsibleListService,
     private toastr: ToastrService,
-    private route: ActivatedRoute
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -49,7 +50,33 @@ export class TabSettingComponent implements OnInit {
     this.collapsibleListService.setCanEdit(false); // disable edit UI in collapsible list
     this.collapsibleListService.expandAll();
     if (this.topic) {
-      this.form.patchValue(this.getFormValuesFromTopic(this.topic));
+      // Pre-fill and enable/disable timing fields like assignment tab
+      const hasOpenTime = !!this.topic.data?.open;
+      const hasCloseTime = !!this.topic.data?.close;
+      const hasTimeLimit = !!this.topic.data?.timeLimit;
+      this.form.patchValue({
+        ...this.getFormValuesFromTopic(this.topic),
+        hasOpenTime,
+        hasCloseTime,
+        hasTimeLimit,
+      });
+      if (hasOpenTime) {
+        this.form.get('open')?.enable();
+      } else {
+        this.form.get('open')?.disable();
+      }
+      if (hasCloseTime) {
+        this.form.get('close')?.enable();
+      } else {
+        this.form.get('close')?.disable();
+      }
+      if (hasTimeLimit) {
+        this.form.get('timeLimit')?.enable();
+        this.form.get('timeLimitUnit')?.enable();
+      } else {
+        this.form.get('timeLimit')?.disable();
+        this.form.get('timeLimitUnit')?.disable();
+      }
     }
   }
 
@@ -116,36 +143,46 @@ export class TabSettingComponent implements OnInit {
       }
       return;
     }
-    const formValue = this.form.value;
-    const updatedTopic: QuizTopic = {
-      ...this.topic,
-      title: formValue.name,
-      data: {
-        ...this.topic.data,
-        description: formValue.description,
-        open: this.form.get('hasOpenTime')?.dirty
-          ? (formValue.hasOpenTime ? formValue.open : null)
-          : this.topic.data.open,
-        close: this.form.get('hasCloseTime')?.dirty
-          ? (formValue.hasCloseTime ? formValue.close : null)
-          : this.topic.data.close,
-        timeLimit: this.form.get('hasTimeLimit')?.dirty
-          ? (formValue.hasTimeLimit ? formValue.timeLimit : null)
-          : this.topic.data.timeLimit,
-        timeLimitUnit: this.form.get('hasTimeLimit')?.dirty
-          ? (formValue.hasTimeLimit ? formValue.timeLimitUnit : null)
-          : this.topic.data.timeLimitUnit,
-        gradeToPass: formValue.gradeToPass,
-        attemptAllowed: formValue.attemptAllowed,
-        gradingMethod: formValue.gradingMethod,
-      },
-    };
-    const courseId = this.route.snapshot.paramMap.get('courseId') || this.topic.course?.id || '';
-    try {
-      await UpdateTopic(updatedTopic, courseId);
-      this.toastr.success('Quiz settings updated successfully');
-    } catch (err) {
-      this.toastr.error('Failed to update quiz settings');
+    if (!this.topic) return;
+    const formValues = this.form.getRawValue();
+    this.topic.title = formValues.name;
+    this.topic.data = this.topic.data || {};
+    this.topic.data.description = formValues.description;
+    if (formValues.hasOpenTime && this.form.get('open')?.enabled) {
+      this.topic.data.open = formValues.open ? new Date(formValues.open).toISOString() : null;
+    } else {
+      this.topic.data.open = null;
+    }
+    if (formValues.hasCloseTime && this.form.get('close')?.enabled) {
+      this.topic.data.close = formValues.close ? new Date(formValues.close).toISOString() : null;
+    } else {
+      this.topic.data.close = null;
+    }
+    if (formValues.hasTimeLimit && this.form.get('timeLimit')?.enabled) {
+      this.topic.data.timeLimit = formValues.timeLimit;
+      this.topic.data.timeLimitUnit = formValues.timeLimitUnit;
+    } else {
+      this.topic.data.timeLimit = null;
+      this.topic.data.timeLimitUnit = TimeLimitType.HOURS;
+    }
+    this.topic.data.gradeToPass = formValues.gradeToPass;
+    this.topic.data.attemptAllowed = formValues.attemptAllowed;
+    this.topic.data.gradingMethod = formValues.gradingMethod;
+    (this.topic.data as any).topicId = this.topic.id;
+    const courseId = this.activatedRoute.snapshot.paramMap.get('courseId');
+    if (courseId) {
+      await UpdateTopic(this.topic, courseId)
+        .then((result) => {
+          this.topic = result as QuizTopic;
+          this.toastr.success('Quiz settings updated successfully', 'Success');
+        })
+        .catch((error) => {
+          console.error('Error updating quiz:', this.topic.data);
+          this.toastr.error('Failed to update quiz settings. Please try again.', 'Error');
+          throw error;
+        });
+    } else {
+      this.toastr.error('Course ID not found in route parameters', 'Error');
     }
   }
 }
