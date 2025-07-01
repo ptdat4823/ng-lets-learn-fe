@@ -1,11 +1,12 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { ComboboxOption } from '@shared/components/combobox/combobox.type';
 import { ComboboxService } from '@shared/components/combobox/combobox.service';
-import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 import { TabService } from '@shared/components/tab-list/tab-list.service';
-import { mockCourses } from '@shared/mocks/course';
+import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 import { ToDoService } from './to-do.service';
-import { ToDoItem, ToDoItemsCategories, ToDoItemsByDueDate } from '../../constants/to-do.constants';
+import { ToDoItem } from '../../constants/to-do.constants';
+import { Topic } from '@shared/models/topic';
+import { isDoneTopic, isOverdueTopic, isWorkingInProgressTopic, isNoDueDateTopic } from '../../helper/to-do.util';
 
 @Component({
   selector: 'to-do-page',
@@ -15,28 +16,22 @@ import { ToDoItem, ToDoItemsCategories, ToDoItemsByDueDate } from '../../constan
   providers: [ComboboxService, TabService],
 })
 export class ToDoPageComponent implements OnInit {
-  courseOptions: ComboboxOption[] = [
-    { value: 'all', label: 'All courses' },
-    ...mockCourses.map((course) => ({
-      value: course.id,
-      label: course.title,
-    })),
-  ];
+  tabs: string[] = ['Assigned', 'Overdue', 'Done'];
+  selectedTab: string = 'Assigned';
   
-  selectedCourse = signal<string>('all');
-  toDoItems = signal<ToDoItem[]>([]);
-  categorizedItems = signal<ToDoItemsCategories>({ assigned: [], overdue: [], done: [] });
-  itemsByDueDate = signal<ToDoItemsByDueDate>({ noDueDate: [], thisWeek: [], nextWeek: [], later: [] });
+  courseOptions = signal<ComboboxOption[]>([
+    { value: 'all', label: 'All courses' }
+  ]);
   
-  // Tab configuration
-  tabs = ['Assigned', 'Overdue', 'Done'];
-  selectedTab = 'Assigned';
+  selectedCourseId = signal<string>('all');
+  allItems: ToDoItem[] = [];
+  isLoading = false;
 
   constructor(
     private breadcrumbService: BreadcrumbService,
     private comboboxService: ComboboxService,
     private tabService: TabService<string>,
-    private toDoService: ToDoService
+    private toDoService: ToDoService,
   ) {
     this.breadcrumbService.setBreadcrumbs([
       {
@@ -47,7 +42,7 @@ export class ToDoPageComponent implements OnInit {
     ]);
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     // Set up tabs
     this.tabService.setTabs(this.tabs);
     this.tabService.selectTab(this.tabs[0]);
@@ -59,27 +54,72 @@ export class ToDoPageComponent implements OnInit {
       }
     });
     
-    // Set the default combobox selection to "All courses"
-    const defaultOption = this.courseOptions.find(option => option.value === 'all');
-    if (defaultOption) {
-      this.comboboxService.selectOption(defaultOption);
-    }
-    
     // Load initial data
-    this.loadToDoItems();
+    await this.loadInitialData();
   }
 
-  onSelectOption(option: ComboboxOption): void {
-    this.selectedCourse.set(option.value);
-    this.loadToDoItems();
+  async onSelectOption(option: ComboboxOption): Promise<void> {
+    this.selectedCourseId.set(option.value);
+    this.updateCourseOptionsFromItems(this.allItems);
   }
-  
-  private loadToDoItems(): void {
-    const courseId = this.selectedCourse() === 'all' ? undefined : this.selectedCourse();
-    const items = this.toDoService.getToDoItems(courseId);
+
+  private async loadInitialData(): Promise<void> {
+    this.isLoading = true;
+    try {
+      const toDoItems = await this.toDoService.getToDoItems();
+      this.allItems = toDoItems;
+      this.updateCourseOptionsFromItems(this.allItems);
+    } catch (error) {
+      this.allItems = [];
+      this.updateCourseOptionsFromItems([]);
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  private updateCourseOptionsFromItems(items: ToDoItem[]): void {
+    const courseOptions: ComboboxOption[] = [
+      { value: 'all', label: 'All courses' },
+    ];
     
-    this.toDoItems.set(items);
-    this.categorizedItems.set(this.toDoService.categorizeToDoItems(items));
-    this.itemsByDueDate.set(this.toDoService.categorizeByDueDate(items));
+    const checkIds: string[] = [];
+    items.forEach((item) => {
+      const course = item.topic.course;
+      if (course && !checkIds.includes(course.id)) {
+        courseOptions.push({ 
+          value: course.id, 
+          label: course.title 
+        });
+        checkIds.push(course.id);
+      }
+    });
+    
+    this.courseOptions.set(courseOptions);
+  }
+
+  get doneItems(): ToDoItem[] {
+    return this.filteredItemsByCourse.filter(item => isDoneTopic(item.topic));
+  }
+
+  get assignedItems(): ToDoItem[] {
+    return this.filteredItemsByCourse.filter(item => isWorkingInProgressTopic(item.topic));
+  }
+
+  get overdueItems(): ToDoItem[] {
+    return this.filteredItemsByCourse.filter(item => isOverdueTopic(item.topic));
+  }
+
+  get noDueDateItems(): ToDoItem[] {
+    return this.filteredItemsByCourse.filter(item => isNoDueDateTopic(item.topic));
+  }
+
+  get filteredItemsByCourse(): ToDoItem[] {
+    const courseId = this.selectedCourseId();
+    if (courseId === 'all') return this.allItems;
+    return this.allItems.filter(item => item.courseId === courseId);
+  }
+
+  refreshData(): void {
+    this.loadInitialData();
   }
 }

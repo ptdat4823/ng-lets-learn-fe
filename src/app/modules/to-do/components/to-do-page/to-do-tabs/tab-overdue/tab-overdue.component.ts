@@ -1,79 +1,112 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
-import { ToDoService } from '../../to-do.service';
 import { ToDoItem, OverdueItemsByTime } from '../../../../constants/to-do.constants';
-import { mockCourses } from '@shared/mocks/course';
 import { CollapsibleListService } from '@shared/components/collapsible-list/collapsible-list.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { isOverdueTopic } from '../../../../helper/to-do.util';
 
 @Component({
   selector: 'tab-overdue',
   standalone: false,
   templateUrl: './tab-overdue.component.html',
   styleUrl: './tab-overdue.component.scss',
-  providers: [CollapsibleListService, ToDoService],
+  providers: [CollapsibleListService]
 })
-export class TabOverdueComponent implements OnInit {
+export class TabOverdueComponent implements OnInit, OnDestroy, OnChanges {
   @Input() items: ToDoItem[] = [];
-  @Input() itemsByTime: OverdueItemsByTime = { thisWeek: [], lastWeek: [], sooner: [] };
   
-  sectionIds: string[] = ['this-week', 'last-week', 'sooner'];
-  
-  collapsedSections: { [key: string]: boolean } = {
-    thisWeek: false,
-    lastWeek: true,
-    sooner: true
+  itemsByTime: OverdueItemsByTime = { 
+    thisWeek: [], 
+    lastWeek: [], 
+    sooner: [] 
   };
-
+  
+  private destroy$ = new Subject<void>();
+  
   constructor(
     private router: Router,
-    private collapsibleListService: CollapsibleListService,
-    private toDoService: ToDoService
+    public collapsibleListService: CollapsibleListService
   ) {}
 
-  ngOnInit(): void {
-    this.collapsibleListService.setSectionIds(this.sectionIds);
+  ngOnInit() {
+    this.initializeCollapsibleSections();
+    this.updateCategorizedItems();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  ngOnChanges() {
+    this.updateCategorizedItems();
+  }
+
+  private initializeCollapsibleSections() {
+    const sectionIds = ['this-week', 'last-week', 'sooner'];
+    this.collapsibleListService.setSectionIds(sectionIds);
     this.collapsibleListService.setCanEdit(false);
     this.collapsibleListService.expandAll();
-    
-    this.loadOverdueItems();
   }
 
-  private loadOverdueItems(): void {
-    const allItems = this.toDoService.getToDoItems();
-    
-    const overdueItems = allItems.filter(item => item.status === 'overdue');
-    
-    this.itemsByTime = this.toDoService.categorizeOverdueItems(overdueItems);
-    
-    this.itemsByTime.thisWeek = this.toDoService.sortItemsByDueDate(this.itemsByTime.thisWeek);
-    this.itemsByTime.lastWeek = this.toDoService.sortItemsByDueDate(this.itemsByTime.lastWeek);
-    this.itemsByTime.sooner = this.toDoService.sortItemsByDueDate(this.itemsByTime.sooner);
+  private sortItemsByDueDate(items: ToDoItem[]): ToDoItem[] {
+    return items.sort((a, b) => {
+      if (!a.dueDate && !b.dueDate) return 0;
+      if (!a.dueDate) return 1;
+      if (!b.dueDate) return -1;
+      return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
+    });
+  }
+  
+  private categorizeOverdueItems(items: ToDoItem[]): OverdueItemsByTime {
+    const overdueItems = items.filter(item => isOverdueTopic(item.topic));
+    const now = new Date();
+    const startOfThisWeek = new Date(now);
+    startOfThisWeek.setDate(now.getDate() - now.getDay());
+    const startOfLastWeek = new Date(startOfThisWeek);
+    startOfLastWeek.setDate(startOfThisWeek.getDate() - 7);
+
+    return {
+      thisWeek: this.sortItemsByDueDate(overdueItems.filter(item => {
+        if (!item.dueDate) return false;
+        const dueDate = new Date(item.dueDate);
+        return dueDate >= startOfThisWeek && dueDate <= now; // Overdue this week
+      })),
+      lastWeek: this.sortItemsByDueDate(overdueItems.filter(item => {
+        if (!item.dueDate) return false;
+        const dueDate = new Date(item.dueDate);
+        const endOfLastWeek = new Date(startOfThisWeek);
+        endOfLastWeek.setDate(startOfThisWeek.getDate() - 1);
+        return dueDate >= startOfLastWeek && dueDate <= endOfLastWeek;
+      })),
+      sooner: this.sortItemsByDueDate(overdueItems.filter(item => {
+        if (!item.dueDate) return false;
+        const dueDate = new Date(item.dueDate);
+        return dueDate < startOfLastWeek;
+      }))
+    };
   }
 
-  getSectionCount(section: string): number {
-    switch (section) {
-      case 'this-week': return this.itemsByTime.thisWeek.length;
-      case 'last-week': return this.itemsByTime.lastWeek.length;
-      case 'sooner': return this.itemsByTime.sooner.length;
-      default: return 0;
+  private updateCategorizedItems() {
+    this.itemsByTime = this.categorizeOverdueItems(this.items);
+  }
+
+  getSectionItems(sectionId: string): ToDoItem[] {
+    switch (sectionId) {
+      case 'this-week':
+        return this.itemsByTime.thisWeek;
+      case 'last-week':
+        return this.itemsByTime.lastWeek;
+      case 'sooner':
+        return this.itemsByTime.sooner;
+      default:
+        return [];
     }
   }
 
-  getSectionItems(section: string): ToDoItem[] {
-    switch (section) {
-      case 'this-week': return this.itemsByTime.thisWeek;
-      case 'last-week': return this.itemsByTime.lastWeek;
-      case 'sooner': return this.itemsByTime.sooner;
-      default: return [];
-    }
-  }
-
-  toggleSection(sectionKey: string): void {
-    this.collapsedSections[sectionKey] = !this.collapsedSections[sectionKey];
-  }
-
-  isSectionCollapsed(sectionKey: string): boolean {
-    return this.collapsedSections[sectionKey];
+  getSectionCount(sectionId: string): number {
+    return this.getSectionItems(sectionId).length;
   }
 
   navigateToItem(item: ToDoItem): void {
@@ -85,7 +118,7 @@ export class TabOverdueComponent implements OnInit {
   }
 
   private getCourseIdFromItem(item: ToDoItem): string {
-    const course = mockCourses.find(c => c.title === item.course);
-    return course?.id || '1'; 
+    return item.courseId || '1';
+    return item.courseId || '1';
   }
 }

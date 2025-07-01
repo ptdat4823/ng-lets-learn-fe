@@ -1,11 +1,11 @@
 import { Component, Input, OnInit, OnDestroy, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToDoService } from '../../to-do.service';
-import { ToDoItem, DoneItemsByCompletion } from '../../../../constants/to-do.constants';
+import { ToDoItem } from '../../../../constants/to-do.constants';
 import { CollapsibleListService } from '@shared/components/collapsible-list/collapsible-list.service';
-import { mockCourses } from '@shared/mocks/course';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { isDoneTopic } from '../../../../helper/to-do.util';
 
 @Component({
   selector: 'tab-done',
@@ -17,24 +17,17 @@ import { takeUntil } from 'rxjs/operators';
 export class TabDoneComponent implements OnInit, OnDestroy, OnChanges {
   @Input() items: ToDoItem[] = [];
   
-  categorizedItems: DoneItemsByCompletion = {
-    noDueDate: [],
-    completeEarly: [],
-    thisWeek: [],
-    lastWeek: [],
-    sooner: []
-  };
+  doneItems: ToDoItem[] = [];
   
   private destroy$ = new Subject<void>();
   constructor(
     private router: Router,
-    private toDoService: ToDoService,
     public collapsibleListService: CollapsibleListService
   ) {}
 
   ngOnInit() {
     this.initializeCollapsibleSections();
-    this.updateCategorizedItems();
+    this.updateDoneItems();
   }
 
   ngOnDestroy() {
@@ -43,8 +36,9 @@ export class TabDoneComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges() {
-    this.updateCategorizedItems();
+    this.updateDoneItems();
   }
+
   private initializeCollapsibleSections() {
     const sectionIds = ['no-due-date', 'complete-early', 'this-week', 'last-week', 'sooner'];
     this.collapsibleListService.setSectionIds(sectionIds);
@@ -52,22 +46,58 @@ export class TabDoneComponent implements OnInit, OnDestroy, OnChanges {
     this.collapsibleListService.expandAll();
   }
 
-  private updateCategorizedItems() {
-    this.categorizedItems = this.toDoService.categorizeDoneItems(this.items);
+  private updateDoneItems() {
+    this.doneItems = this.items.filter(item => isDoneTopic(item.topic));
+  }
+
+  private categorizeDoneItems(items: ToDoItem[]) {
+    const now = new Date();
+    const startOfThisWeek = new Date(now);
+    startOfThisWeek.setDate(now.getDate() - now.getDay());
+    const startOfLastWeek = new Date(startOfThisWeek);
+    startOfLastWeek.setDate(startOfThisWeek.getDate() - 7);
+    const endOfLastWeek = new Date(startOfThisWeek);
+    endOfLastWeek.setDate(startOfThisWeek.getDate() - 1);
+    const endOfThisWeek = new Date(startOfThisWeek);
+    endOfThisWeek.setDate(startOfThisWeek.getDate() + 6);
+    return {
+      noDueDate: items.filter(item => !item.dueDate),
+      completeEarly: items.filter(item => {
+        if (!item.dueDate) return false;
+        const dueDate = new Date(item.dueDate);
+        return dueDate > now;
+      }),
+      thisWeek: items.filter(item => {
+        if (!item.dueDate) return false;
+        const dueDate = new Date(item.dueDate);
+        return dueDate >= startOfThisWeek && dueDate <= endOfThisWeek;
+      }),
+      lastWeek: items.filter(item => {
+        if (!item.dueDate) return false;
+        const dueDate = new Date(item.dueDate);
+        return dueDate >= startOfLastWeek && dueDate <= endOfLastWeek;
+      }),
+      sooner: items.filter(item => {
+        if (!item.dueDate) return false;
+        const dueDate = new Date(item.dueDate);
+        return dueDate < startOfLastWeek;
+      }),
+    };
   }
 
   getSectionItems(sectionId: string): ToDoItem[] {
+    const categorized = this.categorizeDoneItems(this.doneItems);
     switch (sectionId) {
       case 'no-due-date':
-        return this.categorizedItems.noDueDate;
+        return categorized.noDueDate;
       case 'complete-early':
-        return this.categorizedItems.completeEarly;
+        return categorized.completeEarly;
       case 'this-week':
-        return this.categorizedItems.thisWeek;
+        return categorized.thisWeek;
       case 'last-week':
-        return this.categorizedItems.lastWeek;
+        return categorized.lastWeek;
       case 'sooner':
-        return this.categorizedItems.sooner;
+        return categorized.sooner;
       default:
         return [];
     }
@@ -85,7 +115,6 @@ export class TabDoneComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private getCourseIdFromItem(item: ToDoItem): string {
-    const course = mockCourses.find(c => c.title === item.course);
-    return course?.id || '1'; 
+    return item.courseId || '1';
   }
 }
