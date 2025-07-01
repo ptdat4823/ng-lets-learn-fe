@@ -23,18 +23,18 @@
   <div class="charts-container">
     <div class="chart-card">
       <app-donut-chart
-        [chartData]="fileTypeSegments"
+        [chartData]="questionTypeSegments"
         title="Question type"
-        centerText="40"
+        [centerText]="totalQuestions.toString()"
         centerSubtext="Total questions"
       ></app-donut-chart>
     </div>
 
     <div class="chart-card">
       <app-donut-chart
-        [chartData]="gradedAssignmentsSegments"
+        [chartData]="studentMarkSegments"
         title="Student mark"
-        centerText="40"
+        [centerText]="totalStudents.toString()"
         centerSubtext="Total students"
       ></app-donut-chart>
     </div>

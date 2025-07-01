@@ -41,7 +41,8 @@ export class BarChartComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['chartData'] && !changes['chartData'].firstChange) {
+    // Fix: listen for changes to 'segments', not 'chartData'
+    if (changes['segments'] && !changes['segments'].firstChange) {
       this.updateChart();
     }
   }
@@ -137,22 +138,19 @@ export class BarChartComponent implements OnInit, AfterViewInit, OnChanges {
     } else {
       computedMax = rawMax;
     }
+    // Update labels and both datasets
     this.chart.data.labels = this.segments.map(s => s.label);
-    (this.chart.data.datasets[0].data as number[]) = this.segments.map(
-      () => computedMax
-    );
-    (this.chart.data.datasets[1].data as number[]) = this.segments.map(
-      (s) => s.value
-    );
-    (this.chart.data.datasets[1].backgroundColor as string[]) =
-      this.segments.map((s) => s.color);
-    if (
-      this.chart.options &&
-      this.chart.options.scales &&
-      'x' in this.chart.options.scales
-    ) {
-      (this.chart.options.scales['x'] as any).max = computedMax;
-    }
+    (this.chart.data.datasets[0].data as number[]) = this.segments.map(s => s.value);
+    (this.chart.data.datasets[0].backgroundColor as string[]) = this.segments.map(s => s.color);
+    (this.chart.data.datasets[1].data as number[]) = this.segments.map(() => computedMax);
+    this.chart.options.scales = {
+      ...this.chart.options.scales,
+      x: {
+        ...this.chart.options.scales && this.chart.options.scales['x'],
+        min: 0,
+        max: computedMax,
+      },
+    };
     this.chart.update();
   }
 }
