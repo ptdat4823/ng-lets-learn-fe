@@ -20,7 +20,7 @@
     </div>
     <div class="attempt-cell">{{ showDuration(getQuizResponseData(res)) }}</div>
     <div class="attempt-cell actions">
-      <a href="#" class="review-link">Review</a>
+      <span class="review-link" (click)="onReviewClick(res)">Review</span>
     </div>
   </div>
   }

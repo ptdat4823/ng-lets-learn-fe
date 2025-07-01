@@ -1,12 +1,12 @@
 <button
   type="button"
   [class]="{
-    default: getVariant() === 'default',
-    selected: getVariant() === 'selected',
-    correct: getVariant() === 'correct',
-    incorrect: getVariant() === 'incorrect',
-    missing: getVariant() === 'missing',
-    'not-selected': getVariant() === 'not-selected',
+    default: variant === 'default',
+    selected: variant === 'selected',
+    correct: variant === 'correct',
+    incorrect: variant === 'incorrect',
+    missing: variant === 'missing',
+    'not-selected': variant === 'not-selected',
   }"
   (click)="handleClick()"
 >

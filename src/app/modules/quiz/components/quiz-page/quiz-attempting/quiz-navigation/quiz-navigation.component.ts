@@ -66,7 +66,6 @@ export class QuizNavigationComponent implements OnInit {
       this.updateAnsweredMap();
     });
 
-    this.calculateQuestionResult();
     this.updateAnsweredMap();
     this.confirmMessageService.setData(this.confirmMessageNotFulfilTheAnswer);
     this.confirmMessageService.setCancelAction(() =>
@@ -104,6 +103,7 @@ export class QuizNavigationComponent implements OnInit {
     this.questions.forEach((q) => {
       this.answeredQuestionMap[q.id] = this.isQuestionAnswered(q.id);
     });
+    this.calculateQuestionResult();
   }
 
   changeQuestion(questionId: string) {
@@ -113,7 +113,7 @@ export class QuizNavigationComponent implements OnInit {
   finishQuiz() {
     if (this.showAnswer) return;
     this.quizNavigationService.finishQuiz();
-    this.calculateQuestionResult();
+    this.updateAnsweredMap();
   }
 
   finishReview() {

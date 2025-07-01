@@ -144,4 +144,10 @@ export class TabQuizStudentComponent implements OnInit {
       `courses/${this.course.id}/quiz/${this.topic.id}/attempting`,
     ]);
   }
+
+  onReviewClick(responseId: string) {
+    this.router.navigate([
+      `courses/${this.course.id}/quiz/${this.topic.id}/${responseId}/reviewing`,
+    ]);
+  }
 }

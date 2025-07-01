@@ -11,12 +11,15 @@ export class QuizChoiceAnswerService {
   private showAnswer = new BehaviorSubject<boolean>(false);
   public showAnswer$ = this.showAnswer.asObservable();
 
-  private isSeleted = new BehaviorSubject<boolean>(false);
-  public isSelected$ = this.isSeleted.asObservable();
+  private answerRecord = new BehaviorSubject<Record<string, any>>({});
+  public answerRecord$ = this.answerRecord.asObservable();
 
   constructor(private quizAttemptingService: QuizAttemptingService) {
     this.quizAttemptingService.showAnswer$.subscribe((show) => {
       this.showAnswer.next(show);
+    });
+    this.quizAttemptingService.answerRecord$.subscribe((record) => {
+      this.answerRecord.next(record);
     });
   }
 

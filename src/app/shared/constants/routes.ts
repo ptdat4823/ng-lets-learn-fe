@@ -1,5 +1,3 @@
-import { joinStrings } from '@shared/helper/string.helper';
-
 export const ROUTES = {
   HOME: '/courses',
   LOGIN: '/auth/login',

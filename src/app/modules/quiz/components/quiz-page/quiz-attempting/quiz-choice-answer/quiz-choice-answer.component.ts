@@ -24,7 +24,6 @@ export class QuizChoiceAnswerComponent implements OnInit {
   @Input() answer: string = 'A';
   showAnswer: boolean = false;
   quizChoiceAnswerService = inject(QuizChoiceAnswerService);
-  questionResults = QuestionResult;
 
   variant: Variant = 'default';
 
@@ -33,6 +32,9 @@ export class QuizChoiceAnswerComponent implements OnInit {
     this.quizChoiceAnswerService.setChoice(this.choice);
     this.quizChoiceAnswerService.showAnswer$.subscribe((show) => {
       this.showAnswer = show;
+    });
+    this.quizChoiceAnswerService.answerRecord$.subscribe((res) => {
+      this.updateVariant();
     });
   }
 
@@ -47,6 +49,10 @@ export class QuizChoiceAnswerComponent implements OnInit {
     return this.quizChoiceAnswerService.isSelectedChoice()
       ? 'selected'
       : 'default';
+  }
+
+  updateVariant() {
+    this.variant = this.getVariant();
   }
 
   handleClick() {
