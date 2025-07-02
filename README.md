@@ -1,59 +1,46 @@
-# NgLetsLearnFe
+# Angular App Setup Guide
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.2.
+This guide provides step-by-step instructions to set up and run the Angular application locally.
 
-## Development server
+## 🛠️ Setup Instructions
 
-To start a local development server, run:
+### 1. Install Dependencies
 
-```bash
-ng serve
-```
+Ensure you have [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/) installed.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Then run the following command in the project root folder:
 
 ```bash
-ng generate component component-name
+npm install
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### 2. Configure Environment Variables
+
+Open the file src/environments/environment.development.ts and fill in the following values:
+
+```ts
+export const environment = {
+  production: false,
+  BACKEND_URL: "http://localhost:8080",
+
+  CLOUDINARY_CLOUD_NAME: "",
+  UPLOAD_PRESET_NAME: "",
+  CLOUDINARY_API_KEY: "",
+  CLOUDINARY_API_SECRET: "",
+};
+```
+
+⚠️ **Note**:
+
+- Go to [Cloudinary](https://cloudinary.com/) to create an account and get your API keys.
+- Go to [Let's learn backend](https://github.com/ptdat4823/spring-lets-learn-be) to set up the backend server for this application. (This backend server runs on port 8080 by default.)
+
+### 3. Run the Application
+
+Start the development server by running:
 
 ```bash
-ng generate --help
+npm run dev
 ```
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Once the server is running, open your browser and go to: **http://localhost:4200**
