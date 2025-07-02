@@ -14,6 +14,7 @@ import { Course } from '@shared/models/course';
 import { ToastrService } from 'ngx-toastr';
 import { GetAllQuizResponsesOfTopic } from '@modules/quiz/api/quiz-response.api';
 import { StudentResponse } from '@shared/models/student-response';
+import { UserService } from '@shared/services/user.service';
 
 @Component({
   selector: 'tab-quiz-student',
@@ -37,7 +38,8 @@ export class TabQuizStudentComponent implements OnInit {
     private studentResponseService: StudentResponseService,
     private router: Router,
     private confirmMessageService: ConfirmMessageService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private userService: UserService
   ) {}
 
   confirmMessageData: ConfirmMessageData = {
@@ -81,7 +83,12 @@ export class TabQuizStudentComponent implements OnInit {
   async fetchData() {
     await GetAllQuizResponsesOfTopic(this.topic.id)
       .then((responses) => {
-        this.updateGradingDisplayData(responses);
+        // Filter responses to only current userAdd commentMore actions
+        const currentUser = this.userService.getUser();
+        const filteredResponses = currentUser
+          ? responses.filter((r) => r.student.id === currentUser.id)
+          : [];
+        this.updateGradingDisplayData(filteredResponses);
       })
       .catch((error) => {
         console.error('Failed to fetch quiz responses:', error);
@@ -90,7 +97,10 @@ export class TabQuizStudentComponent implements OnInit {
   }
 
   updateGradingDisplayData(quizResponses: StudentResponse[]) {
-    this.studentResponses = quizResponses;
+    const currentUser = this.userService.getUser();
+    this.studentResponses = currentUser
+      ? quizResponses.filter((r) => r.student.id === currentUser.id)
+      : [];
 
     if (!this.topic || !this.topic.data) {
       this.toastr.error('Quiz is not available.');

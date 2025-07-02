@@ -121,9 +121,9 @@ export class TabDashboardStudentComponent implements OnInit {
     // General stats (for current user only)
     this.generalStats = [
       { label: 'Quiz completion rate', value: this.getUserQuizCompletionRate() },
-      { label: 'Avg quiz mark', value: this.getQuizAvgMark().toFixed(1), rank: this.getRank(this.getQuizAvgMark()) },
+      { label: 'Avg quiz mark', value: (this.getQuizAvgMark() * 100).toFixed(1), rank: this.getRank(this.getQuizAvgMark()) },
       { label: 'Assignment completion rate:', value: this.getUserAssignmentCompletionRate() },
-      { label: 'Avg assignment mark', value: this.getAssignmentAvgMark().toFixed(1), rank: this.getRank(this.getAssignmentAvgMark()) },
+      { label: 'Avg assignment mark', value: (this.getAssignmentAvgMark() * 100).toFixed(1), rank: this.getRank(this.getAssignmentAvgMark()) },
     ];
     // Quiz stats (for current user only)
     this.quizStats = [
@@ -158,7 +158,7 @@ export class TabDashboardStudentComponent implements OnInit {
         // Find the student's mark for this assignment
         const userMarkObj = a.studentMarks?.find((stu: any) => stu.student.id === this.currentUser?.id);
         return {
-          value: userMarkObj && typeof userMarkObj.mark === 'number' ? userMarkObj.mark / 10 : 0,
+          value: userMarkObj && typeof userMarkObj.mark === 'number' ? userMarkObj.mark : 0,
           color: '#06B6D4',
           label: a.name || `Assignment ${idx + 1}`,
         };

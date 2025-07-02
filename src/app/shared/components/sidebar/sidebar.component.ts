@@ -5,7 +5,7 @@ import { LayoutService } from '../layout/layout.service';
 import { SidebarGroupComponent } from './sidebar-group/sidebar-group.component';
 import { SidebarItemCollapseComponent } from './sidebar-item-collapse/sidebar-item-collapse.component';
 import { SidebarItemComponent } from './sidebar-item/sidebar-item.component';
-import { mockCourses } from '@shared/mocks/course';
+import { GetTeacherCourses } from '@modules/courses/api/courses.api';
 import { UserService } from '@shared/services/user.service';
 import { Role, User } from '@shared/models/user';
 
@@ -19,17 +19,20 @@ export class SidebarComponent implements OnInit {
   layoutService = inject(LayoutService);
   userService = inject(UserService);
   isCollapsed = false;
-  courses = mockCourses;
+  courses: any[] = [];
   currentUser: User | null = null;
   Role = Role;
 
-  ngOnInit() {
+  async ngOnInit() {
     this.layoutService.isCollapsed$.subscribe((value) => {
       this.isCollapsed = value;
     });
-    
-    this.userService.user$.subscribe((user) => {
+
+    this.userService.user$.subscribe(async (user) => {
       this.currentUser = user;
+      if (user && user.role === Role.TEACHER) {
+        this.courses = await GetTeacherCourses(user.id);
+      }
     });
   }
 }
