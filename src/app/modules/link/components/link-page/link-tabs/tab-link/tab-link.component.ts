@@ -5,14 +5,14 @@ import { LinkTopic } from '@shared/models/topic';
   selector: 'tab-file',
   standalone: false,
   templateUrl: './tab-link.component.html',
-  styleUrls: ['./tab-link.component.scss']
+  styleUrls: ['./tab-link.component.scss'],
 })
 export class TabLinkComponent implements OnInit, OnChanges {
   @Input({ required: true }) topic!: LinkTopic;
 
   hasLink: boolean = false;
   linkUrl: string | null = null;
-  
+
   constructor() {}
   ngOnInit(): void {
     // Get URL from topic data
@@ -24,14 +24,5 @@ export class TabLinkComponent implements OnInit, OnChanges {
     // Update when topic changes
     this.linkUrl = this.topic?.data?.url || null;
     this.hasLink = !!this.linkUrl;
-  }
-
-  onLinkClick(): void {
-    if (!this.linkUrl) {
-      console.warn('No URL available');
-      alert('No file has been uploaded yet. Please upload a file in the Settings tab first.');
-      return;
-    }
-    window.open(this.linkUrl, '_blank');
   }
 }

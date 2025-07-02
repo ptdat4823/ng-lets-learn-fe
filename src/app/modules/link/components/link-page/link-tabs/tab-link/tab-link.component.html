@@ -2,13 +2,15 @@
   <card>
     <div class="file-message">
       @if (hasLink) {
-        <p>Click on <a href="#" 
-                       (click)="onLinkClick()"
-                       class="file-link">
-            Link
-          </a> to open the resource</p>
+      <p>
+        Click on
+        <a [href]="linkUrl" class="file-link"> Link </a>
+        to open the resource
+      </p>
       } @else {
-        <p class="no-file-message">No link has been uploaded yet. Please upload a link in the Settings tab.</p>
+      <p class="no-file-message">
+        No link has been uploaded yet. Please upload a link in the Settings tab.
+      </p>
       }
     </div>
   </card>

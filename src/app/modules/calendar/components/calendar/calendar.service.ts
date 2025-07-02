@@ -130,20 +130,34 @@ export class CalendarService {
   getTopicTime(data: TopicItem, date: Date): string {
     const { startTime, endTime } = data;
 
+    const isStart = !!startTime && isInDate(date, startTime);
+    const isEnd = !!endTime && isInDate(date, endTime);
+
     if (!startTime || !endTime) {
       const time = startTime || endTime;
-      return time ? format(time, 'hh:mm a') : 'No time';
+      let result = time ? format(time, 'hh:mm a') : 'No time';
+      if (isStart) result += ' \u25B6';
+      if (isEnd) result += '   \u23F0';
+      return result;
     }
 
     if (this.isBothStartAndFinish(data, date)) {
-      return `${format(startTime, 'hh:mm a')} - ${format(endTime, 'hh:mm a')}`;
+      let result = `${format(startTime, 'hh:mm a')} - ${format(
+        endTime,
+        'hh:mm a'
+      )}`;
+      return result;
     }
 
     if (this.isFlagStart(data, date)) {
-      return startTime ? format(startTime, 'hh:mm a') : 'No time';
+      let result = startTime ? format(startTime, 'hh:mm a') : 'No time';
+      if (isStart) result += '   \u25B6';
+      return result;
     }
 
-    return endTime ? format(endTime, 'hh:mm a') : 'No time';
+    let result = endTime ? format(endTime, 'hh:mm a') : 'No time';
+    if (isEnd) result += '   \u23F0';
+    return result;
   }
 
   isFlagStart(data: TopicItem, date: Date): boolean {
