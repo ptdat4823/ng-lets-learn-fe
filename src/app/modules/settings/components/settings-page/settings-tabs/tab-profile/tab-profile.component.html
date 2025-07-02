@@ -1,6 +1,6 @@
 <div class="profile-section">
-  <form [formGroup]="profileForm" (ngSubmit)="saveProfile($event)" class="profile-form">    
-    <div class="form-section">      
+  <form [formGroup]="profileForm" (ngSubmit)="saveProfile($event)" class="profile-form">
+    <div class="form-section">
       <div class="form-controls">
         <app-form-field
           [form]="profileForm"
@@ -8,14 +8,14 @@
           controlName="username"
           [showLabel]="true"
         />
-        
+
         <app-form-field
           [form]="profileForm"
           [control]="emailControl"
           controlName="email"
           [showLabel]="true"
         />
-      </div>      
+      </div>
       <div class="submit-container">
         <div class="submit-button">
           <app-button type="submit" label="Save Profile" variant="primary" [loading]="loading" />
@@ -27,7 +27,7 @@
     <div class="profile-image-container">
       <div class="profile-image" (click)="onImageClick()" [class.uploading]="uploadingImage">
         <img [src]="currentImageUrl" [alt]="user?.username + ' profile picture'" />
-        
+
         <!-- Upload overlay -->
         <div class="upload-overlay">
           <div class="upload-content">
@@ -51,8 +51,5 @@
         <li><span class="material-symbols-outlined check-icon">check_circle</span>Only .jpg, .jpeg, .png or .webp</li>
       </ul>
     </div>
-  </div>
-  <div class="placeholder-section">
-
   </div>
 </div>

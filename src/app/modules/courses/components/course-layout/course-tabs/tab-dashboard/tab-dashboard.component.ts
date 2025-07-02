@@ -6,8 +6,14 @@ import { getMonthName } from '@shared/helper/date.helper';
 import { generateMonthOptions } from '@shared/helper/date.helper';
 import { ComboboxService } from '@shared/components/combobox/combobox.service';
 import { BarChartSegment } from '@shared/components/charts/bar-chart/bar-chart.component';
-import { GetQuizOverallReport, GetAssignmentOverallReport } from '@shared/api/report.api';
-import { QuizOverallReport, AssignmentOverallReport } from '@shared/models/report';
+import {
+  GetQuizOverallReport,
+  GetAssignmentOverallReport,
+} from '@shared/api/report.api';
+import {
+  QuizOverallReport,
+  AssignmentOverallReport,
+} from '@shared/models/report';
 
 @Component({
   selector: 'tab-dashboard',
@@ -56,7 +62,7 @@ export class TabDashboardComponent implements OnInit {
     this.selectedMonthValue = value;
     await Promise.all([
       this.fetchQuizOverallReport(),
-      this.fetchAssignmentOverallReport()
+      this.fetchAssignmentOverallReport(),
     ]);
     this.updateStatsForMonth();
   }
@@ -64,11 +70,23 @@ export class TabDashboardComponent implements OnInit {
   async fetchQuizOverallReport() {
     // Calculate start and end of month
     const start = new Date(this.selectedYear, this.selectedMonth, 1);
-    const end = new Date(this.selectedYear, this.selectedMonth + 1, 0, 23, 59, 59, 999);
+    const end = new Date(
+      this.selectedYear,
+      this.selectedMonth + 1,
+      0,
+      23,
+      59,
+      59,
+      999
+    );
     const startTime = start.toISOString();
     const endTime = end.toISOString();
     try {
-      this.quizReport = await GetQuizOverallReport(this.course.id, startTime, endTime);
+      this.quizReport = await GetQuizOverallReport(
+        this.course.id,
+        startTime,
+        endTime
+      );
     } catch (error) {
       this.quizReport = null;
     }
@@ -77,11 +95,23 @@ export class TabDashboardComponent implements OnInit {
   async fetchAssignmentOverallReport() {
     // Calculate start and end of month
     const start = new Date(this.selectedYear, this.selectedMonth, 1);
-    const end = new Date(this.selectedYear, this.selectedMonth + 1, 0, 23, 59, 59, 999);
+    const end = new Date(
+      this.selectedYear,
+      this.selectedMonth + 1,
+      0,
+      23,
+      59,
+      59,
+      999
+    );
     const startTime = start.toISOString();
     const endTime = end.toISOString();
     try {
-      this.assignmentReport = await GetAssignmentOverallReport(this.course.id, startTime, endTime);
+      this.assignmentReport = await GetAssignmentOverallReport(
+        this.course.id,
+        startTime,
+        endTime
+      );
     } catch (error) {
       this.assignmentReport = null;
     }
@@ -98,36 +128,86 @@ export class TabDashboardComponent implements OnInit {
     } else {
       this.quizStats = [
         { label: 'Total quizzes', value: this.quizReport.quizCount.toString() },
-        { label: 'Number of question rang', value: `${this.quizReport.minQuestionCount} - ${this.quizReport.maxQuestionCount}` },
-        { label: 'Avg completion rate', value: `${(this.quizReport.avgCompletionPercentage > 1 ? this.quizReport.avgCompletionPercentage : this.quizReport.avgCompletionPercentage * 100).toFixed(1)} %` },
-        { label: 'Score range', value: `${this.quizReport.minStudentScoreBase10.toFixed(1)} - ${this.quizReport.maxStudentScoreBase10.toFixed(1)}` },
+        {
+          label: 'Number of question rang',
+          value: `${this.quizReport.minQuestionCount} - ${this.quizReport.maxQuestionCount}`,
+        },
+        {
+          label: 'Avg completion rate',
+          value: `${(this.quizReport.avgCompletionPercentage > 1
+            ? this.quizReport.avgCompletionPercentage * 100
+            : this.quizReport.avgCompletionPercentage * 100
+          ).toFixed(1)} %`,
+        },
+        {
+          label: 'Score range',
+          value: `${this.quizReport.minStudentScoreBase10.toFixed(
+            1
+          )} - ${this.quizReport.maxStudentScoreBase10.toFixed(1)}`,
+        },
       ];
       // Question type segments
       this.questionTypeSegments = [
-        { value: this.quizReport.multipleChoiceQuestionCount, color: '#EC4899', label: 'Multiple choice' },
-        { value: this.quizReport.trueFalseQuestionCount, color: '#8B5CF6', label: 'True/false' },
-        { value: this.quizReport.shortAnswerQuestionCount, color: '#F97316', label: 'Short answer' },
+        {
+          value: this.quizReport.multipleChoiceQuestionCount,
+          color: '#EC4899',
+          label: 'Multiple choice',
+        },
+        {
+          value: this.quizReport.trueFalseQuestionCount,
+          color: '#8B5CF6',
+          label: 'True/false',
+        },
+        {
+          value: this.quizReport.shortAnswerQuestionCount,
+          color: '#F97316',
+          label: 'Short answer',
+        },
       ];
       // Mark distribution segments
       this.studentMarkSegments = [
-        { value: this.quizReport.markDistributionCount['8'], color: '#4CAF50', label: '80 - 100%' },
-        { value: this.quizReport.markDistributionCount['5'], color: '#448AFF', label: '50 - 79%' },
-        { value: this.quizReport.markDistributionCount['2'], color: '#FFC107', label: '20 - 49%' },
-        { value: this.quizReport.markDistributionCount['0'], color: '#FF5252', label: '0 - 19%' },
-        { value: this.quizReport.markDistributionCount['-1'], color: '#9E9E9E', label: 'Not attempted' },
+        {
+          value: this.quizReport.markDistributionCount['8'],
+          color: '#4CAF50',
+          label: '80 - 100%',
+        },
+        {
+          value: this.quizReport.markDistributionCount['5'],
+          color: '#448AFF',
+          label: '50 - 79%',
+        },
+        {
+          value: this.quizReport.markDistributionCount['2'],
+          color: '#FFC107',
+          label: '20 - 49%',
+        },
+        {
+          value: this.quizReport.markDistributionCount['0'],
+          color: '#FF5252',
+          label: '0 - 19%',
+        },
+        {
+          value: this.quizReport.markDistributionCount['-1'],
+          color: '#9E9E9E',
+          label: 'Not attempted',
+        },
       ];
       // Avg mark segments (per quiz)
-      this.quizAvgMarkSegments = this.quizReport.singleQuizReports.map((q, idx) => ({
-        value: q.avgStudentMarkBase10,
-        color: '#06B6D4',
-        label: q.name || `Quiz ${idx + 1}`,
-      }));
+      this.quizAvgMarkSegments = this.quizReport.singleQuizReports.map(
+        (q, idx) => ({
+          value: q.avgStudentMarkBase10,
+          color: '#06B6D4',
+          label: q.name || `Quiz ${idx + 1}`,
+        })
+      );
       // Completion rate segments (per quiz)
-      this.quizCompletionRateSegments = this.quizReport.singleQuizReports.map((q, idx) => ({
-        value: q.completionRate * 100,
-        color: '#8B5CF6',
-        label: q.name || `Quiz ${idx + 1}`,
-      }));
+      this.quizCompletionRateSegments = this.quizReport.singleQuizReports.map(
+        (q, idx) => ({
+          value: q.completionRate * 100,
+          color: '#8B5CF6',
+          label: q.name || `Quiz ${idx + 1}`,
+        })
+      );
     }
     // Assignments
     if (!this.assignmentReport) {
@@ -138,45 +218,85 @@ export class TabDashboardComponent implements OnInit {
       this.assignmentsCompletionRateSegments = [];
     } else {
       this.assignmentsStats = [
-        { label: 'Total assignments', value: this.assignmentReport.assignmentCount?.toString() ?? '0' },
-        { label: 'Avg completion rate', value: `${(this.assignmentReport.avgCompletionRate ?? 0).toFixed(1)} %` },
-        { label: 'Assignments to do', value: this.assignmentReport.assignmentsCountInProgress?.toString() ?? '0' },
+        {
+          label: 'Total assignments',
+          value: this.assignmentReport.assignmentCount?.toString() ?? '0',
+        },
+        {
+          label: 'Avg completion rate',
+          value: `${(this.assignmentReport.avgCompletionRate * 100).toFixed(
+            1
+          )} %`,
+        },
+        {
+          label: 'Assignments to do',
+          value:
+            this.assignmentReport.assignmentsCountInProgress?.toString() ?? '0',
+        },
         {
           label: 'Next assignment will end on',
           value: this.assignmentReport.closestNextEndAssignment
-        ? (() => {
-            const date = new Date(this.assignmentReport.closestNextEndAssignment);
-            const hours = date.getHours().toString().padStart(2, '0');
-            const minutes = date.getMinutes().toString().padStart(2, '0');
-            const month = date.toLocaleString('en-US', { month: 'short' });
-            const day = date.getDate();
-            return `${hours}:${minutes} ${month} ${day}`;
-          })()
-        : '-'
+            ? (() => {
+                const date = new Date(
+                  this.assignmentReport.closestNextEndAssignment
+                );
+                const hours = date.getHours().toString().padStart(2, '0');
+                const minutes = date.getMinutes().toString().padStart(2, '0');
+                const month = date.toLocaleString('en-US', { month: 'short' });
+                const day = date.getDate();
+                return `${hours}:${minutes} ${month} ${day}`;
+              })()
+            : '-',
         },
       ];
       // File type segments
-      this.fileTypeSegments = Object.entries(this.assignmentReport.fileTypeCount || {}).map(([type, count], idx) => ({
+      this.fileTypeSegments = Object.entries(
+        this.assignmentReport.fileTypeCount || {}
+      ).map(([type, count], idx) => ({
         value: count as number,
         color: ['#FF5252', '#E040FB', '#448AFF', '#4CAF50'][idx % 4],
-        label: type
+        label: type,
       }));
       // Graded segments (mark distribution)
       this.gradedSegments = [
-        { value: this.assignmentReport.markDistributionCount['8'], color: '#4CAF50', label: '80 - 100%' },
-        { value: this.assignmentReport.markDistributionCount['5'], color: '#448AFF', label: '50 - 79%' },
-        { value: this.assignmentReport.markDistributionCount['2'], color: '#FFC107', label: '20 - 49%' },
-        { value: this.assignmentReport.markDistributionCount['0'], color: '#FF5252', label: '0 - 19%' },
-        { value: this.assignmentReport.markDistributionCount['-1'], color: '#9E9E9E', label: 'Not attempted' },
+        {
+          value: this.assignmentReport.markDistributionCount['8'],
+          color: '#4CAF50',
+          label: '80 - 100%',
+        },
+        {
+          value: this.assignmentReport.markDistributionCount['5'],
+          color: '#448AFF',
+          label: '50 - 79%',
+        },
+        {
+          value: this.assignmentReport.markDistributionCount['2'],
+          color: '#FFC107',
+          label: '20 - 49%',
+        },
+        {
+          value: this.assignmentReport.markDistributionCount['0'],
+          color: '#FF5252',
+          label: '0 - 19%',
+        },
+        {
+          value: this.assignmentReport.markDistributionCount['-1'],
+          color: '#9E9E9E',
+          label: 'Not attempted',
+        },
       ];
       // Avg mark segments (per assignment)
-      this.assignmentsAvgMarkSegments = (this.assignmentReport.singleAssignmentReports || []).map((a, idx) => ({
+      this.assignmentsAvgMarkSegments = (
+        this.assignmentReport.singleAssignmentReports || []
+      ).map((a, idx) => ({
         value: a.avgMark / 10,
         color: '#06B6D4',
         label: a.name || `Assignment ${idx + 1}`,
       }));
       // Completion rate segments (per assignment)
-      this.assignmentsCompletionRateSegments = (this.assignmentReport.singleAssignmentReports || []).map((a, idx) => ({
+      this.assignmentsCompletionRateSegments = (
+        this.assignmentReport.singleAssignmentReports || []
+      ).map((a, idx) => ({
         value: a.completionRate * 100,
         color: '#8B5CF6',
         label: a.name || `Assignment ${idx + 1}`,
@@ -195,13 +315,17 @@ export class TabDashboardComponent implements OnInit {
 
   get totalQuizStudents(): number {
     if (!this.quizReport) return 0;
-    // Sum all students in mark distribution (excluding 'Not attempted')
-    return (
-      (this.quizReport.markDistributionCount['8'] || 0) +
-      (this.quizReport.markDistributionCount['5'] || 0) +
-      (this.quizReport.markDistributionCount['2'] || 0) +
-      (this.quizReport.markDistributionCount['0'] || 0)
-    );
+    // Use unique student ids from all mark distribution arrays (excluding 'Not attempted')
+    const ids = new Set<string>();
+    [
+      ...(this.quizReport.studentWithMarkOver8 ?? []),
+      ...(this.quizReport.studentWithMarkOver5 ?? []),
+      ...(this.quizReport.studentWithMarkOver2 ?? []),
+      ...(this.quizReport.studentWithMarkOver0 ?? []),
+    ].forEach((s) => {
+      if (s.student?.id) ids.add(s.student.id);
+    });
+    return ids.size;
   }
 
   get totalGradedSubmissions(): number {
@@ -217,21 +341,21 @@ export class TabDashboardComponent implements OnInit {
 
   get studentsS(): any[] {
     if (!this.quizReport) return [];
-    return this.quizReport.studentWithMarkOver8.map(s => s.student);
+    return this.quizReport.studentWithMarkOver8.map((s) => s.student);
   }
 
   get studentsA(): any[] {
     if (!this.quizReport) return [];
-    return this.quizReport.studentWithMarkOver5.map(s => s.student);
+    return this.quizReport.studentWithMarkOver5.map((s) => s.student);
   }
 
   get studentsB(): any[] {
     if (!this.quizReport) return [];
-    return this.quizReport.studentWithMarkOver2.map(s => s.student);
+    return this.quizReport.studentWithMarkOver2.map((s) => s.student);
   }
 
   get studentsC(): any[] {
     if (!this.quizReport) return [];
-    return this.quizReport.studentWithMarkOver0.map(s => s.student);
+    return this.quizReport.studentWithMarkOver0.map((s) => s.student);
   }
 }

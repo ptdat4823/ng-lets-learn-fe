@@ -112,12 +112,12 @@ export const getTopicTypeOptions = (): TopicTypeOption[] => [
     icon: iconMap.quiz,
     description: 'Create quizzes with multiple question types',
   },
-  {
-    type: TopicType.MEETING,
-    label: 'Meeting',
-    icon: iconMap.meeting,
-    description: 'Schedule virtual meetings and conferences',
-  },
+  // {
+  //   type: TopicType.MEETING,
+  //   label: 'Meeting',
+  //   icon: iconMap.meeting,
+  //   description: 'Schedule virtual meetings and conferences',
+  // },
   {
     type: TopicType.LINK,
     label: 'Link',
@@ -139,7 +139,11 @@ export const getTopicTypeOptions = (): TopicTypeOption[] => [
 ];
 
 export const getActivityTopicOptions = (): TopicTypeOption[] =>
-  getTopicTypeOptions().filter(option => activityTopics.includes(option.type));
+  getTopicTypeOptions().filter((option) =>
+    activityTopics.includes(option.type)
+  );
 
 export const getResourceTopicOptions = (): TopicTypeOption[] =>
-  getTopicTypeOptions().filter(option => resourceTopics.includes(option.type));
+  getTopicTypeOptions().filter((option) =>
+    resourceTopics.includes(option.type)
+  );

@@ -5,7 +5,7 @@ export const profileFormSchema = {
   username: new FormControl('', [
     Validators.required,
     Validators.minLength(3),
-    Validators.pattern(/^[a-zA-Z0-9_]+$/),
+    Validators.pattern(/^[a-zA-Z0-9_ ]+$/),
   ]),
   email: new FormControl('', [
     Validators.required,

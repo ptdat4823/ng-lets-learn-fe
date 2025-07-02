@@ -5,7 +5,8 @@ export const courseSettingFormSchema = {
   name: new FormControl('', [Validators.required, Validators.minLength(2)]),
   category: new FormControl('', [Validators.required, Validators.minLength(2)]),
   level: new FormControl('beginner', [Validators.required]),
-  price: new FormControl('', [Validators.required, Validators.min(0)])
+  // price: new FormControl('', [Validators.required, Validators.min(0)])
+  price: new FormControl('', []),
 };
 
 export const courseGeneralSettingFormControls: FormControlField[] = [

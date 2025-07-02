@@ -3,6 +3,7 @@ import { Observable, of } from 'rxjs';
 import { Course, Section } from '@shared/models/course';
 import { generateId } from '@shared/helper/string.helper';
 import { Topic } from '@shared/models/topic';
+import { UploadCloudinaryFile } from '@shared/api/cloudinary.api';
 
 export interface CreateSectionRequest {
   courseId: string;
@@ -140,17 +141,9 @@ export class CourseService {
     return of([]);
   }
 
-  updateCourseImage(
+ async  updateCourseImage(
     request: UpdateCourseImageRequest
-  ): Observable<UpdateCourseImageResponse> {
-    const imageUrl =
-      request.imageUrl ||
-      (request.imageFile ? URL.createObjectURL(request.imageFile) : '');
-
-    return of({
-      imageUrl,
-      success: true,
-      message: 'Course image updated successfully',
-    });
+  ) {
+    await UploadCloudinaryFile(request.imageFile!)
   }
 }
